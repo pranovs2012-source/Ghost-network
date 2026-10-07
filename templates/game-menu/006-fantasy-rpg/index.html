@@ -1,0 +1,309 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Embervale — Game Menu</title>
+  <meta name="description" content="Fantasy RPG game menu template: main menu, pause by the campfire, options, quest chapters, hero cards, game over and hall of legends.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;700;900&amp;family=EB+Garamond:ital,wght@0,400;0,500;0,600;1,400&amp;display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <!-- ===== Night landscape (CSS only) ===== -->
+  <div class="realm" aria-hidden="true">
+    <div class="realm__sky"></div>
+    <div class="realm__moon"></div>
+    <div class="realm__mist realm__mist--back"></div>
+    <div class="realm__peaks"></div>
+    <div class="realm__castle"></div>
+    <div class="realm__hills"></div>
+    <div class="realm__mist realm__mist--front"></div>
+    <div class="embers" id="embers"></div>
+    <div class="realm__vignette"></div>
+  </div>
+
+  <!-- Shared SVG definitions -->
+  <svg width="0" height="0" class="defs" aria-hidden="true" focusable="false">
+    <defs>
+      <linearGradient id="gilt" x1="0" y1="0" x2="0" y2="1">
+        <stop offset="0" stop-color="#fbe7a1"/>
+        <stop offset=".5" stop-color="#d4a541"/>
+        <stop offset="1" stop-color="#8c5f17"/>
+      </linearGradient>
+      <!-- Ornamental corner, rotated for each corner of a panel -->
+      <symbol id="corner" viewBox="0 0 40 40">
+        <path d="M2 38V14C2 7 7 2 14 2h24" fill="none" stroke="url(#gilt)" stroke-width="2.5"/>
+        <path d="M8 38V18c0-6 4-10 10-10h20" fill="none" stroke="url(#gilt)" stroke-width="1"/>
+        <circle cx="14" cy="14" r="3.5" fill="url(#gilt)"/>
+      </symbol>
+      <!-- Original sigil: flame within a leaf -->
+      <symbol id="sigil" viewBox="0 0 100 100">
+        <path d="M50 6c18 16 30 32 30 52a30 30 0 0 1-60 0C20 38 32 22 50 6z" fill="none" stroke="url(#gilt)" stroke-width="3"/>
+        <path d="M50 30c8 9 13 17 13 27a13 13 0 0 1-26 0c0-6 3-11 7-15 0 6 3 9 6 9-2-7-2-14 0-21z" fill="url(#gilt)"/>
+        <path d="M50 88V96M38 92h24" stroke="#d4a541" stroke-width="3" stroke-linecap="round"/>
+      </symbol>
+    </defs>
+  </svg>
+
+  <main class="app">
+
+    <!-- ================= MAIN MENU ================= -->
+    <section class="screen screen--main is-active" id="main" data-screen aria-labelledby="main-title">
+      <div class="banner" aria-hidden="true">
+        <svg class="banner__sigil"><use href="#sigil"/></svg>
+      </div>
+      <div class="title-block">
+        <p class="title-block__pre">The Chronicles of</p>
+        <h1 class="game-title" id="main-title" tabindex="-1">Embervale</h1>
+        <p class="title-block__post"><span class="rule" aria-hidden="true"></span>Book II · The Ashen Crown<span class="rule" aria-hidden="true"></span></p>
+      </div>
+
+      <nav class="plaques" aria-label="Main menu">
+        <button class="plaque" type="button" data-goto="play"><span class="gem" aria-hidden="true"></span><span class="plaque__label">Continue Journey</span><span class="plaque__meta">Chapter III · Lv 24</span></button>
+        <button class="plaque" type="button" data-goto="levels"><span class="gem" aria-hidden="true"></span><span class="plaque__label">Quest Log</span><span class="plaque__meta">5 of 8 chapters</span></button>
+        <button class="plaque" type="button" data-goto="characters"><span class="gem" aria-hidden="true"></span><span class="plaque__label">Heroes</span><span class="plaque__meta">Choose thy champion</span></button>
+        <button class="plaque" type="button" data-goto="leaderboard"><span class="gem" aria-hidden="true"></span><span class="plaque__label">Hall of Legends</span><span class="plaque__meta">Rank 41</span></button>
+        <button class="plaque" type="button" data-goto="settings"><span class="gem" aria-hidden="true"></span><span class="plaque__label">Options</span><span class="plaque__meta">Sound · Sight · Play</span></button>
+        <button class="plaque plaque--dim" type="button" data-goto="quit"><span class="gem" aria-hidden="true"></span><span class="plaque__label">Leave the Realm</span><span class="plaque__meta">Quit</span></button>
+      </nav>
+      <p class="version">v2.4.1 · Saved 3 minutes ago</p>
+    </section>
+
+    <!-- ================= PLAY (demo HUD) ================= -->
+    <section class="screen screen--play" id="play" data-screen aria-labelledby="play-title" hidden>
+      <h1 class="visually-hidden" id="play-title" tabindex="-1">In game — The Whispering Fen</h1>
+      <div class="hud">
+        <div class="orbs">
+          <div class="orb orb--hp" role="meter" aria-label="Health" aria-valuemin="0" aria-valuemax="100" aria-valuenow="68"><span class="orb__fill" style="--v:68%"></span><span class="orb__num">68</span></div>
+          <div class="orb orb--mp" role="meter" aria-label="Mana" aria-valuemin="0" aria-valuemax="100" aria-valuenow="45"><span class="orb__fill" style="--v:45%"></span><span class="orb__num">45</span></div>
+        </div>
+        <div class="quest-tracker">
+          <p class="quest-tracker__label">Current quest</p>
+          <p class="quest-tracker__title">The Drowned Bell</p>
+          <ul class="quest-tracker__tasks">
+            <li class="is-done">Speak with the ferryman</li>
+            <li>Light the three beacons <span id="beacons">(1/3)</span></li>
+          </ul>
+        </div>
+        <button class="icon-btn" type="button" data-goto="pause"><span class="visually-hidden">Pause</span><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="6" y="5" width="4" height="14" rx="1"/><rect x="14" y="5" width="4" height="14" rx="1"/></svg></button>
+      </div>
+      <div class="compass" aria-hidden="true"><span class="compass__needle"></span><span class="compass__n">N</span></div>
+      <div class="play-foot">
+        <p class="hint">Demo scene · press <kbd>Esc</kbd> to rest</p>
+        <button class="btn btn--blood" type="button" data-goto="gameover">Fall in battle</button>
+      </div>
+    </section>
+
+    <!-- ================= PAUSE (campfire) ================= -->
+    <section class="screen screen--rest" id="pause" data-screen aria-labelledby="pause-title" hidden>
+      <div class="campfire" aria-hidden="true">
+        <span class="flame flame--1"></span><span class="flame flame--2"></span><span class="flame flame--3"></span>
+        <span class="log log--1"></span><span class="log log--2"></span>
+        <span class="glow"></span>
+      </div>
+      <div class="parchment parchment--narrow">
+        <svg class="corner corner--tl" aria-hidden="true"><use href="#corner"/></svg>
+        <svg class="corner corner--tr" aria-hidden="true"><use href="#corner"/></svg>
+        <svg class="corner corner--bl" aria-hidden="true"><use href="#corner"/></svg>
+        <svg class="corner corner--br" aria-hidden="true"><use href="#corner"/></svg>
+        <h1 class="parchment__title" id="pause-title" tabindex="-1">Thou Restest</h1>
+        <p class="parchment__sub">The fire crackles. Danger can wait a while.</p>
+        <nav class="ink-menu" aria-label="Pause menu">
+          <button class="ink-btn" type="button" data-goto="play">Resume the Journey</button>
+          <button class="ink-btn" type="button" data-goto="play" data-action="save">Save Progress</button>
+          <button class="ink-btn" type="button" data-goto="settings">Options</button>
+          <button class="ink-btn" type="button" data-goto="main">Return to Title</button>
+        </nav>
+      </div>
+    </section>
+
+    <!-- ================= OPTIONS ================= -->
+    <section class="screen" id="settings" data-screen aria-labelledby="settings-title" hidden>
+      <div class="parchment">
+        <svg class="corner corner--tl" aria-hidden="true"><use href="#corner"/></svg>
+        <svg class="corner corner--tr" aria-hidden="true"><use href="#corner"/></svg>
+        <svg class="corner corner--bl" aria-hidden="true"><use href="#corner"/></svg>
+        <svg class="corner corner--br" aria-hidden="true"><use href="#corner"/></svg>
+        <div class="parchment__head">
+          <button class="back-btn" type="button" data-goto="main" data-back><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M15 5l-7 7 7 7"/></svg><span class="visually-hidden">Back</span></button>
+          <h1 class="parchment__title" id="settings-title" tabindex="-1">Options</h1>
+        </div>
+        <div class="tabs" role="tablist" aria-label="Option groups">
+          <button class="tab" role="tab" type="button" id="tab-sound" aria-controls="pane-sound" aria-selected="true">Sound</button>
+          <button class="tab" role="tab" type="button" id="tab-sight" aria-controls="pane-sight" aria-selected="false" tabindex="-1">Sight</button>
+          <button class="tab" role="tab" type="button" id="tab-play" aria-controls="pane-play" aria-selected="false" tabindex="-1">Play</button>
+        </div>
+        <form class="options" id="settings-form">
+          <div class="pane" role="tabpanel" id="pane-sound" aria-labelledby="tab-sound">
+            <div class="option">
+              <label for="o-master">Master volume</label>
+              <input class="gilded" type="range" id="o-master" name="master" min="0" max="100" value="80">
+              <output for="o-master">80</output>
+            </div>
+            <div class="option">
+              <label for="o-music">Music</label>
+              <input class="gilded" type="range" id="o-music" name="music" min="0" max="100" value="65">
+              <output for="o-music">65</output>
+            </div>
+            <div class="option">
+              <label for="o-voice">Voices</label>
+              <input class="gilded" type="range" id="o-voice" name="voice" min="0" max="100" value="90">
+              <output for="o-voice">90</output>
+            </div>
+            <div class="option option--switch">
+              <label for="o-chimes">Menu chimes</label>
+              <input type="checkbox" class="rune-switch" id="o-chimes" name="chimes" role="switch">
+            </div>
+          </div>
+          <div class="pane" role="tabpanel" id="pane-sight" aria-labelledby="tab-sight" hidden>
+            <div class="option">
+              <label for="o-gamma">Gamma</label>
+              <input class="gilded" type="range" id="o-gamma" name="gamma" min="60" max="140" value="100">
+              <output for="o-gamma">100</output>
+            </div>
+            <div class="option option--switch">
+              <label for="o-embers">Embers</label>
+              <input type="checkbox" class="rune-switch" id="o-embers" name="embers" role="switch" checked>
+            </div>
+            <div class="option option--switch">
+              <label for="o-mist">Drifting mist</label>
+              <input type="checkbox" class="rune-switch" id="o-mist" name="mist" role="switch" checked>
+            </div>
+            <div class="option">
+              <label for="o-text">Text size</label>
+              <select id="o-text" name="textSize">
+                <option value="1">Regular</option>
+                <option value="1.12">Large</option>
+                <option value="1.25">Grand</option>
+              </select>
+            </div>
+          </div>
+          <div class="pane" role="tabpanel" id="pane-play" aria-labelledby="tab-play" hidden>
+            <fieldset class="option option--choice">
+              <legend>Difficulty</legend>
+              <div class="choices">
+                <input type="radio" id="d-story" name="difficulty" value="story"><label for="d-story">Story</label>
+                <input type="radio" id="d-adv" name="difficulty" value="adventurer" checked><label for="d-adv">Adventurer</label>
+                <input type="radio" id="d-legend" name="difficulty" value="legend"><label for="d-legend">Legend</label>
+              </div>
+            </fieldset>
+            <div class="option option--switch">
+              <label for="o-subs">Subtitles</label>
+              <input type="checkbox" class="rune-switch" id="o-subs" name="subtitles" role="switch" checked>
+            </div>
+            <div class="option option--switch">
+              <label for="o-autosave">Autosave</label>
+              <input type="checkbox" class="rune-switch" id="o-autosave" name="autosave" role="switch" checked>
+            </div>
+          </div>
+          <div class="options__actions">
+            <button class="btn btn--ghost" type="button" id="reset-settings">Restore defaults</button>
+            <button class="btn" type="submit">Seal changes</button>
+          </div>
+        </form>
+      </div>
+    </section>
+
+    <!-- ================= QUEST LOG (level select) ================= -->
+    <section class="screen" id="levels" data-screen aria-labelledby="levels-title" hidden>
+      <div class="parchment parchment--wide">
+        <svg class="corner corner--tl" aria-hidden="true"><use href="#corner"/></svg>
+        <svg class="corner corner--tr" aria-hidden="true"><use href="#corner"/></svg>
+        <svg class="corner corner--bl" aria-hidden="true"><use href="#corner"/></svg>
+        <svg class="corner corner--br" aria-hidden="true"><use href="#corner"/></svg>
+        <div class="parchment__head">
+          <button class="back-btn" type="button" data-goto="main"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M15 5l-7 7 7 7"/></svg><span class="visually-hidden">Back to main menu</span></button>
+          <h1 class="parchment__title" id="levels-title" tabindex="-1">Quest Log</h1>
+        </div>
+        <ol class="chapters" id="chapters"></ol>
+        <div class="parchment__foot">
+          <p class="chosen" id="chosen-chapter" aria-live="polite"></p>
+          <button class="btn" type="button" data-goto="play">Embark</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- ================= HEROES (character select) ================= -->
+    <section class="screen" id="characters" data-screen aria-labelledby="characters-title" hidden>
+      <div class="hero-select">
+        <div class="hero-select__head">
+          <button class="back-btn back-btn--light" type="button" data-goto="main"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M15 5l-7 7 7 7"/></svg><span class="visually-hidden">Back to main menu</span></button>
+          <h1 class="hero-select__title" id="characters-title" tabindex="-1">Choose Thy Champion</h1>
+        </div>
+        <p class="hero-select__hint">Select a card to turn it and read the hero’s deeds.</p>
+        <div class="cards" id="hero-cards" role="radiogroup" aria-label="Heroes"></div>
+        <div class="hero-select__foot">
+          <p class="chosen chosen--light" id="chosen-hero" aria-live="polite"></p>
+          <button class="btn" type="button" data-goto="main" data-action="pick-hero">Swear the Oath</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- ================= GAME OVER ================= -->
+    <section class="screen screen--fallen" id="gameover" data-screen aria-labelledby="gameover-title" hidden>
+      <div class="fallen">
+        <svg class="fallen__sword" viewBox="0 0 120 120" aria-hidden="true">
+          <path d="M60 10l7 10v38H53V20z" fill="#cfd4dc" stroke="#5b4a2e" stroke-width="2"/>
+          <path d="M53 58h14l-3 12h-8z" fill="#9aa1ab" transform="rotate(14 60 64) translate(6 6)"/>
+          <path d="M38 60h44v8H38z" fill="url(#gilt)"/>
+          <path d="M56 68h8v26h-8z" fill="#5b3a1e"/>
+          <circle cx="60" cy="100" r="6" fill="url(#gilt)"/>
+        </svg>
+        <h1 class="fallen__title" id="gameover-title" tabindex="-1">Thou Hast Fallen</h1>
+        <p class="fallen__text">“Even legends rest in the earth before they rise again.”</p>
+        <dl class="tally">
+          <div><dt>Foes vanquished</dt><dd id="tally-foes">0</dd></div>
+          <div><dt>Gold gathered</dt><dd id="tally-gold">0</dd></div>
+          <div><dt>Time in realm</dt><dd>4h 12m</dd></div>
+        </dl>
+        <nav class="fallen__actions" aria-label="Game over options">
+          <button class="btn" type="button" data-goto="play" data-action="revive">Rise Again</button>
+          <button class="btn btn--ghost-light" type="button" data-goto="leaderboard">Hall of Legends</button>
+          <button class="btn btn--ghost-light" type="button" data-goto="main">Return to Title</button>
+        </nav>
+      </div>
+    </section>
+
+    <!-- ================= HALL OF LEGENDS ================= -->
+    <section class="screen" id="leaderboard" data-screen aria-labelledby="leaderboard-title" hidden>
+      <div class="parchment parchment--wide">
+        <svg class="corner corner--tl" aria-hidden="true"><use href="#corner"/></svg>
+        <svg class="corner corner--tr" aria-hidden="true"><use href="#corner"/></svg>
+        <svg class="corner corner--bl" aria-hidden="true"><use href="#corner"/></svg>
+        <svg class="corner corner--br" aria-hidden="true"><use href="#corner"/></svg>
+        <div class="parchment__head">
+          <button class="back-btn" type="button" data-goto="main"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M15 5l-7 7 7 7"/></svg><span class="visually-hidden">Back to main menu</span></button>
+          <h1 class="parchment__title" id="leaderboard-title" tabindex="-1">Hall of Legends</h1>
+        </div>
+        <div class="tabs" role="tablist" aria-label="Legend ranking">
+          <button class="tab" role="tab" type="button" id="lg-renown" aria-controls="lg-panel" aria-selected="true" data-board="renown">Renown</button>
+          <button class="tab" role="tab" type="button" id="lg-speed" aria-controls="lg-panel" aria-selected="false" data-board="speed" tabindex="-1">Swiftest</button>
+          <button class="tab" role="tab" type="button" id="lg-guild" aria-controls="lg-panel" aria-selected="false" data-board="guild" tabindex="-1">Thy Guild</button>
+        </div>
+        <div id="lg-panel" role="tabpanel" aria-labelledby="lg-renown"><ol class="legends" id="lg-list"></ol></div>
+      </div>
+    </section>
+
+    <!-- ================= QUIT ================= -->
+    <section class="screen screen--rest" id="quit" data-screen aria-labelledby="quit-title" hidden>
+      <div class="parchment parchment--narrow">
+        <svg class="corner corner--tl" aria-hidden="true"><use href="#corner"/></svg>
+        <svg class="corner corner--tr" aria-hidden="true"><use href="#corner"/></svg>
+        <svg class="corner corner--bl" aria-hidden="true"><use href="#corner"/></svg>
+        <svg class="corner corner--br" aria-hidden="true"><use href="#corner"/></svg>
+        <h1 class="parchment__title" id="quit-title" tabindex="-1">Leave the Realm?</h1>
+        <p class="parchment__sub">Thy progress was saved at the last shrine.</p>
+        <nav class="ink-menu" aria-label="Quit confirmation">
+          <button class="ink-btn" type="button" data-goto="main">Stay a While</button>
+          <button class="ink-btn ink-btn--danger" type="button" data-goto="main" data-action="quit">Depart</button>
+        </nav>
+      </div>
+    </section>
+  </main>
+
+  <div class="toast" role="status" aria-live="polite"></div>
+  <script src="script.js"></script>
+</body>
+</html>
