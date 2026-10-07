@@ -18,7 +18,7 @@ Alternate categories: odd numbers = login, even numbers = game-menu.
 
 ## Themes used (never repeat)
 
-aurora-glass (glassmorphism), neon-cyberpunk, swiss-minimal, pixel-arcade, dark-luxury, fantasy-rpg-bloom, scifi-hud, forest-fern-odyssey
+aurora-glass (glassmorphism), neon-cyberpunk, swiss-minimal, pixel-arcade, dark-luxury, fantasy-rpg-bloom, scifi-hud, forest-fern-odyssey-pop
 
 ## Theme backlog (pick the next unused one)
 
@@ -33,3 +33,4 @@ aurora-glass (glassmorphism), neon-cyberpunk, swiss-minimal, pixel-arcade, dark-
 | 011 | login | Forest Fern | `templates/login/011-forest-fern/` | `login-011-forest-fern.zip` | Calm botanical login whose forest follows the real time of day — dawn, day, dusk, night — with a growing-tree password meter. |
 | 012 | game-menu | Space Odyssey | `templates/game-menu/012-space-odyssey/` | `game-menu-012-space-odyssey.zip` | Cosmic exploration menus — parallax starfield with warp, spinning CSS planets, crew manifest and a drifting signal-lost screen. |
 | 013 | login | Neumorphism | `templates/login/013-neumorphism/` | `login-013-neumorphism.zip` | Calm soft-UI login that still passes contrast — passkey fingerprint scan, strength ring, 4 accents and dark soft mode. |
+| 014 | game-menu | Cartoon Pop | `templates/game-menu/014-cartoon-pop/` | `game-menu-014-cartoon-pop.zip` | Bouncy cartoon menus — jelly buttons, POW bursts, recolorable SVG buddies, sticker-book levels and a podium leaderboard. |

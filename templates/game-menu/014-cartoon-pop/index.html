@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>BOUNCE BUDDIES — Game Menu</title>
+  <meta name="description" content="Cartoon game menu template: jelly buttons, sunburst sky, sticker-book level select, recolorable characters, podium leaderboard and comic game over.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@500;600;700;800&amp;family=Luckiest+Guy&amp;display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <!-- ===== Cartoon sky ===== -->
+  <div class="sky" aria-hidden="true">
+    <div class="sunburst"></div>
+    <div class="cloud cloud--1"></div>
+    <div class="cloud cloud--2"></div>
+    <div class="cloud cloud--3"></div>
+    <div class="hills"><span class="hill hill--back"></span><span class="hill hill--front"></span></div>
+  </div>
+  <div class="bursts" id="bursts" aria-hidden="true"></div>
+
+  <main class="app">
+
+    <!-- ================= MAIN ================= -->
+    <section class="screen screen--main is-active" id="main" data-screen aria-labelledby="main-title">
+      <h1 class="logo" id="main-title" tabindex="-1">
+        <span class="logo__word">Bounce</span>
+        <span class="logo__word logo__word--2">Buddies!</span>
+      </h1>
+      <div class="buddy-peek" aria-hidden="true" data-buddy="0"></div>
+      <nav class="jelly-menu" aria-label="Main menu">
+        <button class="jelly jelly--green" type="button" data-goto="play">Play!</button>
+        <button class="jelly jelly--blue" type="button" data-goto="levels">Worlds</button>
+        <button class="jelly jelly--pink" type="button" data-goto="characters">Buddies</button>
+        <button class="jelly jelly--yellow" type="button" data-goto="leaderboard">Top Bouncers</button>
+        <button class="jelly jelly--purple" type="button" data-goto="settings">Settings</button>
+        <button class="jelly jelly--white" type="button" data-goto="quit">Quit</button>
+      </nav>
+      <p class="tip"><span class="tip__bubble">Psst! Click everything. Things go <b>POW</b>.</span></p>
+    </section>
+
+    <!-- ================= PLAY (demo) ================= -->
+    <section class="screen screen--play" id="play" data-screen aria-labelledby="play-title" hidden>
+      <h1 class="visually-hidden" id="play-title" tabindex="-1">In game — Jellybean Hills</h1>
+      <div class="hud">
+        <div class="hud__pill"><span class="hud__icon hud__icon--star" aria-hidden="true"></span><span class="visually-hidden">Stars:</span> <output id="stars">0</output></div>
+        <div class="hud__pill"><span class="hud__icon hud__icon--heart" aria-hidden="true"></span><span class="visually-hidden">Lives:</span> 3</div>
+        <button class="round" type="button" data-goto="pause"><span class="visually-hidden">Pause</span><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="6" y="5" width="4" height="14" rx="2"/><rect x="14" y="5" width="4" height="14" rx="2"/></svg></button>
+      </div>
+      <div class="playfield" aria-hidden="true">
+        <div class="coin-row"><span></span><span></span><span></span><span></span><span></span></div>
+        <div class="player" data-buddy="0"></div>
+        <div class="ground"></div>
+      </div>
+      <div class="play-foot">
+        <p class="tip"><span class="tip__bubble">Demo screen — press <kbd>Esc</kbd> for a time out</span></p>
+        <button class="jelly jelly--red jelly--small" type="button" data-goto="gameover">Bonk!</button>
+      </div>
+    </section>
+
+    <!-- ================= PAUSE ================= -->
+    <section class="screen screen--dim" id="pause" data-screen aria-labelledby="pause-title" hidden>
+      <div class="comic">
+        <h1 class="comic__title" id="pause-title" tabindex="-1">Time out!</h1>
+        <p class="comic__text">Grab a snack. The jelly will wait.</p>
+        <nav class="jelly-menu jelly-menu--compact" aria-label="Pause menu">
+          <button class="jelly jelly--green" type="button" data-goto="play">Keep bouncing</button>
+          <button class="jelly jelly--yellow" type="button" data-goto="play" data-action="restart">Start over</button>
+          <button class="jelly jelly--purple" type="button" data-goto="settings">Settings</button>
+          <button class="jelly jelly--white" type="button" data-goto="main">Main menu</button>
+        </nav>
+      </div>
+    </section>
+
+    <!-- ================= SETTINGS ================= -->
+    <section class="screen" id="settings" data-screen aria-labelledby="settings-title" hidden>
+      <div class="card">
+        <div class="card__head">
+          <button class="round" type="button" data-goto="main" data-back><span class="visually-hidden">Back</span><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M15 5l-7 7 7 7" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+          <h1 class="card__title" id="settings-title" tabindex="-1">Settings</h1>
+        </div>
+        <form id="settings-form" class="settings">
+          <div class="opt"><label for="o-music">Music</label><input class="goo" type="range" id="o-music" name="music" min="0" max="10" value="7"><output for="o-music">7</output></div>
+          <div class="opt"><label for="o-sfx">Sound effects</label><input class="goo" type="range" id="o-sfx" name="sfx" min="0" max="10" value="8"><output for="o-sfx">8</output></div>
+          <div class="opt"><label for="o-wobble">Wobble power</label><input class="goo" type="range" id="o-wobble" name="wobble" min="0" max="10" value="6"><output for="o-wobble">6</output></div>
+          <div class="opt opt--switch"><label for="o-boing">Boing sounds</label><input type="checkbox" class="pill-switch" id="o-boing" name="boing" role="switch"></div>
+          <div class="opt opt--switch"><label for="o-pow">POW bursts</label><input type="checkbox" class="pill-switch" id="o-pow" name="pow" role="switch" checked></div>
+          <div class="opt opt--switch"><label for="o-spin">Spinning sunburst</label><input type="checkbox" class="pill-switch" id="o-spin" name="spin" role="switch" checked></div>
+          <fieldset class="opt opt--choice">
+            <legend>Difficulty</legend>
+            <div class="choices">
+              <input type="radio" id="d-easy" name="difficulty" value="easy"><label for="d-easy">Squishy</label>
+              <input type="radio" id="d-mid" name="difficulty" value="normal" checked><label for="d-mid">Bouncy</label>
+              <input type="radio" id="d-hard" name="difficulty" value="hard"><label for="d-hard">Super!</label>
+            </div>
+          </fieldset>
+          <div class="settings__actions">
+            <button class="jelly jelly--white jelly--small" type="button" id="reset-settings">Reset</button>
+            <button class="jelly jelly--green jelly--small" type="submit">Save</button>
+          </div>
+        </form>
+      </div>
+    </section>
+
+    <!-- ================= WORLDS (sticker book) ================= -->
+    <section class="screen" id="levels" data-screen aria-labelledby="levels-title" hidden>
+      <div class="card card--wide card--book">
+        <div class="card__head">
+          <button class="round" type="button" data-goto="main"><span class="visually-hidden">Back to main menu</span><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M15 5l-7 7 7 7" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+          <h1 class="card__title" id="levels-title" tabindex="-1">Sticker Book</h1>
+          <span class="badge" id="star-count">0 ★</span>
+        </div>
+        <div class="tabs" role="tablist" aria-label="Worlds">
+          <button class="tab" role="tab" type="button" id="w-1" aria-controls="w-panel" aria-selected="true" data-world="0">Jellybean Hills</button>
+          <button class="tab" role="tab" type="button" id="w-2" aria-controls="w-panel" aria-selected="false" data-world="1" tabindex="-1">Frosty Peaks</button>
+          <button class="tab" role="tab" type="button" id="w-3" aria-controls="w-panel" aria-selected="false" data-world="2" tabindex="-1">Lava Pops</button>
+        </div>
+        <div id="w-panel" role="tabpanel" aria-labelledby="w-1">
+          <ul class="stickers" id="stickers" aria-label="Levels"></ul>
+        </div>
+        <div class="card__foot">
+          <p class="picked" id="picked" aria-live="polite"></p>
+          <button class="jelly jelly--green jelly--small" type="button" data-goto="play">Let’s go!</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- ================= BUDDIES (character select) ================= -->
+    <section class="screen" id="characters" data-screen aria-labelledby="characters-title" hidden>
+      <div class="card card--wide">
+        <div class="card__head">
+          <button class="round" type="button" data-goto="main"><span class="visually-hidden">Back to main menu</span><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M15 5l-7 7 7 7" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+          <h1 class="card__title" id="characters-title" tabindex="-1">Pick a Buddy</h1>
+        </div>
+        <div class="buddy-stage">
+          <button class="round round--big" type="button" id="buddy-prev"><span class="visually-hidden">Previous buddy</span><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M15 5l-7 7 7 7" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+          <div class="pedestal">
+            <p class="speech" id="buddy-says" aria-live="polite">Hi!</p>
+            <div class="buddy" id="buddy-big" data-buddy="0"></div>
+            <span class="pedestal__top" aria-hidden="true"></span>
+          </div>
+          <button class="round round--big" type="button" id="buddy-next"><span class="visually-hidden">Next buddy</span><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 5l7 7-7 7" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+        </div>
+        <div class="buddy-info">
+          <h2 class="buddy-info__name" id="buddy-name">Blip</h2>
+          <dl class="candy" id="buddy-stats"></dl>
+          <div class="paint">
+            <span class="paint__label" id="paint-label">Paint your buddy</span>
+            <div class="paint__swatches" id="paint" role="radiogroup" aria-labelledby="paint-label"></div>
+          </div>
+        </div>
+        <div class="card__foot">
+          <p class="picked">Use ← → to meet everyone</p>
+          <button class="jelly jelly--pink jelly--small" type="button" data-goto="main" data-action="pick">This one!</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- ================= GAME OVER ================= -->
+    <section class="screen screen--dim" id="gameover" data-screen aria-labelledby="gameover-title" hidden>
+      <div class="comic comic--oops">
+        <div class="dizzy" aria-hidden="true">
+          <div class="buddy" data-buddy="0" data-mood="dizzy"></div>
+          <span class="dizzy__stars"><i></i><i></i><i></i></span>
+        </div>
+        <h1 class="comic__title comic__title--oops" id="gameover-title" tabindex="-1">Oopsie!</h1>
+        <p class="comic__text">You collected <strong id="go-stars">0 stars</strong> before the bonk.</p>
+        <nav class="jelly-menu jelly-menu--row" aria-label="Game over options">
+          <button class="jelly jelly--green" type="button" data-goto="play" data-action="restart">Try again</button>
+          <button class="jelly jelly--yellow" type="button" data-goto="leaderboard">Top Bouncers</button>
+          <button class="jelly jelly--white" type="button" data-goto="main">Menu</button>
+        </nav>
+      </div>
+    </section>
+
+    <!-- ================= TOP BOUNCERS (podium) ================= -->
+    <section class="screen" id="leaderboard" data-screen aria-labelledby="leaderboard-title" hidden>
+      <div class="card card--wide">
+        <div class="card__head">
+          <button class="round" type="button" data-goto="main"><span class="visually-hidden">Back to main menu</span><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M15 5l-7 7 7 7" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+          <h1 class="card__title" id="leaderboard-title" tabindex="-1">Top Bouncers</h1>
+        </div>
+        <div class="tabs" role="tablist" aria-label="Leaderboard">
+          <button class="tab" role="tab" type="button" id="lb-all" aria-controls="lb-panel" aria-selected="true" data-board="all">All time</button>
+          <button class="tab" role="tab" type="button" id="lb-friends" aria-controls="lb-panel" aria-selected="false" data-board="friends" tabindex="-1">Friends</button>
+        </div>
+        <div id="lb-panel" role="tabpanel" aria-labelledby="lb-all">
+          <ol class="podium" id="podium" aria-label="Top three"></ol>
+          <ol class="ranks" id="ranks" aria-label="Everyone else"></ol>
+        </div>
+      </div>
+    </section>
+
+    <!-- ================= QUIT ================= -->
+    <section class="screen screen--dim" id="quit" data-screen aria-labelledby="quit-title" hidden>
+      <div class="comic">
+        <div class="buddy buddy--small" data-buddy="2" data-mood="sad" aria-hidden="true"></div>
+        <h1 class="comic__title" id="quit-title" tabindex="-1">Leaving already?</h1>
+        <p class="comic__text">Your buddies will miss you!</p>
+        <nav class="jelly-menu jelly-menu--row" aria-label="Quit confirmation">
+          <button class="jelly jelly--green" type="button" data-goto="main">Stay!</button>
+          <button class="jelly jelly--white" type="button" data-goto="main" data-action="quit">Bye bye</button>
+        </nav>
+      </div>
+    </section>
+  </main>
+
+  <div class="toast" role="status" aria-live="polite"></div>
+  <script src="script.js"></script>
+</body>
+</html>

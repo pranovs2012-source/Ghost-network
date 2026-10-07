@@ -1,0 +1,31 @@
+Cartoon Pop (BOUNCE BUDDIES) — UI Template License
+Copyright (c) 2026 the template author. All rights reserved.
+
+By purchasing or downloading this template you receive a non-exclusive,
+worldwide, perpetual license to use it under the terms below.
+
+YOU MAY
+  * Use the template in unlimited personal projects.
+  * Use the template in unlimited commercial projects, including client work,
+    websites, web apps, games and products you sell or distribute.
+  * Modify, adapt and combine the template with other work in any way.
+  * Ship the template as part of a finished end product (for example, a
+    published game or a live website), where it is not offered on its own.
+
+YOU MAY NOT
+  * Resell, redistribute, sublicense, share or give away the template itself,
+    in original or modified form, as a standalone item or as part of a
+    template pack, UI kit, theme, asset bundle or similar collection.
+  * Upload the template files to any marketplace, file-sharing service or
+    public repository where others can download the template itself.
+  * Claim the original template design as your own work for resale.
+
+NO WARRANTY
+  The template is provided "as is", without warranty of any kind, express or
+  implied. In no event shall the author be liable for any claim, damages or
+  other liability arising from the use of the template.
+
+THIRD-PARTY FONTS
+  Fonts are loaded from Google Fonts and are licensed separately by their
+  authors under the SIL Open Font License or Apache License 2.0, both of
+  which permit commercial use.
