@@ -45,6 +45,9 @@
     if (!opts.silent) {
       var h = target.querySelector('h1');
       if (h) h.focus({ preventScroll: true });
+      // On stacked (mobile) layouts, bring the new screen into view if it starts off-screen
+      var top = target.getBoundingClientRect().top;
+      if (top < 0 || top > window.innerHeight * .6) target.scrollIntoView({ block: 'start', behavior: 'smooth' });
     }
     if (id === 'sent') startResendTimer();
   }
