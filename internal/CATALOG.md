@@ -18,15 +18,16 @@ Alternate categories: odd numbers = login, even numbers = game-menu.
 
 ## Themes used (never repeat)
 
-aurora-glass (glassmorphism), neon-cyberpunk, swiss-minimal, pixel-arcade, dark-luxury, fantasy-rpg-bloom, scifi-hud
+aurora-glass (glassmorphism), neon-cyberpunk, swiss-minimal, pixel-arcade, dark-luxury, fantasy-rpg-bloom, scifi-hud, forest-fern
 
 ## Theme backlog (pick the next unused one)
 
 - game-menu: horror, space, cartoon, steampunk, underwater, samurai ink, post-apocalyptic, candy/kawaii, racing/motorsport, medieval stone, western frontier
-- login: pastel, brutalist, nature/forest, neumorphism, retro terminal, synthwave, paper/origami, art deco, newspaper editorial, claymorphism, bauhaus, ocean wave, desert sand
+- login: pastel, brutalist, neumorphism, retro terminal, synthwave, paper/origami, art deco, newspaper editorial, claymorphism, bauhaus, ocean wave, desert sand
 
 ## Bundles
 
 | Bundle | Templates | File |
 |---|---|---|
 | 1 | #001–#010 | `internal/bundles/bundle-1.md` · `downloads/bundle-1.zip` |
+| 011 | login | Forest Fern | `templates/login/011-forest-fern/` | `login-011-forest-fern.zip` | Calm botanical login whose forest follows the real time of day — dawn, day, dusk, night — with a growing-tree password meter. |

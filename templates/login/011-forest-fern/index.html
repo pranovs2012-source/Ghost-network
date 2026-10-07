@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Fernwood — Sign in</title>
+  <meta name="description" content="Nature-inspired login template with a time-of-day forest scene, trail name generator and growing-tree password meter.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700&amp;family=Fraunces:ital,opsz,wght@0,9..144,500;0,9..144,700;1,9..144,500&amp;display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body data-time="day">
+  <!-- ===== Forest landscape: colors follow the time of day ===== -->
+  <div class="land" aria-hidden="true">
+    <div class="land__sky"></div>
+    <div class="land__sun"></div>
+    <div class="land__stars"></div>
+    <svg class="land__layers" viewBox="0 0 1440 600" preserveAspectRatio="xMidYMax slice">
+      <path class="hill hill--4" d="M0 330 C180 260 360 300 520 250 C700 190 860 280 1040 230 C1200 190 1320 240 1440 210 V600 H0Z"/>
+      <g class="trees trees--back">
+        <path d="M120 300 l26 -80 26 80z M210 290 l22 -70 22 70z M300 285 l30 -95 30 95z M760 270 l24 -76 24 76z M850 262 l28 -88 28 88z M1180 240 l26 -82 26 82z M1270 248 l22 -70 22 70z"/>
+      </g>
+      <path class="hill hill--3" d="M0 400 C200 340 380 380 560 340 C760 296 940 380 1120 336 C1260 304 1360 330 1440 320 V600 H0Z"/>
+      <g class="trees trees--mid">
+        <path d="M60 400 l34 -110 34 110z M150 392 l28 -90 28 90z M640 360 l36 -116 36 116z M720 368 l30 -96 30 96z M980 360 l34 -108 34 108z M1340 340 l36 -118 36 118z"/>
+      </g>
+      <path class="hill hill--2" d="M0 470 C220 420 420 460 640 430 C860 400 1060 470 1260 430 C1350 412 1400 420 1440 418 V600 H0Z"/>
+      <g class="trees trees--front">
+        <path d="M20 500 l44 -150 44 150z M100 492 l38 -126 38 126z M1250 470 l46 -156 46 156z M1340 478 l40 -132 40 132z"/>
+      </g>
+      <path class="hill hill--1" d="M0 540 C260 500 520 530 760 512 C1000 494 1220 530 1440 506 V600 H0Z"/>
+    </svg>
+    <div class="leaves" id="leaves"></div>
+    <div class="fireflies" id="fireflies"></div>
+  </div>
+
+  <div class="layout">
+    <header class="intro">
+      <a class="brand" href="#login" data-goto="login">
+        <svg viewBox="0 0 40 40" aria-hidden="true"><path d="M20 36V14" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"/><path d="M20 22c-8 0-13-5-13-13 8 0 13 5 13 13zM20 16c6 0 10-4 10-10-6 0-10 4-10 10z" fill="currentColor"/></svg>
+        Fernwood
+      </a>
+      <p class="intro__tag" id="greeting">Good day, wanderer.</p>
+      <div class="timepick" role="radiogroup" aria-label="Preview time of day">
+        <button type="button" role="radio" data-set-time="dawn" aria-checked="false">Dawn</button>
+        <button type="button" role="radio" data-set-time="day" aria-checked="true">Day</button>
+        <button type="button" role="radio" data-set-time="dusk" aria-checked="false">Dusk</button>
+        <button type="button" role="radio" data-set-time="night" aria-checked="false">Night</button>
+      </div>
+    </header>
+
+    <main class="card">
+      <svg class="card__leaf" viewBox="0 0 120 120" aria-hidden="true"><path d="M10 110C10 50 50 10 110 10 110 70 70 110 10 110z" fill="currentColor"/><path d="M10 110L80 40" stroke="var(--cream)" stroke-width="2"/></svg>
+
+      <!-- SIGN IN -->
+      <section class="screen is-active" id="login" data-screen aria-labelledby="login-title">
+        <h1 class="title" id="login-title" tabindex="-1">Welcome back to the trail</h1>
+        <p class="subtitle">Sign in to see what grew while you were away.</p>
+        <form class="form" id="login-form" novalidate>
+          <div class="field">
+            <label for="login-email">Email</label>
+            <input id="login-email" name="email" type="email" autocomplete="email" placeholder="you@meadow.com" required aria-describedby="login-email-error">
+            <p class="field__error" id="login-email-error" aria-live="polite"></p>
+          </div>
+          <div class="field">
+            <div class="field__top">
+              <label for="login-password">Password</label>
+              <button class="link link--small" type="button" data-goto="forgot">Forgot it?</button>
+            </div>
+            <div class="field__wrap">
+              <input id="login-password" name="password" type="password" autocomplete="current-password" placeholder="••••••••" required minlength="8" aria-describedby="login-password-error">
+              <button class="peek" type="button" data-toggle-password="login-password" aria-pressed="false">Show</button>
+            </div>
+            <p class="field__error" id="login-password-error" aria-live="polite"></p>
+          </div>
+          <label class="check"><input type="checkbox" name="remember" checked><span class="check__box" aria-hidden="true"></span>Keep me signed in</label>
+          <button class="btn" type="submit"><span class="btn__label">Enter the forest</span><span class="btn__leaf" aria-hidden="true"></span></button>
+        </form>
+        <p class="switch">First time here? <button class="link" type="button" data-goto="signup">Plant your account</button></p>
+      </section>
+
+      <!-- SIGN UP -->
+      <section class="screen" id="signup" data-screen aria-labelledby="signup-title" hidden>
+        <h1 class="title" id="signup-title" tabindex="-1">Plant your account</h1>
+        <p class="subtitle">Every account starts as a seed.</p>
+        <form class="form" id="signup-form" novalidate>
+          <div class="field">
+            <div class="field__top">
+              <label for="signup-trail">Trail name</label>
+              <button class="link link--small" type="button" id="suggest-name">Suggest one</button>
+            </div>
+            <input id="signup-trail" name="trail" type="text" autocomplete="username" placeholder="e.g. QuietFern" required minlength="3" aria-describedby="signup-trail-error">
+            <p class="field__error" id="signup-trail-error" aria-live="polite"></p>
+          </div>
+          <div class="field">
+            <label for="signup-email">Email</label>
+            <input id="signup-email" name="email" type="email" autocomplete="email" placeholder="you@meadow.com" required aria-describedby="signup-email-error">
+            <p class="field__error" id="signup-email-error" aria-live="polite"></p>
+          </div>
+          <div class="field">
+            <label for="signup-password">Password</label>
+            <div class="grow">
+              <div class="field__wrap">
+                <input id="signup-password" name="password" type="password" autocomplete="new-password" placeholder="Grow it strong" required minlength="8" aria-describedby="grow-label signup-password-error">
+                <button class="peek" type="button" data-toggle-password="signup-password" aria-pressed="false">Show</button>
+              </div>
+              <svg class="sapling" id="sapling" data-stage="0" viewBox="0 0 60 80" aria-hidden="true">
+                <path class="sapling__soil" d="M6 74 Q30 64 54 74 Z"/>
+                <g class="sapling__seed"><ellipse cx="30" cy="70" rx="5" ry="3.5"/></g>
+                <g class="sapling__sprout"><path d="M30 70 V56" /><path d="M30 60 c-6 0 -9 -4 -9 -8 6 0 9 4 9 8z M30 58 c5 0 8 -3 8 -7 -5 0 -8 3 -8 7z"/></g>
+                <g class="sapling__young"><path d="M30 70 V40"/><path d="M30 48 c-9 0 -13 -6 -13 -12 9 0 13 6 13 12z M30 44 c8 0 12 -5 12 -11 -8 0 -12 5 -12 11z"/></g>
+                <g class="sapling__tree"><path d="M30 70 V34" class="trunk"/><circle cx="30" cy="26" r="18"/><circle cx="18" cy="34" r="10"/><circle cx="42" cy="34" r="10"/></g>
+              </svg>
+            </div>
+            <p class="grow__label" id="grow-label" aria-live="polite">Seed — add more to help it grow.</p>
+            <p class="field__error" id="signup-password-error" aria-live="polite"></p>
+          </div>
+          <label class="check"><input type="checkbox" name="terms" required aria-describedby="signup-terms-error"><span class="check__box" aria-hidden="true"></span><span>I’ll leave no trace and accept the <a class="link" href="#terms">terms</a></span></label>
+          <p class="field__error" id="signup-terms-error" aria-live="polite"></p>
+          <button class="btn" type="submit"><span class="btn__label">Plant it</span><span class="btn__leaf" aria-hidden="true"></span></button>
+        </form>
+        <p class="switch">Already rooted? <button class="link" type="button" data-goto="login">Sign in</button></p>
+      </section>
+
+      <!-- FORGOT -->
+      <section class="screen" id="forgot" data-screen aria-labelledby="forgot-title" hidden>
+        <h1 class="title" id="forgot-title" tabindex="-1">Lost on the trail?</h1>
+        <p class="subtitle">Tell us your email and we’ll send a bird with a way back.</p>
+        <form class="form" id="forgot-form" novalidate>
+          <div class="field">
+            <label for="forgot-email">Email</label>
+            <input id="forgot-email" name="email" type="email" autocomplete="email" placeholder="you@meadow.com" required aria-describedby="forgot-email-error">
+            <p class="field__error" id="forgot-email-error" aria-live="polite"></p>
+          </div>
+          <button class="btn" type="submit"><span class="btn__label">Send the bird</span><span class="btn__leaf" aria-hidden="true"></span></button>
+        </form>
+        <p class="switch"><button class="link" type="button" data-goto="login">← Back to sign in</button></p>
+      </section>
+
+      <!-- SENT -->
+      <section class="screen screen--center" id="sent" data-screen aria-labelledby="sent-title" hidden>
+        <svg class="bird" viewBox="0 0 120 70" aria-hidden="true">
+          <path class="bird__path" d="M4 64 C30 60 40 30 70 30" fill="none" stroke-dasharray="3 6"/>
+          <g class="bird__body">
+            <path d="M70 34 c8 -10 22 -12 34 -6 -8 2 -12 6 -14 12 -6 4 -14 4 -20 -6z" class="bird__fill"/>
+            <path class="bird__wing" d="M84 30 c-2 -12 -12 -18 -22 -18 6 6 8 12 8 18z"/>
+            <path d="M104 28 l8 -2 -6 5z" class="bird__beak"/>
+            <rect class="bird__letter" x="74" y="38" width="12" height="8" rx="1"/>
+          </g>
+        </svg>
+        <h1 class="title" id="sent-title" tabindex="-1">A bird is on its way</h1>
+        <p class="subtitle">It’s carrying a reset link to <strong class="sent-email">your inbox</strong>. The link wilts in 30 minutes.</p>
+        <button class="btn btn--light" type="button" data-goto="login"><span class="btn__label">Back to sign in</span></button>
+        <p class="switch"><button class="link" type="button" id="resend" disabled>Send another in <span id="resend-timer">30</span>s</button></p>
+      </section>
+    </main>
+  </div>
+
+  <div class="toast" role="status" aria-live="polite"></div>
+  <script src="script.js"></script>
+</body>
+</html>
