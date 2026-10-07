@@ -1,0 +1,270 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>PIXEL QUEST — Game Menu</title>
+  <meta name="description" content="8-bit pixel arcade game menu template: title screen, main menu, pause, options, world map level select, character select, continue screen and high scores.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&amp;family=VT323&amp;display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <!-- ===== Pixel landscape (CSS only) ===== -->
+  <div class="world" aria-hidden="true">
+    <div class="stars"></div>
+    <div class="moon"></div>
+    <div class="cloud cloud--1"></div>
+    <div class="cloud cloud--2"></div>
+    <div class="mountains mountains--far"></div>
+    <div class="mountains mountains--near"></div>
+    <div class="ground"></div>
+  </div>
+  <div class="crt" aria-hidden="true"></div>
+
+  <main class="app">
+
+    <!-- ================= TITLE ================= -->
+    <section class="screen screen--title is-active" id="title" data-screen aria-labelledby="title-heading">
+      <div class="logo-wrap">
+        <p class="logo-sub">~ AN 8-BIT ADVENTURE ~</p>
+        <h1 class="logo" id="title-heading" tabindex="-1"><span class="logo__line">PIXEL</span><span class="logo__line logo__line--2">QUEST</span></h1>
+        <div class="title-sprite" data-sprite="knight" data-scale="6"></div>
+      </div>
+      <button class="press-start" type="button" data-goto="main">PRESS START</button>
+      <p class="credits"><span>CREDITS 03</span><span>© 2026 YOUR STUDIO</span></p>
+    </section>
+
+    <!-- ================= MAIN MENU ================= -->
+    <section class="screen" id="main" data-screen aria-labelledby="main-title" hidden>
+      <div class="box box--menu">
+        <h1 class="box__title" id="main-title" tabindex="-1">MAIN MENU</h1>
+        <nav class="menu" aria-label="Main menu">
+          <button class="menu__item" type="button" data-goto="play">START GAME</button>
+          <button class="menu__item" type="button" data-goto="levels">WORLD MAP</button>
+          <button class="menu__item" type="button" data-goto="characters">HEROES</button>
+          <button class="menu__item" type="button" data-goto="leaderboard">HIGH SCORES</button>
+          <button class="menu__item" type="button" data-goto="settings">OPTIONS</button>
+          <button class="menu__item" type="button" data-goto="quit">QUIT</button>
+        </nav>
+        <p class="box__hint">UP/DOWN MOVE · ENTER SELECT</p>
+      </div>
+      <div class="hiscore-chip"><span>HI-SCORE</span><strong>047200</strong></div>
+    </section>
+
+    <!-- ================= PLAY (demo) ================= -->
+    <section class="screen screen--play" id="play" data-screen aria-labelledby="play-title" hidden>
+      <h1 class="visually-hidden" id="play-title" tabindex="-1">In game — World 1-2</h1>
+      <div class="hud">
+        <div class="hud__group">
+          <span class="hud__label">LIFE</span>
+          <span class="hearts" role="img" aria-label="3 of 4 hearts"><span class="heart"></span><span class="heart"></span><span class="heart"></span><span class="heart heart--empty"></span></span>
+        </div>
+        <div class="hud__group"><span class="hud__label">SCORE</span><output class="hud__value" id="live-score">000000</output></div>
+        <div class="hud__group"><span class="hud__label">COINS</span><span class="hud__value"><span class="coin" aria-hidden="true"></span>×<span id="coins">12</span></span></div>
+        <div class="hud__group hud__group--hide-sm"><span class="hud__label">WORLD</span><span class="hud__value">1-2</span></div>
+        <button class="pixel-btn pixel-btn--icon" type="button" data-goto="pause"><span aria-hidden="true">II</span><span class="visually-hidden">Pause</span></button>
+      </div>
+      <div class="stage" aria-hidden="true">
+        <div class="block block--q"></div>
+        <div class="block block--brick"></div>
+        <div class="block block--q block--2"></div>
+        <div class="player" data-sprite="knight" data-scale="4"></div>
+        <div class="enemy"></div>
+      </div>
+      <div class="play-bar">
+        <p class="small-print">DEMO SCREEN · ESC TO PAUSE</p>
+        <button class="pixel-btn pixel-btn--red" type="button" data-goto="gameover">LOSE A LIFE</button>
+      </div>
+    </section>
+
+    <!-- ================= PAUSE ================= -->
+    <section class="screen screen--dim" id="pause" data-screen aria-labelledby="pause-title" hidden>
+      <div class="box box--small">
+        <h1 class="box__title box__title--blink" id="pause-title" tabindex="-1">PAUSE</h1>
+        <nav class="menu" aria-label="Pause menu">
+          <button class="menu__item" type="button" data-goto="play">CONTINUE</button>
+          <button class="menu__item" type="button" data-goto="play" data-action="restart">RETRY LEVEL</button>
+          <button class="menu__item" type="button" data-goto="settings">OPTIONS</button>
+          <button class="menu__item" type="button" data-goto="main">EXIT TO MENU</button>
+        </nav>
+      </div>
+    </section>
+
+    <!-- ================= OPTIONS ================= -->
+    <section class="screen" id="settings" data-screen aria-labelledby="settings-title" hidden>
+      <div class="box box--wide">
+        <div class="box__head">
+          <button class="pixel-btn pixel-btn--icon" type="button" data-goto="main" data-back><svg class="px-arrow" viewBox="0 0 8 8" shape-rendering="crispEdges" aria-hidden="true"><path d="M5 0h2v1H5zM4 1h2v1H4zM3 2h2v1H3zM2 3h2v2H2zM3 5h2v1H3zM4 6h2v1H4zM5 7h2v1H5z"/></svg><span class="visually-hidden">Back</span></button>
+          <h1 class="box__title" id="settings-title" tabindex="-1">OPTIONS</h1>
+        </div>
+        <div class="tabs" role="tablist" aria-label="Option groups">
+          <button class="tab" role="tab" type="button" id="tab-sound" aria-controls="pane-sound" aria-selected="true">SOUND</button>
+          <button class="tab" role="tab" type="button" id="tab-video" aria-controls="pane-video" aria-selected="false" tabindex="-1">VIDEO</button>
+          <button class="tab" role="tab" type="button" id="tab-keys" aria-controls="pane-keys" aria-selected="false" tabindex="-1">CONTROLS</button>
+        </div>
+
+        <form id="settings-form" class="settings">
+          <div class="pane" role="tabpanel" id="pane-sound" aria-labelledby="tab-sound">
+            <div class="opt">
+              <label for="opt-music">MUSIC</label>
+              <input class="blocks" type="range" id="opt-music" name="music" min="0" max="10" value="7">
+              <output for="opt-music" class="opt__val">7</output>
+            </div>
+            <div class="opt">
+              <label for="opt-sfx">SOUND FX</label>
+              <input class="blocks" type="range" id="opt-sfx" name="sfx" min="0" max="10" value="8">
+              <output for="opt-sfx" class="opt__val">8</output>
+            </div>
+            <div class="opt opt--toggle">
+              <label for="opt-beeps">MENU BEEPS</label>
+              <input type="checkbox" class="onoff" id="opt-beeps" name="beeps" role="switch">
+            </div>
+          </div>
+
+          <div class="pane" role="tabpanel" id="pane-video" aria-labelledby="tab-video" hidden>
+            <div class="opt opt--toggle">
+              <label for="opt-crt">CRT FILTER</label>
+              <input type="checkbox" class="onoff" id="opt-crt" name="crt" role="switch" checked>
+            </div>
+            <div class="opt opt--toggle">
+              <label for="opt-parallax">PARALLAX</label>
+              <input type="checkbox" class="onoff" id="opt-parallax" name="parallax" role="switch" checked>
+            </div>
+            <fieldset class="opt opt--choice">
+              <legend>PALETTE</legend>
+              <div class="choice">
+                <input type="radio" id="pal-night" name="palette" value="night" checked><label for="pal-night">NIGHT</label>
+                <input type="radio" id="pal-day" name="palette" value="day"><label for="pal-day">DAY</label>
+                <input type="radio" id="pal-gb" name="palette" value="mono"><label for="pal-gb">MONO</label>
+              </div>
+            </fieldset>
+          </div>
+
+          <div class="pane" role="tabpanel" id="pane-keys" aria-labelledby="tab-keys" hidden>
+            <table class="keys">
+              <caption class="visually-hidden">Controls</caption>
+              <tbody>
+                <tr><th scope="row">MOVE</th><td><kbd>←</kbd><kbd>→</kbd> / <kbd>A</kbd><kbd>D</kbd></td></tr>
+                <tr><th scope="row">JUMP</th><td><kbd>SPACE</kbd></td></tr>
+                <tr><th scope="row">ATTACK</th><td><kbd>J</kbd></td></tr>
+                <tr><th scope="row">PAUSE</th><td><kbd>ESC</kbd></td></tr>
+              </tbody>
+            </table>
+            <fieldset class="opt opt--choice">
+              <legend>DIFFICULTY</legend>
+              <div class="choice">
+                <input type="radio" id="dif-easy" name="difficulty" value="easy"><label for="dif-easy">EASY</label>
+                <input type="radio" id="dif-normal" name="difficulty" value="normal" checked><label for="dif-normal">NORMAL</label>
+                <input type="radio" id="dif-hard" name="difficulty" value="hard"><label for="dif-hard">HARD</label>
+              </div>
+            </fieldset>
+          </div>
+
+          <div class="settings__actions">
+            <button class="pixel-btn" type="button" id="reset-settings">DEFAULT</button>
+            <button class="pixel-btn pixel-btn--green" type="submit">SAVE</button>
+          </div>
+        </form>
+      </div>
+    </section>
+
+    <!-- ================= WORLD MAP (level select) ================= -->
+    <section class="screen" id="levels" data-screen aria-labelledby="levels-title" hidden>
+      <div class="box box--wide">
+        <div class="box__head">
+          <button class="pixel-btn pixel-btn--icon" type="button" data-goto="main"><svg class="px-arrow" viewBox="0 0 8 8" shape-rendering="crispEdges" aria-hidden="true"><path d="M5 0h2v1H5zM4 1h2v1H4zM3 2h2v1H3zM2 3h2v2H2zM3 5h2v1H3zM4 6h2v1H4zM5 7h2v1H5z"/></svg><span class="visually-hidden">Back to main menu</span></button>
+          <h1 class="box__title" id="levels-title" tabindex="-1">WORLD MAP</h1>
+          <span class="box__meta"><span class="coin" aria-hidden="true"></span> <span id="stars-total">0</span>/24</span>
+        </div>
+        <div class="map" id="map">
+          <svg class="map__path" viewBox="0 0 100 60" preserveAspectRatio="none" aria-hidden="true">
+            <polyline id="map-path" fill="none" points=""/>
+          </svg>
+          <div class="map__lake" aria-hidden="true"></div>
+          <div class="map__trees" aria-hidden="true"></div>
+          <ol class="map__nodes" id="map-nodes" aria-label="Levels"></ol>
+        </div>
+        <div class="box__foot">
+          <p class="level-info" id="level-info" aria-live="polite">1-1 GRASSY HILLS</p>
+          <button class="pixel-btn pixel-btn--green" type="button" data-goto="play">ENTER LEVEL</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- ================= HEROES (character select) ================= -->
+    <section class="screen" id="characters" data-screen aria-labelledby="characters-title" hidden>
+      <div class="box box--wide">
+        <div class="box__head">
+          <button class="pixel-btn pixel-btn--icon" type="button" data-goto="main"><svg class="px-arrow" viewBox="0 0 8 8" shape-rendering="crispEdges" aria-hidden="true"><path d="M5 0h2v1H5zM4 1h2v1H4zM3 2h2v1H3zM2 3h2v2H2zM3 5h2v1H3zM4 6h2v1H4zM5 7h2v1H5z"/></svg><span class="visually-hidden">Back to main menu</span></button>
+          <h1 class="box__title" id="characters-title" tabindex="-1">SELECT HERO</h1>
+        </div>
+        <div class="heroes" id="heroes" role="radiogroup" aria-label="Heroes"></div>
+        <div class="hero-detail" id="hero-detail" aria-live="polite">
+          <div class="hero-detail__sprite" id="hero-big"></div>
+          <div>
+            <h2 class="hero-detail__name" id="hero-name">KNIGHT</h2>
+            <p class="hero-detail__bio" id="hero-bio"></p>
+            <dl class="pips" id="hero-stats"></dl>
+          </div>
+        </div>
+        <div class="box__foot">
+          <p class="small-print">LEFT/RIGHT TO CHOOSE</p>
+          <button class="pixel-btn pixel-btn--green" type="button" data-goto="main" data-action="pick-hero">CONFIRM</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- ================= GAME OVER / CONTINUE ================= -->
+    <section class="screen screen--dim" id="gameover" data-screen aria-labelledby="gameover-title" hidden>
+      <div class="box box--small box--center">
+        <h1 class="box__title box__title--red" id="gameover-title" tabindex="-1">CONTINUE?</h1>
+        <p class="countdown" id="countdown" aria-live="polite">9</p>
+        <p class="score-line">SCORE <span id="final-score">000000</span></p>
+        <nav class="menu menu--row" aria-label="Continue?">
+          <button class="menu__item" type="button" data-goto="play" data-action="restart">YES</button>
+          <button class="menu__item" type="button" data-goto="leaderboard">NO</button>
+        </nav>
+        <p class="small-print">CREDITS 02</p>
+      </div>
+    </section>
+
+    <!-- ================= HIGH SCORES ================= -->
+    <section class="screen" id="leaderboard" data-screen aria-labelledby="leaderboard-title" hidden>
+      <div class="box box--wide">
+        <div class="box__head">
+          <button class="pixel-btn pixel-btn--icon" type="button" data-goto="main"><svg class="px-arrow" viewBox="0 0 8 8" shape-rendering="crispEdges" aria-hidden="true"><path d="M5 0h2v1H5zM4 1h2v1H4zM3 2h2v1H3zM2 3h2v2H2zM3 5h2v1H3zM4 6h2v1H4zM5 7h2v1H5z"/></svg><span class="visually-hidden">Back to main menu</span></button>
+          <h1 class="box__title" id="leaderboard-title" tabindex="-1">HIGH SCORES</h1>
+        </div>
+        <div class="tabs" role="tablist" aria-label="Score table">
+          <button class="tab" role="tab" type="button" id="hs-all" aria-controls="hs-panel" aria-selected="true" data-board="all">ALL TIME</button>
+          <button class="tab" role="tab" type="button" id="hs-today" aria-controls="hs-panel" aria-selected="false" data-board="today" tabindex="-1">TODAY</button>
+        </div>
+        <div id="hs-panel" role="tabpanel" aria-labelledby="hs-all">
+          <table class="scores">
+            <caption class="visually-hidden">High scores</caption>
+            <thead><tr><th scope="col">RANK</th><th scope="col">SCORE</th><th scope="col">NAME</th><th scope="col" class="col-hero">HERO</th></tr></thead>
+            <tbody id="hs-body"></tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <!-- ================= QUIT ================= -->
+    <section class="screen screen--dim" id="quit" data-screen aria-labelledby="quit-title" hidden>
+      <div class="box box--small box--center">
+        <h1 class="box__title" id="quit-title" tabindex="-1">QUIT GAME?</h1>
+        <p class="box__text">YOUR PROGRESS IS SAVED.</p>
+        <nav class="menu menu--row" aria-label="Quit confirmation">
+          <button class="menu__item" type="button" data-goto="main">NO</button>
+          <button class="menu__item" type="button" data-goto="title" data-action="quit">YES</button>
+        </nav>
+      </div>
+    </section>
+  </main>
+
+  <div class="toast" role="status" aria-live="polite"></div>
+  <script src="script.js"></script>
+</body>
+</html>
