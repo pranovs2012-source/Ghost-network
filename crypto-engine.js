@@ -534,3 +534,86 @@ export async function verifyChallenge(nonce, signatureBase64, pubJwk) {
         return false;
     }
 }
+
+// ─── ENCRYPTED P2P FILE TRANSFER (AES-256-GCM SESSION TUNNEL) ───────────────
+// Each verified peer link gets its own AES-256-GCM key, derived from an ephemeral
+// ECDH P-256 exchange that is bound to both identity keys by the signed handshake.
+// Every file header and chunk then travels as authenticated ciphertext (random noise
+// to anyone without the key), with a fresh 96-bit IV per packet.
+
+function getSubtle() {
+    const subtle = globalThis.crypto?.subtle || (typeof window !== 'undefined' ? window.crypto.subtle : null);
+    if (!subtle) throw new Error("Web Crypto API unavailable.");
+    return subtle;
+}
+
+/**
+ * Generates a single-use ECDH P-256 keypair for one peer session.
+ * Returns { privateKey, publicKey, pubB64 } where pubB64 is the raw public point in base64.
+ */
+export async function generateSessionKeyPair() {
+    const subtle = getSubtle();
+    const keyPair = await subtle.generateKey({ name: "ECDH", namedCurve: "P-256" }, false, ["deriveBits"]);
+    const rawPub = await subtle.exportKey("raw", keyPair.publicKey);
+    return { privateKey: keyPair.privateKey, publicKey: keyPair.publicKey, pubB64: bufferToBase64(rawPub) };
+}
+
+/**
+ * Builds the exact string each side signs during the handshake so the ephemeral ECDH keys
+ * are bound to the signer's identity (prevents a man-in-the-middle swapping them).
+ */
+export function buildHandshakeTranscript(nonce, signerEphPubB64, otherEphPubB64) {
+    return `ghost-session-v1|${nonce}|${signerEphPubB64}|${otherEphPubB64}`;
+}
+
+/**
+ * Derives the shared AES-256-GCM session key from our ephemeral private key and the peer's
+ * ephemeral public key using ECDH + HKDF-SHA-256. Both peers must pass the same salt string.
+ */
+export async function deriveSessionKey(myPrivateKey, theirPubB64, salt) {
+    const subtle = getSubtle();
+    const enc = new TextEncoder();
+    const theirPub = await subtle.importKey(
+        "raw", base64ToBuffer(theirPubB64), { name: "ECDH", namedCurve: "P-256" }, false, []
+    );
+    const sharedBits = await subtle.deriveBits({ name: "ECDH", public: theirPub }, myPrivateKey, 256);
+    const hkdfKey = await subtle.importKey("raw", sharedBits, "HKDF", false, ["deriveKey"]);
+    return await subtle.deriveKey(
+        { name: "HKDF", hash: "SHA-256", salt: enc.encode(salt), info: enc.encode("ghost-mesh-file-tunnel") },
+        hkdfKey, { name: "AES-GCM", length: 256 }, false, ["encrypt", "decrypt"]
+    );
+}
+
+/**
+ * Encrypts a JSON-serialisable packet into an AES-GCM envelope { type: 'SECURE_FRAME', iv, data }.
+ */
+export async function encryptSessionPacket(sessionKey, packet) {
+    const subtle = getSubtle();
+    const iv = (globalThis.crypto || window.crypto).getRandomValues(new Uint8Array(12));
+    const plaintext = new TextEncoder().encode(JSON.stringify(packet));
+    const ciphertext = await subtle.encrypt(
+        { name: "AES-GCM", iv, additionalData: new TextEncoder().encode("SECURE_FRAME") },
+        sessionKey, plaintext
+    );
+    return { type: 'SECURE_FRAME', iv: bufferToBase64(iv), data: bufferToBase64(ciphertext) };
+}
+
+/**
+ * Decrypts and authenticates a SECURE_FRAME envelope back into the original packet.
+ * Throws if the frame was tampered with or encrypted under a different key.
+ */
+export async function decryptSessionPacket(sessionKey, envelope) {
+    if (!envelope || !envelope.iv || !envelope.data) {
+        throw new Error("Invalid SECURE_FRAME envelope.");
+    }
+    const subtle = getSubtle();
+    try {
+        const plaintext = await subtle.decrypt(
+            { name: "AES-GCM", iv: new Uint8Array(base64ToBuffer(envelope.iv)), additionalData: new TextEncoder().encode("SECURE_FRAME") },
+            sessionKey, base64ToBuffer(envelope.data)
+        );
+        return JSON.parse(new TextDecoder().decode(plaintext));
+    } catch (e) {
+        throw new Error("SECURE_FRAME authentication failed: tampered data or wrong session key.");
+    }
+}

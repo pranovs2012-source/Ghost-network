@@ -797,7 +797,7 @@
             </div>
             <input type="file" id="myFileInput" accept="*/*" />
             <button id="btn-send-file" disabled>Stream File to Mesh RAM</button>
-            <div id="file-info" style="font-size: 0.8rem; color: var(--text-muted); margin-top: 8px;">Select a file to stream directly over WebRTC DataChannels.</div>
+            <div id="file-info" style="font-size: 0.8rem; color: var(--text-muted); margin-top: 8px;">Select a file to stream over WebRTC. Every chunk is AES-256-GCM encrypted with a per-peer session key.</div>
         </div>
 
         <!-- RECEIVED FILES -->
@@ -941,7 +941,9 @@
                  generateIndexMap, encryptIndexMap, decryptIndexMap, decryptAndReconstructShard,
                  generateIdentityKeypair, derivePhoneNumberFromPublicKey,
                  encryptContact, decryptContact,
-                 generateNonce, signChallenge, verifyChallenge } from './crypto-engine.js';
+                 generateNonce, signChallenge, verifyChallenge,
+                 generateSessionKeyPair, buildHandshakeTranscript, deriveSessionKey,
+                 encryptSessionPacket, decryptSessionPacket } from './crypto-engine.js';
 
 
         // State variables
@@ -967,6 +969,8 @@
         // Cryptographic Handshake State
         let peerHandshakes = {};  // { peerId: { myNonce, theirNonce, status: 'PENDING'|'VERIFIED'|'REJECTED' } }
         let peerIdentities = {};  // { peerId: { pubJwk, fingerprint, phone } }
+        let peerSessionKeys = {}; // { peerId: CryptoKey } — AES-256-GCM key for the encrypted file tunnel
+        let secureRxQueues = {};  // { peerId: Promise } — keeps decrypted frames in arrival order
         let pendingCall = null;   // { callerId, callerPhone } — active incoming call awaiting user decision
         let autoAcceptCalls = true; // Auto-accept calls when dialed by default (unrestricted connection)
         let pendingDialPhone = null;
@@ -1789,14 +1793,16 @@
                 if (isInitiator) {
                     // Step 1: Initiator sends CRYPTO_HELLO with our public key JWK + a random nonce challenge
                     const myNonce = generateNonce();
-                    peerHandshakes[peerId] = { myNonce, theirNonce: null, status: 'PENDING' };
+                    const myEph = await generateSessionKeyPair(); // Ephemeral ECDH key for the AES-GCM file tunnel
+                    peerHandshakes[peerId] = { myNonce, theirNonce: null, myEph, status: 'PENDING' };
 
                     safeSendChannel(channel, {
                         type:        'CRYPTO_HELLO',
                         pubJwk:      myIdentityKeypair.pubJwk,
                         fingerprint: myIdentityKeypair.fingerprint,
                         phone:       myPhone,
-                        nonce:       myNonce
+                        nonce:       myNonce,
+                        ephPub:      myEph.pubB64
                     });
                 }
 
@@ -1829,8 +1835,8 @@
                 (async () => {
                     if (!myIdentityKeypair) return;
 
-                    const { pubJwk, fingerprint, phone, nonce: theirNonce } = packet;
-                    if (!pubJwk || !theirNonce) {
+                    const { pubJwk, fingerprint, phone, nonce: theirNonce, ephPub: theirEphPub } = packet;
+                    if (!pubJwk || !theirNonce || !theirEphPub) {
                         log(`🔐 Malformed CRYPTO_HELLO from [${peerId}]. Rejecting.`, 'error');
                         safeSendChannel(dataChannels[peerId], { type: 'CRYPTO_REJECT', reason: 'MALFORMED_HELLO' });
                         return;
@@ -1841,9 +1847,12 @@
 
                     // Sign their nonce challenge with our private key
                     const myNonce = generateNonce();
-                    peerHandshakes[peerId] = { myNonce, theirNonce, status: 'PENDING' };
+                    const myEph = await generateSessionKeyPair();
+                    peerHandshakes[peerId] = { myNonce, theirNonce, myEph, theirEphPub, status: 'PENDING' };
 
-                    const signature = await signChallenge(theirNonce, myIdentityKeypair.privateKey);
+                    // Signature binds their nonce AND both ephemeral keys to our identity
+                    const signature = await signChallenge(
+                        buildHandshakeTranscript(theirNonce, myEph.pubB64, theirEphPub), myIdentityKeypair.privateKey);
 
                     // Send CRYPTO_HELLO_REPLY: our public key + signed their nonce + our new nonce challenge
                     safeSendChannel(dataChannels[peerId], {
@@ -1851,8 +1860,9 @@
                         pubJwk:      myIdentityKeypair.pubJwk,
                         fingerprint: myIdentityKeypair.fingerprint,
                         phone:       myPhone,
-                        signature:   signature,       // Signs theirNonce
-                        nonce:       myNonce          // Our challenge to them
+                        signature:   signature,       // Signs theirNonce + both ephemeral keys
+                        nonce:       myNonce,         // Our challenge to them
+                        ephPub:      myEph.pubB64
                     });
 
                     log(`🔐 CRYPTO_HELLO_REPLY sent to [${peerId}]. Awaiting ACK...`, 'info');
@@ -1863,16 +1873,17 @@
             // ── STEP 3a: Initiator handles CRYPTO_HELLO_REPLY ─────────────────
             if (packet && packet.type === 'CRYPTO_HELLO_REPLY') {
                 (async () => {
-                    const { pubJwk, fingerprint, phone, signature, nonce: theirNonce } = packet;
+                    const { pubJwk, fingerprint, phone, signature, nonce: theirNonce, ephPub: theirEphPub } = packet;
                     const hs = peerHandshakes[peerId];
-                    if (!hs || !pubJwk || !signature || !theirNonce) {
+                    if (!hs || !hs.myEph || !pubJwk || !signature || !theirNonce || !theirEphPub) {
                         log(`🔐 Unexpected or malformed CRYPTO_HELLO_REPLY from [${peerId}]. Rejecting.`, 'error');
                         safeSendChannel(dataChannels[peerId], { type: 'CRYPTO_REJECT', reason: 'MALFORMED_REPLY' });
                         return;
                     }
 
                     // Verify: peer signed OUR nonce with THEIR private key
-                    const valid = await verifyChallenge(hs.myNonce, signature, pubJwk);
+                    const valid = await verifyChallenge(
+                        buildHandshakeTranscript(hs.myNonce, theirEphPub, hs.myEph.pubB64), signature, pubJwk);
                     if (!valid) {
                         log(`🔐 ❌ CRYPTO_HELLO_REPLY signature INVALID from [${peerId}]! Closing channel.`, 'error');
                         peerHandshakes[peerId].status = 'REJECTED';
@@ -1887,11 +1898,15 @@
                     peerHandshakes[peerId].theirNonce = theirNonce;
 
                     // Sign THEIR nonce to complete the mutual auth
-                    const ackSig = await signChallenge(theirNonce, myIdentityKeypair.privateKey);
+                    const ackSig = await signChallenge(
+                        buildHandshakeTranscript(theirNonce, hs.myEph.pubB64, theirEphPub), myIdentityKeypair.privateKey);
+
+                    // Derive the per-link AES-256-GCM key (salt: initiator nonce | responder nonce)
+                    peerSessionKeys[peerId] = await deriveSessionKey(hs.myEph.privateKey, theirEphPub, `${hs.myNonce}|${theirNonce}`);
 
                     safeSendChannel(dataChannels[peerId], {
                         type:      'CRYPTO_ACK',
-                        signature: ackSig   // Signs theirNonce
+                        signature: ackSig   // Signs theirNonce + both ephemeral keys
                     });
 
                     // Mark as VERIFIED — now allow full mesh traffic
@@ -1900,6 +1915,7 @@
                     lastHeartbeats[peerId] = Date.now();
 
                     log(`🔐 ✅ Peer [${peerId}] CRYPTOGRAPHICALLY VERIFIED! Phone: [${phone || '?'}] Fingerprint: [${(fingerprint||'').substring(0,16)}...]`, 'success');
+                    log(`🔒 AES-256-GCM file tunnel established with [${peerId}] (ephemeral ECDH P-256 + HKDF-SHA-256).`, 'success');
 
                     // Now begin heartbeat
                     safeSendChannel(dataChannels[peerId], { type: 'HEARTBEAT_PING', timestamp: Date.now(), senderId: myNodeId });
@@ -1920,7 +1936,8 @@
                     }
 
                     // Verify they signed OUR nonce
-                    const valid = await verifyChallenge(hs.myNonce, signature, identity.pubJwk);
+                    const valid = hs.myEph && hs.theirEphPub && await verifyChallenge(
+                        buildHandshakeTranscript(hs.myNonce, hs.theirEphPub, hs.myEph.pubB64), signature, identity.pubJwk);
                     if (!valid) {
                         log(`🔐 ❌ CRYPTO_ACK signature INVALID from [${peerId}]! Closing channel.`, 'error');
                         peerHandshakes[peerId].status = 'REJECTED';
@@ -1929,12 +1946,14 @@
                         return;
                     }
 
-                    // Mutual authentication complete
+                    // Mutual authentication complete — derive the same AES-256-GCM session key
+                    peerSessionKeys[peerId] = await deriveSessionKey(hs.myEph.privateKey, hs.theirEphPub, `${hs.theirNonce}|${hs.myNonce}`);
                     peerHandshakes[peerId].status = 'VERIFIED';
                     peerStatuses[peerId] = 'CONNECTED';
                     lastHeartbeats[peerId] = Date.now();
 
                     log(`🔐 ✅ Peer [${peerId}] CRYPTOGRAPHICALLY VERIFIED! Phone: [${identity.phone || '?'}] Fingerprint: [${(identity.fingerprint||'').substring(0,16)}...]`, 'success');
+                    log(`🔒 AES-256-GCM file tunnel established with [${peerId}] (ephemeral ECDH P-256 + HKDF-SHA-256).`, 'success');
 
                     safeSendChannel(dataChannels[peerId], { type: 'HEARTBEAT_PING', timestamp: Date.now(), senderId: myNodeId });
                     updateUI();
@@ -2087,20 +2106,59 @@
                 return;
             }
 
-            // File transfer handling (RAM Stream)
-            if (packet && packet.type === 'FILE_HEADER') {
-                const key = `${peerId}:${packet.fileId}`;
-                window._incomingFiles = window._incomingFiles || {};
-                window._incomingFiles[key] = { fileName: packet.fileName, totalChunks: packet.totalChunks, chunks: [], received: 0 };
-                log(`Incoming file stream from [${peerId}]: "${packet.fileName}" (${packet.totalChunks} chunks)`, 'info');
+            // Encrypted file tunnel: decrypt + authenticate, then route the inner packet
+            if (packet && packet.type === 'SECURE_FRAME') {
+                const sessionKey = peerSessionKeys[peerId];
+                if (!sessionKey) {
+                    log(`🔒 Encrypted frame from [${peerId}] but no session key exists. Dropping.`, 'error');
+                    return;
+                }
+                // Chain per peer so frames are handled in arrival order (header before chunks)
+                secureRxQueues[peerId] = (secureRxQueues[peerId] || Promise.resolve()).then(async () => {
+                    try {
+                        const inner = await decryptSessionPacket(sessionKey, packet);
+                        if (inner && (inner.type === 'FILE_HEADER' || inner.type === 'FILE_CHUNK')) {
+                            handleSecureFilePacket(peerId, inner);
+                        }
+                    } catch (e) {
+                        log(`🔒 ❌ ${e.message} Frame from [${peerId}] discarded.`, 'error');
+                    }
+                });
                 return;
             }
 
-            if (packet && packet.type === 'FILE_CHUNK') {
+            // Files must only travel through the AES-GCM tunnel — never accept plaintext file data
+            if (packet && (packet.type === 'FILE_HEADER' || packet.type === 'FILE_CHUNK')) {
+                log(`🔒 Rejected unencrypted ${packet.type} from [${peerId}]. Files are only accepted over the AES-GCM tunnel.`, 'warn');
+                return;
+            }
+
+            // Fallback: Display raw text into RAM mirror
+            document.getElementById('ram-mirror').innerText = rawData;
+            log(`Inbound RAM Sync from [${peerId}]: "${rawData}"`, 'info');
+        }
+
+        // Handles file packets that have already been decrypted and authenticated
+        function handleSecureFilePacket(peerId, packet) {
+            if (packet.type === 'FILE_HEADER') {
+                const key = `${peerId}:${packet.fileId}`;
+                window._incomingFiles = window._incomingFiles || {};
+                window._incomingFiles[key] = { fileName: packet.fileName, totalChunks: packet.totalChunks, chunks: [], received: 0 };
+                log(`🔒 Incoming encrypted file stream from [${peerId}]: "${packet.fileName}" (${packet.totalChunks} chunks)`, 'info');
+                if (packet.totalChunks === 0) {
+                    const blob = new Blob([]);
+                    renderReceivedFile(packet.fileName, URL.createObjectURL(blob), blob);
+                    delete window._incomingFiles[key];
+                }
+                return;
+            }
+
+            if (packet.type === 'FILE_CHUNK') {
                 const key = `${peerId}:${packet.fileId}`;
                 const transfer = window._incomingFiles && window._incomingFiles[key];
                 if (!transfer) return;
 
+                if (transfer.chunks[packet.chunkIndex] !== undefined) return; // ignore replayed chunk
                 transfer.chunks[packet.chunkIndex] = atob(packet.payload);
                 transfer.received += 1;
 
@@ -2114,15 +2172,10 @@
                     const url = URL.createObjectURL(blob);
 
                     renderReceivedFile(transfer.fileName, url, blob);
-                    log(`File stream complete from [${peerId}]: "${transfer.fileName}"`, 'success');
+                    log(`🔒 Decrypted & verified file from [${peerId}]: "${transfer.fileName}"`, 'success');
                     delete window._incomingFiles[key];
                 }
-                return;
             }
-
-            // Fallback: Display raw text into RAM mirror
-            document.getElementById('ram-mirror').innerText = rawData;
-            log(`Inbound RAM Sync from [${peerId}]: "${rawData}"`, 'info');
         }
 
         // Heartbeat broadcast interval (runs every 3 seconds)
@@ -2181,6 +2234,8 @@
             delete peerStatuses[peerId];
             delete peerHandshakes[peerId];
             delete peerIdentities[peerId];
+            delete peerSessionKeys[peerId];
+            delete secureRxQueues[peerId];
 
             // PHASE 2 DYNAMIC AUTO-HEALING & RE-REPLICATION
             const onlinePeers = Object.keys(dataChannels).filter(id => dataChannels[id].readyState === 'open');
@@ -2804,49 +2859,60 @@
             container.appendChild(card);
         }
 
-        function sendFileToPeers(file) {
-            if (!file) return;
-            const chunkSize = 64 * 1024; // 64KB
-            const totalChunks = Math.ceil(file.size / chunkSize);
-            const fileId = `${file.name}-${Date.now()}`;
-
-            const header = JSON.stringify({ type: 'FILE_HEADER', fileId, fileName: file.name, totalChunks });
-            Object.keys(dataChannels).forEach(pid => {
-                safeSendChannel(dataChannels[pid], header);
+        // Waits until the channel's send buffer drains so large files don't overflow it
+        function waitForBufferDrain(channel, limit = 1024 * 1024) {
+            if (channel.bufferedAmount <= limit) return Promise.resolve();
+            return new Promise(resolve => {
+                const check = () => {
+                    if (channel.readyState !== 'open' || channel.bufferedAmount <= limit) resolve();
+                    else setTimeout(check, 20);
+                };
+                check();
             });
+        }
 
-            log(`Started file stream for "${file.name}" (${(file.size/1024).toFixed(1)} KB) to ${Object.keys(dataChannels).length} peer(s).`, 'info');
+        // Encrypts a packet with each peer's own AES-256-GCM session key and sends it
+        async function sendSecureToPeers(peerIds, packet) {
+            let sent = 0;
+            for (const pid of peerIds) {
+                const channel = dataChannels[pid];
+                const sessionKey = peerSessionKeys[pid];
+                if (!channel || channel.readyState !== 'open' || !sessionKey) continue;
+                await waitForBufferDrain(channel);
+                const frame = await encryptSessionPacket(sessionKey, packet);
+                if (safeSendChannel(channel, frame)) sent++;
+            }
+            return sent;
+        }
 
-            let offset = 0;
-            const reader = new FileReader();
-            let chunkIndex = 0;
+        async function sendFileToPeers(file) {
+            if (!file) return;
+            const chunkSize = 32 * 1024; // 32KB plaintext -> keeps encrypted frames well under DataChannel message limits
+            const totalChunks = Math.ceil(file.size / chunkSize);
+            const fileId = `${Date.now()}-${generateNonce().substring(0, 16)}`;
 
-            reader.onload = () => {
-                const binary = String.fromCharCode.apply(null, new Uint8Array(reader.result));
-                const base64 = btoa(binary);
-                const packet = JSON.stringify({ type: 'FILE_CHUNK', fileId, chunkIndex, totalChunks, payload: base64 });
-
-                Object.keys(dataChannels).forEach(pid => {
-                    safeSendChannel(dataChannels[pid], packet);
-                });
-
-                chunkIndex++;
-                offset += chunkSize;
-                if (offset < file.size) {
-                    readNext();
-                } else {
-                    log(`Completed file stream for "${file.name}".`, 'success');
-                }
-            };
-
-            reader.onerror = () => log(`Error reading file "${file.name}"`, 'error');
-
-            function readNext() {
-                const slice = file.slice(offset, offset + chunkSize);
-                reader.readAsArrayBuffer(slice);
+            // Only peers that completed the signed handshake have a session key
+            const securePeers = Object.keys(dataChannels).filter(pid =>
+                dataChannels[pid] && dataChannels[pid].readyState === 'open' && peerSessionKeys[pid]);
+            if (securePeers.length === 0) {
+                log(`🔒 No peers with an established AES-GCM tunnel. File "${file.name}" was not sent.`, 'warn');
+                return;
             }
 
-            readNext();
+            log(`🔒 Encrypting "${file.name}" (${(file.size/1024).toFixed(1)} KB) with AES-256-GCM for ${securePeers.length} peer(s)...`, 'info');
+
+            try {
+                await sendSecureToPeers(securePeers, { type: 'FILE_HEADER', fileId, fileName: file.name, totalChunks });
+
+                for (let chunkIndex = 0, offset = 0; offset < file.size; chunkIndex++, offset += chunkSize) {
+                    const buffer = await file.slice(offset, offset + chunkSize).arrayBuffer();
+                    const payload = bufferToBase64(buffer);
+                    await sendSecureToPeers(securePeers, { type: 'FILE_CHUNK', fileId, chunkIndex, totalChunks, payload });
+                }
+                log(`🔒 Completed encrypted file stream for "${file.name}".`, 'success');
+            } catch (e) {
+                log(`Error streaming file "${file.name}": ${e.message}`, 'error');
+            }
         }
 
         // --- PHASE 3: INDEX MAP GENERATION & SECURE STORAGE ---
