@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="en" data-mode="normal">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>SYSTEM/LOGIN — Sign in</title>
+  <meta name="description" content="Brutalist login, sign-up and password reset template with caps lock warning, username check and invert mode.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Archivo+Black&amp;family=Space+Mono:wght@400;700&amp;display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="marquee" aria-hidden="true">
+    <div class="marquee__track">
+      <span>NO TRACKING ✦ NO DARK PATTERNS ✦ NO NONSENSE ✦ JUST A LOGIN FORM ✦ </span>
+      <span>NO TRACKING ✦ NO DARK PATTERNS ✦ NO NONSENSE ✦ JUST A LOGIN FORM ✦ </span>
+    </div>
+  </div>
+
+  <div class="page">
+    <header class="masthead">
+      <div class="masthead__top">
+        <a class="logo" href="#login" data-goto="login">SYSTEM/<span>LOGIN</span></a>
+        <button class="invert" type="button" id="invert" aria-pressed="false">Invert</button>
+      </div>
+      <p class="big" id="big-word" aria-hidden="true">LOG<br>IN.</p>
+      <span class="sticker sticker--1" aria-hidden="true">v2.0</span>
+      <span class="sticker sticker--2" aria-hidden="true">100% HTML</span>
+      <ul class="facts">
+        <li><b>0</b> cookies</li>
+        <li><b>1</b> form</li>
+        <li><b>∞</b> patience</li>
+      </ul>
+    </header>
+
+    <main class="panel">
+
+      <!-- LOGIN -->
+      <section class="screen is-active" id="login" data-screen aria-labelledby="login-title">
+        <div class="screen__meta mono"><span>FORM 001</span><span id="attempts">ATTEMPT 0/5</span></div>
+        <h1 class="title" id="login-title" tabindex="-1">Sign in</h1>
+        <p class="lead">Enter your details. Hit the big button. That’s it.</p>
+
+        <form class="form" id="login-form" novalidate>
+          <div class="field">
+            <label for="login-email"><span class="num">01/</span> Email</label>
+            <input id="login-email" name="email" type="email" autocomplete="email" required aria-describedby="login-email-error">
+            <p class="field__error" id="login-email-error" aria-live="polite"></p>
+          </div>
+          <div class="field">
+            <label for="login-password"><span class="num">02/</span> Password</label>
+            <div class="field__wrap">
+              <input id="login-password" name="password" type="password" autocomplete="current-password" required minlength="8" aria-describedby="login-caps login-password-error" data-caps="login-caps">
+              <button class="reveal" type="button" data-toggle-password="login-password" aria-pressed="false">Show</button>
+            </div>
+            <p class="caps mono" id="login-caps" aria-live="polite"></p>
+            <p class="field__error" id="login-password-error" aria-live="polite"></p>
+          </div>
+          <label class="check"><input type="checkbox" name="remember"><span class="check__box" aria-hidden="true"></span>Remember this machine</label>
+          <button class="btn" type="submit"><span class="btn__label">Sign in →</span></button>
+        </form>
+
+        <nav class="links" aria-label="Sign-in help">
+          <button class="link" type="button" data-goto="forgot">Forgot password</button>
+          <button class="link" type="button" data-goto="signup">Create account</button>
+        </nav>
+      </section>
+
+      <!-- SIGN UP -->
+      <section class="screen" id="signup" data-screen aria-labelledby="signup-title" hidden>
+        <div class="screen__meta mono"><span>FORM 002</span><span>NEW USER</span></div>
+        <h1 class="title" id="signup-title" tabindex="-1">Create account</h1>
+        <p class="lead">Four fields. We counted.</p>
+
+        <form class="form" id="signup-form" novalidate>
+          <div class="field">
+            <label for="signup-username"><span class="num">01/</span> Username</label>
+            <input id="signup-username" name="username" type="text" autocomplete="username" required minlength="3" pattern="[a-z0-9_]+" spellcheck="false" aria-describedby="signup-username-status signup-username-error">
+            <p class="status mono" id="signup-username-status" aria-live="polite">Lowercase letters, numbers, underscores.</p>
+            <p class="field__error" id="signup-username-error" aria-live="polite"></p>
+          </div>
+          <div class="field">
+            <label for="signup-email"><span class="num">02/</span> Email</label>
+            <input id="signup-email" name="email" type="email" autocomplete="email" required aria-describedby="signup-email-error">
+            <p class="field__error" id="signup-email-error" aria-live="polite"></p>
+          </div>
+          <div class="field">
+            <label for="signup-password"><span class="num">03/</span> Password</label>
+            <div class="field__wrap">
+              <input id="signup-password" name="password" type="password" autocomplete="new-password" required minlength="8" aria-describedby="signup-rules signup-caps signup-password-error" data-caps="signup-caps">
+              <button class="reveal" type="button" data-toggle-password="signup-password" aria-pressed="false">Show</button>
+            </div>
+            <p class="caps mono" id="signup-caps" aria-live="polite"></p>
+            <ul class="rules mono" id="signup-rules" aria-label="Password rules">
+              <li data-rule="length"><span class="mark" aria-hidden="true">[ ]</span> 8+ characters</li>
+              <li data-rule="number"><span class="mark" aria-hidden="true">[ ]</span> contains a number</li>
+              <li data-rule="mixed"><span class="mark" aria-hidden="true">[ ]</span> upper + lower case</li>
+            </ul>
+            <p class="field__error" id="signup-password-error" aria-live="polite"></p>
+          </div>
+          <label class="check"><input type="checkbox" name="terms" required aria-describedby="signup-terms-error"><span class="check__box" aria-hidden="true"></span><span>I read the <a class="link" href="#terms">terms</a>. Really.</span></label>
+          <p class="field__error" id="signup-terms-error" aria-live="polite"></p>
+          <button class="btn" type="submit"><span class="btn__label">Create account →</span></button>
+        </form>
+
+        <nav class="links" aria-label="Sign-up help">
+          <button class="link" type="button" data-goto="login">I have an account</button>
+        </nav>
+      </section>
+
+      <!-- FORGOT -->
+      <section class="screen" id="forgot" data-screen aria-labelledby="forgot-title" hidden>
+        <div class="screen__meta mono"><span>FORM 003</span><span>RECOVERY</span></div>
+        <h1 class="title" id="forgot-title" tabindex="-1">Lost it?</h1>
+        <p class="lead">Type your email. We send a reset link. You pick a better password.</p>
+        <form class="form" id="forgot-form" novalidate>
+          <div class="field">
+            <label for="forgot-email"><span class="num">01/</span> Email</label>
+            <input id="forgot-email" name="email" type="email" autocomplete="email" required aria-describedby="forgot-email-error">
+            <p class="field__error" id="forgot-email-error" aria-live="polite"></p>
+          </div>
+          <button class="btn" type="submit"><span class="btn__label">Send link →</span></button>
+        </form>
+        <nav class="links" aria-label="Recovery help">
+          <button class="link" type="button" data-goto="login">← Back to sign in</button>
+        </nav>
+      </section>
+
+      <!-- SENT -->
+      <section class="screen" id="sent" data-screen aria-labelledby="sent-title" hidden>
+        <div class="screen__meta mono"><span>FORM 004</span><span>OK</span></div>
+        <h1 class="title title--huge" id="sent-title" tabindex="-1">Sent.</h1>
+        <p class="lead">Check <strong class="sent-email">your inbox</strong>. The link dies in 30 minutes.</p>
+        <div class="receipt mono" aria-hidden="true">
+          <p>------------------------------</p>
+          <p>REQUEST ........ PASSWORD RESET</p>
+          <p>STATUS .................. SENT</p>
+          <p>EXPIRES ............... 30 MIN</p>
+          <p>------------------------------</p>
+        </div>
+        <button class="btn" type="button" data-goto="login"><span class="btn__label">Back to sign in →</span></button>
+        <nav class="links" aria-label="Resend">
+          <button class="link" type="button" id="resend" disabled>Resend in <span id="resend-timer">30</span>s</button>
+        </nav>
+      </section>
+    </main>
+  </div>
+
+  <div class="toast mono" role="status" aria-live="polite"></div>
+  <script src="script.js"></script>
+</body>
+</html>
