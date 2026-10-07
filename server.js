@@ -187,7 +187,13 @@ function broadcast(data, excludeId = null) {
 const storageRoot = path.join(__dirname, 'storage');
 function genId() { return Math.random().toString(36).substring(2, 9); }
 
+const signalingHandler = require('./api/signaling');
+
 const httpServer = http.createServer(async (req, res) => {
+    // Built-in HTTP signaling (same function Vercel runs at /api/signaling)
+    if (req.url && req.url.split('?')[0] === '/api/signaling') {
+        return signalingHandler(req, res);
+    }
     if (req.method === 'POST' && req.url === '/api/upload') {
         try {
             let body = '';

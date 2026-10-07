@@ -11,7 +11,7 @@
     "start:full": "node server.js",
     "start:signaling": "node signaling-server.js",
     "dev": "node server.js",
-    "test": "node test_handshake.js && node test_secure_transfer.js && node test_identity.js && node test_contacts.js && node test_phase4.js && node test_api.js"
+    "test": "node test_handshake.js && node test_secure_transfer.js && node test_http_signaling.js && node test_identity.js && node test_contacts.js && node test_phase4.js && node test_api.js"
   },
   "keywords": [
     "p2p",
