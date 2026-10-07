@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en" data-phosphor="green">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>MAINFRAME/77 — Secure Access</title>
+  <meta name="description" content="Retro CRT terminal login, registration and password reset template with a working command line and phosphor themes.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&amp;display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="crt" aria-hidden="true"></div>
+
+  <div class="monitor">
+    <div class="terminal">
+      <header class="bar">
+        <span>[■] TTY1</span>
+        <span class="bar__title">MAINFRAME/77 · SECURE ACCESS</span>
+        <span id="clock">00:00:00</span>
+      </header>
+
+      <main class="screen-area">
+        <pre class="boot" id="boot" aria-hidden="true"></pre>
+
+        <!-- LOGIN -->
+        <section class="screen is-active" id="login" data-screen aria-labelledby="login-title">
+<pre class="ascii" aria-hidden="true"> __  __    _    ___ _   _ _____ ____      _    __  __ _____
+|  \/  |  / \  |_ _| \ | |  ___|  _ \    / \  |  \/  | ____|
+| |\/| | / _ \  | ||  \| | |_  | |_) |  / _ \ | |\/| |  _|
+| |  | |/ ___ \ | || |\  |  _| |  _ &lt;  / ___ \| |  | | |___
+|_|  |_/_/   \_\___|_| \_|_|   |_| \_\/_/   \_\_|  |_|_____|</pre>
+          <h1 class="title" id="login-title" tabindex="-1">&gt; SECURE ACCESS TERMINAL</h1>
+          <p class="dim">Last login: <span id="last-login">—</span> from 10.0.4.17</p>
+          <p class="rule" aria-hidden="true"></p>
+          <form class="form" id="login-form" novalidate>
+            <div class="prompt">
+              <label for="login-email">login:</label>
+              <input id="login-email" name="email" type="email" autocomplete="email" spellcheck="false" required aria-describedby="login-email-error">
+            </div>
+            <p class="err" id="login-email-error" aria-live="polite"></p>
+            <div class="prompt">
+              <label for="login-password">password:</label>
+              <input id="login-password" name="password" type="password" autocomplete="current-password" required minlength="8" aria-describedby="login-password-error">
+              <button class="tbtn tbtn--small" type="button" data-toggle-password="login-password" aria-pressed="false">[show]</button>
+            </div>
+            <p class="err" id="login-password-error" aria-live="polite"></p>
+            <label class="tcheck"><input type="checkbox" name="remember"><span class="tcheck__box" aria-hidden="true"></span>remember this terminal</label>
+            <button class="tbtn tbtn--primary" type="submit"><span class="btn__label">&gt; AUTHENTICATE</span></button>
+          </form>
+          <p class="dim">New operator? Press <kbd>F2</kbd> or <button class="tlink" type="button" data-goto="signup">register</button>. Lost password? <kbd>F3</kbd> / <button class="tlink" type="button" data-goto="forgot">reset</button>.</p>
+        </section>
+
+        <!-- SIGN UP -->
+        <section class="screen" id="signup" data-screen aria-labelledby="signup-title" hidden>
+          <h1 class="title" id="signup-title" tabindex="-1">&gt; useradd --interactive</h1>
+          <p class="dim">Creating a new operator account. All fields required.</p>
+          <p class="rule" aria-hidden="true"></p>
+          <form class="form" id="signup-form" novalidate>
+            <div class="prompt">
+              <label for="signup-user">username:</label>
+              <input id="signup-user" name="username" type="text" autocomplete="username" spellcheck="false" required minlength="3" aria-describedby="signup-user-error">
+            </div>
+            <p class="err" id="signup-user-error" aria-live="polite"></p>
+            <div class="prompt">
+              <label for="signup-email">email:</label>
+              <input id="signup-email" name="email" type="email" autocomplete="email" spellcheck="false" required aria-describedby="signup-email-error">
+            </div>
+            <p class="err" id="signup-email-error" aria-live="polite"></p>
+            <div class="prompt">
+              <label for="signup-password">password:</label>
+              <input id="signup-password" name="password" type="password" autocomplete="new-password" required minlength="8" aria-describedby="signup-strength signup-password-error">
+              <button class="tbtn tbtn--small" type="button" data-toggle-password="signup-password" aria-pressed="false">[show]</button>
+            </div>
+            <p class="meter" id="signup-strength" aria-live="polite">strength [----------]   0% EMPTY</p>
+            <p class="err" id="signup-password-error" aria-live="polite"></p>
+            <label class="tcheck"><input type="checkbox" name="terms" required aria-describedby="signup-terms-error"><span class="tcheck__box" aria-hidden="true"></span>i accept the <a class="tlink" href="#terms">acceptable use policy</a></label>
+            <p class="err" id="signup-terms-error" aria-live="polite"></p>
+            <button class="tbtn tbtn--primary" type="submit"><span class="btn__label">&gt; CREATE OPERATOR</span></button>
+          </form>
+          <p class="dim">Already registered? <kbd>F1</kbd> / <button class="tlink" type="button" data-goto="login">login</button></p>
+        </section>
+
+        <!-- FORGOT -->
+        <section class="screen" id="forgot" data-screen aria-labelledby="forgot-title" hidden>
+          <h1 class="title" id="forgot-title" tabindex="-1">&gt; passwd --reset</h1>
+          <p class="dim">A one-time reset token will be sent to the address on file.</p>
+          <p class="rule" aria-hidden="true"></p>
+          <form class="form" id="forgot-form" novalidate>
+            <div class="prompt">
+              <label for="forgot-email">email:</label>
+              <input id="forgot-email" name="email" type="email" autocomplete="email" spellcheck="false" required aria-describedby="forgot-email-error">
+            </div>
+            <p class="err" id="forgot-email-error" aria-live="polite"></p>
+            <button class="tbtn tbtn--primary" type="submit"><span class="btn__label">&gt; SEND TOKEN</span></button>
+          </form>
+          <p class="dim"><kbd>F1</kbd> / <button class="tlink" type="button" data-goto="login">back to login</button></p>
+        </section>
+
+        <!-- SENT -->
+        <section class="screen" id="sent" data-screen aria-labelledby="sent-title" hidden>
+          <h1 class="title" id="sent-title" tabindex="-1">&gt; token dispatched</h1>
+          <pre class="log" id="sent-log">&gt; generating token ...... [ OK ]
+&gt; queueing mail ......... [ OK ]
+&gt; transmission complete.</pre>
+          <p>Check <strong class="sent-email">your inbox</strong>. Token expires in 30 minutes.</p>
+          <div class="sent-actions">
+            <button class="tbtn tbtn--primary" type="button" data-goto="login"><span class="btn__label">&gt; RETURN TO LOGIN</span></button>
+            <button class="tlink" type="button" id="resend" disabled>resend available in <span id="resend-timer">30</span>s</button>
+          </div>
+        </section>
+
+        <!-- Command line -->
+        <form class="cmd" id="cmd-form" autocomplete="off">
+          <label class="cmd__prompt" for="cmd">guest@mainframe:~$</label>
+          <input class="cmd__input" id="cmd" name="cmd" type="text" spellcheck="false" aria-describedby="cmd-help">
+          <p class="visually-hidden" id="cmd-help">Type help for a list of commands.</p>
+          <button class="visually-hidden" type="submit" tabindex="-1">Run command</button>
+        </form>
+        <pre class="cmd-out" id="cmd-out" aria-live="polite"></pre>
+      </main>
+
+      <nav class="fkeys" aria-label="Function keys">
+        <button type="button" data-goto="login"><kbd>F1</kbd> LOGIN</button>
+        <button type="button" data-goto="signup"><kbd>F2</kbd> REGISTER</button>
+        <button type="button" data-goto="forgot"><kbd>F3</kbd> RECOVER</button>
+        <button type="button" id="phosphor"><kbd>F4</kbd> <span id="phosphor-label">PHOSPHOR: GREEN</span></button>
+      </nav>
+    </div>
+  </div>
+
+  <div class="toast" role="status" aria-live="polite"></div>
+  <script src="script.js"></script>
+</body>
+</html>

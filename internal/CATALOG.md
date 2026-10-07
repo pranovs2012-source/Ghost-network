@@ -18,12 +18,12 @@ Alternate categories: odd numbers = login, even numbers = game-menu.
 
 ## Themes used (never repeat)
 
-aurora-glass (glassmorphism), neon-cyberpunk, swiss-minimal, pixel-arcade, dark-luxury, fantasy-rpg-bloom, scifi-hud, forest-fern-odyssey-pop
+aurora-glass (glassmorphism), neon-cyberpunk, swiss-minimal, pixel-arcade, dark-luxury, fantasy-rpg-bloom, scifi-hud, forest-fern-odyssey-pop, retro-terminal
 
 ## Theme backlog (pick the next unused one)
 
 - game-menu: horror, space, cartoon, steampunk, underwater, samurai ink, post-apocalyptic, candy/kawaii, racing/motorsport, medieval stone, western frontier
-- login: pastel, brutalist, neumorphism, retro terminal, synthwave, paper/origami, art deco, newspaper editorial, claymorphism, bauhaus, ocean wave, desert sand
+- login: pastel, brutalist, neumorphism, synthwave, paper/origami, art deco, newspaper editorial, claymorphism, bauhaus, ocean wave, desert sand
 
 ## Bundles
 
@@ -34,3 +34,4 @@ aurora-glass (glassmorphism), neon-cyberpunk, swiss-minimal, pixel-arcade, dark-
 | 012 | game-menu | Space Odyssey | `templates/game-menu/012-space-odyssey/` | `game-menu-012-space-odyssey.zip` | Cosmic exploration menus — parallax starfield with warp, spinning CSS planets, crew manifest and a drifting signal-lost screen. |
 | 013 | login | Neumorphism | `templates/login/013-neumorphism/` | `login-013-neumorphism.zip` | Calm soft-UI login that still passes contrast — passkey fingerprint scan, strength ring, 4 accents and dark soft mode. |
 | 014 | game-menu | Cartoon Pop | `templates/game-menu/014-cartoon-pop/` | `game-menu-014-cartoon-pop.zip` | Bouncy cartoon menus — jelly buttons, POW bursts, recolorable SVG buddies, sticker-book levels and a podium leaderboard. |
+| 015 | login | Retro Terminal | `templates/login/015-retro-terminal/` | `login-015-retro-terminal.zip` | Glowing CRT terminal login with a working command line, F-key navigation and green/amber/ice phosphor themes. |
