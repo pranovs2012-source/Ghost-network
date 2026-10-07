@@ -1,0 +1,290 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>AXIOM FRONT — Tactical Menu</title>
+  <meta name="description" content="Sci-fi HUD game menu template: tactical main menu, mission select with hologram globe, pilot dossiers with radar charts, key rebinding, debrief and rankings.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@500;600;700&amp;family=Share+Tech+Mono&amp;display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <!-- ===== Holographic environment ===== -->
+  <div class="env" aria-hidden="true">
+    <svg class="env__grid" preserveAspectRatio="none" viewBox="0 0 100 100">
+      <defs>
+        <pattern id="hex" width="5.2" height="9" patternUnits="userSpaceOnUse" patternTransform="scale(1.6)">
+          <path d="M2.6 0 L5.2 1.5 L5.2 4.5 L2.6 6 L0 4.5 L0 1.5 Z M2.6 6 V9" fill="none" stroke="currentColor" stroke-width=".12"/>
+        </pattern>
+      </defs>
+      <rect width="100" height="100" fill="url(#hex)"/>
+    </svg>
+    <div class="env__glow"></div>
+    <div class="env__scan"></div>
+    <div class="datastream datastream--left" id="stream-left"></div>
+    <div class="datastream datastream--right" id="stream-right"></div>
+    <div class="env__frame"><span></span><span></span><span></span><span></span></div>
+  </div>
+
+  <div class="boot mono" id="boot" aria-hidden="true"></div>
+
+  <main class="app">
+
+    <!-- ================= MAIN ================= -->
+    <section class="screen screen--main is-active" id="main" data-screen aria-labelledby="main-title">
+      <header class="topbar">
+        <span class="mono">AXF-OS v9.4.2</span>
+        <span class="mono topbar__mid">LINK SECURE <span class="pulse-dot" aria-hidden="true"></span></span>
+        <span class="mono" id="clock">00:00:00 UTC</span>
+      </header>
+
+      <div class="main-grid">
+        <div class="command">
+          <p class="callsign mono">// COMMANDER ON DECK</p>
+          <h1 class="logo" id="main-title" tabindex="-1">AXIOM <span>FRONT</span></h1>
+          <nav class="cmd-menu" aria-label="Main menu">
+            <button class="cmd" type="button" data-goto="play"><span class="cmd__code mono">01</span><span class="cmd__label">Deploy</span><span class="cmd__info mono">OP-7 / RESUME</span></button>
+            <button class="cmd" type="button" data-goto="levels"><span class="cmd__code mono">02</span><span class="cmd__label">Missions</span><span class="cmd__info mono">6 AVAILABLE</span></button>
+            <button class="cmd" type="button" data-goto="characters"><span class="cmd__code mono">03</span><span class="cmd__label">Pilots</span><span class="cmd__info mono">4 ON ROSTER</span></button>
+            <button class="cmd" type="button" data-goto="leaderboard"><span class="cmd__code mono">04</span><span class="cmd__label">Rankings</span><span class="cmd__info mono">SQUAD #12</span></button>
+            <button class="cmd" type="button" data-goto="settings"><span class="cmd__code mono">05</span><span class="cmd__label">Systems</span><span class="cmd__info mono">CONFIG</span></button>
+            <button class="cmd cmd--alert" type="button" data-goto="quit"><span class="cmd__code mono">06</span><span class="cmd__label">Terminate</span><span class="cmd__info mono">EXIT</span></button>
+          </nav>
+        </div>
+
+        <div class="viewport" aria-hidden="true">
+          <div class="radar">
+            <span class="radar__ring"></span><span class="radar__ring"></span><span class="radar__ring"></span>
+            <span class="radar__sweep"></span>
+            <span class="radar__blip" style="--x:62%;--y:30%"></span>
+            <span class="radar__blip radar__blip--hostile" style="--x:28%;--y:64%"></span>
+            <span class="radar__blip" style="--x:70%;--y:72%"></span>
+          </div>
+          <svg class="mech" viewBox="-60 -70 120 140">
+            <g class="mech__spin">
+              <path d="M-14 -50h28l6 14h-40z M-22 -36h44l8 30h-60z M-30 -6h60l-10 22h-40z M-18 16l-8 40h12l6-30 6 30h12l-8-40z M-30 -30l-22 6 4 26 14-4 M30 -30l22 6-4 26-14-4" fill="none" stroke="currentColor" stroke-width="1.2"/>
+              <path d="M-8 -44h16v6h-16z" fill="currentColor" opacity=".7"/>
+              <ellipse cx="0" cy="58" rx="40" ry="6" fill="none" stroke="currentColor" stroke-width=".8" stroke-dasharray="3 3"/>
+            </g>
+          </svg>
+          <p class="viewport__label mono">UNIT: VX-04 "WARDEN" · STATUS NOMINAL</p>
+        </div>
+      </div>
+
+      <footer class="readouts">
+        <div class="readout"><span class="mono">HULL</span><span class="readout__bar"><span style="--v:98%"></span></span><span class="mono">98%</span></div>
+        <div class="readout"><span class="mono">REACTOR</span><span class="readout__bar"><span style="--v:76%"></span></span><span class="mono">76%</span></div>
+        <div class="readout"><span class="mono">COMMS</span><span class="readout__bar"><span style="--v:88%"></span></span><span class="mono">88%</span></div>
+        <p class="readout__keys mono"><kbd>↑</kbd><kbd>↓</kbd> SELECT · <kbd>ENTER</kbd> CONFIRM · <kbd>ESC</kbd> BACK</p>
+      </footer>
+    </section>
+
+    <!-- ================= PLAY (demo HUD) ================= -->
+    <section class="screen screen--play" id="play" data-screen aria-labelledby="play-title" hidden>
+      <h1 class="visually-hidden" id="play-title" tabindex="-1">In mission — Operation Glass Tide</h1>
+      <div class="hud-top">
+        <div class="objective">
+          <p class="mono objective__label">OBJECTIVE</p>
+          <p class="objective__text">Secure the relay tower <span class="mono" id="relay">0/3</span></p>
+        </div>
+        <button class="sq-btn" type="button" data-goto="pause"><span class="visually-hidden">Tactical pause</span><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 5h3v14H7zM14 5h3v14h-3z"/></svg></button>
+      </div>
+      <div class="reticle" aria-hidden="true">
+        <span class="reticle__ring"></span><span class="reticle__cross"></span>
+        <span class="reticle__shield"></span>
+        <span class="reticle__dist mono" id="dist">342m</span>
+      </div>
+      <div class="hud-bottom">
+        <div class="ammo"><span class="mono ammo__label">RAIL CANNON</span><span class="ammo__count" id="ammo">24</span><span class="mono ammo__max">/ 48</span></div>
+        <div class="mini-radar" aria-hidden="true"><span class="radar__sweep"></span></div>
+        <button class="btn btn--alert" type="button" data-goto="gameover">Simulate hull breach</button>
+      </div>
+    </section>
+
+    <!-- ================= PAUSE ================= -->
+    <section class="screen screen--overlay" id="pause" data-screen aria-labelledby="pause-title" hidden>
+      <div class="panel panel--narrow">
+        <div class="panel__bar mono"><span>SYS // PAUSE</span><span>OP-7</span></div>
+        <h1 class="panel__title" id="pause-title" tabindex="-1">Tactical Pause</h1>
+        <ul class="checklist">
+          <li class="is-done">Insert at drop zone Kilo</li>
+          <li class="is-done">Disable AA battery</li>
+          <li>Secure the relay tower</li>
+          <li>Extract with intel</li>
+        </ul>
+        <nav class="cmd-menu cmd-menu--compact" aria-label="Pause menu">
+          <button class="cmd" type="button" data-goto="play"><span class="cmd__label">Resume</span></button>
+          <button class="cmd" type="button" data-goto="play" data-action="restart"><span class="cmd__label">Restart mission</span></button>
+          <button class="cmd" type="button" data-goto="settings"><span class="cmd__label">Systems</span></button>
+          <button class="cmd cmd--alert" type="button" data-goto="main"><span class="cmd__label">Abort to command</span></button>
+        </nav>
+      </div>
+    </section>
+
+    <!-- ================= SYSTEMS (settings) ================= -->
+    <section class="screen" id="settings" data-screen aria-labelledby="settings-title" hidden>
+      <div class="panel">
+        <div class="panel__bar mono"><span>SYS-04 // CONFIGURATION</span><span id="cfg-status">SYNCED</span></div>
+        <div class="panel__head">
+          <button class="sq-btn" type="button" data-goto="main" data-back><span class="visually-hidden">Back</span><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M15 5l-7 7 7 7" fill="none" stroke="currentColor" stroke-width="2.2"/></svg></button>
+          <h1 class="panel__title" id="settings-title" tabindex="-1">Systems</h1>
+        </div>
+        <div class="tabs" role="tablist" aria-label="System groups">
+          <button class="tab" role="tab" type="button" id="t-audio" aria-controls="p-audio" aria-selected="true">Audio</button>
+          <button class="tab" role="tab" type="button" id="t-display" aria-controls="p-display" aria-selected="false" tabindex="-1">Display</button>
+          <button class="tab" role="tab" type="button" id="t-controls" aria-controls="p-controls" aria-selected="false" tabindex="-1">Controls</button>
+        </div>
+        <form id="settings-form" class="sys-form">
+          <div class="pane" role="tabpanel" id="p-audio" aria-labelledby="t-audio">
+            <div class="sys-row"><label for="s-master">Master output</label><input class="seg" type="range" id="s-master" name="master" min="0" max="100" step="5" value="80"><output class="mono" for="s-master">80</output></div>
+            <div class="sys-row"><label for="s-comms">Comms chatter</label><input class="seg" type="range" id="s-comms" name="comms" min="0" max="100" step="5" value="60"><output class="mono" for="s-comms">60</output></div>
+            <div class="sys-row"><label for="s-music">Score</label><input class="seg" type="range" id="s-music" name="music" min="0" max="100" step="5" value="70"><output class="mono" for="s-music">70</output></div>
+            <div class="sys-row sys-row--switch"><label for="s-ui">Interface tones</label><input type="checkbox" class="bracket" id="s-ui" name="uiTones" role="switch"></div>
+          </div>
+          <div class="pane" role="tabpanel" id="p-display" aria-labelledby="t-display" hidden>
+            <div class="sys-row"><label for="s-holo">Holo intensity</label><input class="seg" type="range" id="s-holo" name="holo" min="40" max="140" step="10" value="100"><output class="mono" for="s-holo">100</output></div>
+            <div class="sys-row sys-row--switch"><label for="s-scan">Scan lines</label><input type="checkbox" class="bracket" id="s-scan" name="scan" role="switch" checked></div>
+            <div class="sys-row sys-row--switch"><label for="s-stream">Data streams</label><input type="checkbox" class="bracket" id="s-stream" name="streams" role="switch" checked></div>
+            <fieldset class="sys-row sys-row--choice">
+              <legend>HUD color</legend>
+              <div class="pills">
+                <input type="radio" id="c-cyan" name="hue" value="cyan" checked><label for="c-cyan">Cyan</label>
+                <input type="radio" id="c-amber" name="hue" value="amber"><label for="c-amber">Amber</label>
+                <input type="radio" id="c-green" name="hue" value="green"><label for="c-green">Green</label>
+              </div>
+            </fieldset>
+          </div>
+          <div class="pane" role="tabpanel" id="p-controls" aria-labelledby="t-controls" hidden>
+            <p class="pane__note mono">Select a binding, then press any key. <kbd>ESC</kbd> cancels.</p>
+            <table class="binds">
+              <caption class="visually-hidden">Key bindings</caption>
+              <tbody id="binds"></tbody>
+            </table>
+            <div class="sys-row"><label for="s-sens">Aim sensitivity</label><input class="seg" type="range" id="s-sens" name="sens" min="1" max="20" value="8"><output class="mono" for="s-sens">8</output></div>
+          </div>
+          <div class="sys-actions">
+            <button class="btn btn--ghost" type="button" id="reset-settings">Factory reset</button>
+            <button class="btn" type="submit">Commit</button>
+          </div>
+        </form>
+      </div>
+    </section>
+
+    <!-- ================= MISSIONS (level select) ================= -->
+    <section class="screen" id="levels" data-screen aria-labelledby="levels-title" hidden>
+      <div class="panel panel--wide">
+        <div class="panel__bar mono"><span>OPS // MISSION BOARD</span><span>THEATER: KESTREL BELT</span></div>
+        <div class="panel__head">
+          <button class="sq-btn" type="button" data-goto="main"><span class="visually-hidden">Back to command</span><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M15 5l-7 7 7 7" fill="none" stroke="currentColor" stroke-width="2.2"/></svg></button>
+          <h1 class="panel__title" id="levels-title" tabindex="-1">Mission Select</h1>
+        </div>
+        <div class="missions">
+          <ul class="mission-list" id="mission-list" aria-label="Missions"></ul>
+          <article class="briefing" id="briefing" aria-live="polite">
+            <div class="globe" aria-hidden="true"><span class="globe__lat"></span><span class="globe__lng"></span><span class="globe__marker" id="globe-marker"></span></div>
+            <p class="mono briefing__code" id="b-code">OP-01</p>
+            <h2 class="briefing__title" id="b-title">Mission</h2>
+            <p class="briefing__text" id="b-text"></p>
+            <dl class="briefing__stats">
+              <div><dt class="mono">THREAT</dt><dd><span class="threat" id="b-threat"></span></dd></div>
+              <div><dt class="mono">TERRAIN</dt><dd id="b-terrain"></dd></div>
+              <div><dt class="mono">REWARD</dt><dd id="b-reward"></dd></div>
+            </dl>
+            <button class="btn" type="button" data-goto="play">Launch mission</button>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <!-- ================= PILOTS (character select) ================= -->
+    <section class="screen" id="characters" data-screen aria-labelledby="characters-title" hidden>
+      <div class="panel panel--wide">
+        <div class="panel__bar mono"><span>PERSONNEL // PILOT DOSSIERS</span><span>CLEARANCE: OMEGA</span></div>
+        <div class="panel__head">
+          <button class="sq-btn" type="button" data-goto="main"><span class="visually-hidden">Back to command</span><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M15 5l-7 7 7 7" fill="none" stroke="currentColor" stroke-width="2.2"/></svg></button>
+          <h1 class="panel__title" id="characters-title" tabindex="-1">Pilot Select</h1>
+        </div>
+        <div class="roster" id="roster" role="radiogroup" aria-label="Pilots"></div>
+        <div class="dossier" id="dossier" aria-live="polite">
+          <div class="dossier__id">
+            <div class="hex-portrait" id="d-portrait" aria-hidden="true"></div>
+            <div>
+              <p class="mono dossier__call" id="d-call"></p>
+              <h2 class="dossier__name" id="d-name">Pilot</h2>
+              <p class="dossier__bio" id="d-bio"></p>
+            </div>
+          </div>
+          <figure class="spider">
+            <svg viewBox="-110 -110 220 220" id="spider" role="img" aria-labelledby="spider-desc"><desc id="spider-desc">Pilot attribute chart</desc></svg>
+            <figcaption class="visually-hidden" id="spider-text"></figcaption>
+          </figure>
+        </div>
+        <div class="panel__foot">
+          <p class="mono hint">← → BROWSE ROSTER</p>
+          <button class="btn" type="button" data-goto="main" data-action="assign">Assign pilot</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- ================= MISSION FAILED ================= -->
+    <section class="screen screen--failed" id="gameover" data-screen aria-labelledby="gameover-title" hidden>
+      <div class="alert-stripes" aria-hidden="true"></div>
+      <div class="panel panel--narrow panel--alert">
+        <div class="panel__bar mono"><span>!! CRITICAL</span><span>HULL INTEGRITY 0%</span></div>
+        <h1 class="failed-title" id="gameover-title" tabindex="-1" data-text="MISSION FAILED">MISSION FAILED</h1>
+        <p class="failed-sub mono">PILOT EJECTED · RECOVERY TEAM EN ROUTE</p>
+        <dl class="debrief">
+          <div><dt class="mono">HOSTILES</dt><dd id="db-hostiles">0</dd></div>
+          <div><dt class="mono">ACCURACY</dt><dd id="db-acc">0%</dd></div>
+          <div><dt class="mono">SCORE</dt><dd id="db-score">0</dd></div>
+        </dl>
+        <nav class="cmd-menu cmd-menu--compact" aria-label="Mission failed options">
+          <button class="cmd" type="button" data-goto="play" data-action="restart"><span class="cmd__label">Redeploy</span></button>
+          <button class="cmd" type="button" data-goto="leaderboard"><span class="cmd__label">View rankings</span></button>
+          <button class="cmd" type="button" data-goto="main"><span class="cmd__label">Return to command</span></button>
+        </nav>
+      </div>
+    </section>
+
+    <!-- ================= RANKINGS ================= -->
+    <section class="screen" id="leaderboard" data-screen aria-labelledby="leaderboard-title" hidden>
+      <div class="panel panel--wide">
+        <div class="panel__bar mono"><span>NET // SQUADRON RANKINGS</span><span>SEASON 04</span></div>
+        <div class="panel__head">
+          <button class="sq-btn" type="button" data-goto="main"><span class="visually-hidden">Back to command</span><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M15 5l-7 7 7 7" fill="none" stroke="currentColor" stroke-width="2.2"/></svg></button>
+          <h1 class="panel__title" id="leaderboard-title" tabindex="-1">Rankings</h1>
+        </div>
+        <div class="tabs" role="tablist" aria-label="Ranking scope">
+          <button class="tab" role="tab" type="button" id="r-global" aria-controls="r-panel" aria-selected="true" data-board="global">Global</button>
+          <button class="tab" role="tab" type="button" id="r-squad" aria-controls="r-panel" aria-selected="false" data-board="squad" tabindex="-1">Squadron</button>
+        </div>
+        <div class="table-wrap" id="r-panel" role="tabpanel" aria-labelledby="r-global">
+          <table class="ranks">
+            <caption class="visually-hidden">Pilot rankings</caption>
+            <thead><tr><th scope="col">#</th><th scope="col">Pilot</th><th scope="col" class="col-kd">K/D</th><th scope="col" class="col-ops">Ops</th><th scope="col">Rating</th></tr></thead>
+            <tbody id="r-body"></tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <!-- ================= QUIT ================= -->
+    <section class="screen screen--overlay" id="quit" data-screen aria-labelledby="quit-title" hidden>
+      <div class="panel panel--narrow">
+        <div class="panel__bar mono"><span>SYS // SHUTDOWN</span><span>CONFIRM</span></div>
+        <h1 class="panel__title" id="quit-title" tabindex="-1">Terminate session?</h1>
+        <p class="panel__text">All squad telemetry has been uploaded.</p>
+        <nav class="cmd-menu cmd-menu--compact" aria-label="Quit confirmation">
+          <button class="cmd" type="button" data-goto="main"><span class="cmd__label">Cancel</span></button>
+          <button class="cmd cmd--alert" type="button" data-goto="main" data-action="quit"><span class="cmd__label">Terminate</span></button>
+        </nav>
+      </div>
+    </section>
+  </main>
+
+  <div class="toast mono" role="status" aria-live="polite"></div>
+  <script src="script.js"></script>
+</body>
+</html>

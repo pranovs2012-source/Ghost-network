@@ -12,14 +12,15 @@ Alternate categories: odd numbers = login, even numbers = game-menu.
 | 005 | login | Dark Luxury | `templates/login/005-dark-luxury/` | `login-005-dark-luxury.zip` | Black-and-gold members-club login with foil type, floating labels, 2-step code entry and membership tier cards. |
 | 006 | game-menu | Fantasy RPG | `templates/game-menu/006-fantasy-rpg/` | `game-menu-006-fantasy-rpg.zip` | Storybook RPG menus in parchment & gilt — flip-card heroes, quest log, campfire pause and a hall of legends with heraldic shields. |
 | 007 | login | Pastel Bloom | `templates/login/007-pastel-bloom/` | `login-007-pastel-bloom.zip` | Bouncy pastel login with a cloud mascot that watches you type, 3-step sign-up, flower strength meter and confetti. |
+| 008 | game-menu | Sci-Fi HUD | `templates/game-menu/008-scifi-hud/` | `game-menu-008-scifi-hud.zip` | Holographic tactical command menus — radar, mission briefings with hologram globe, pilot radar charts and live key rebinding. |
 
 ## Themes used (never repeat)
 
-aurora-glass (glassmorphism), neon-cyberpunk, swiss-minimal, pixel-arcade, dark-luxury, fantasy-rpg-bloom
+aurora-glass (glassmorphism), neon-cyberpunk, swiss-minimal, pixel-arcade, dark-luxury, fantasy-rpg-bloom, scifi-hud
 
 ## Theme backlog (pick the next unused one)
 
-- game-menu: sci-fi HUD, horror, space, cartoon, steampunk, underwater, samurai ink, post-apocalyptic, candy/kawaii, racing/motorsport, medieval stone, western frontier
+- game-menu: horror, space, cartoon, steampunk, underwater, samurai ink, post-apocalyptic, candy/kawaii, racing/motorsport, medieval stone, western frontier
 - login: pastel, brutalist, nature/forest, neumorphism, retro terminal, synthwave, paper/origami, art deco, newspaper editorial, claymorphism, bauhaus, ocean wave, desert sand
 
 ## Bundles
