@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Aurum Private — Member Sign In</title>
+  <meta name="description" content="Dark luxury login template with two-step verification, membership sign-up and password recovery.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;1,500&amp;family=Manrope:wght@400;500;600&amp;display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="backdrop" aria-hidden="true">
+    <div class="spotlight"></div>
+    <div class="dust" id="dust"></div>
+  </div>
+
+  <div class="layout">
+    <!-- ===== Editorial side ===== -->
+    <aside class="editorial" aria-label="About Aurum Private">
+      <div class="sculpture" aria-hidden="true">
+        <span class="ring ring--1"></span>
+        <span class="ring ring--2"></span>
+        <span class="ring ring--3"></span>
+        <span class="orb"></span>
+      </div>
+      <figure class="editorial__quote">
+        <blockquote>“Quiet rooms, loud ideas.”</blockquote>
+        <figcaption>The Aurum Members’ Handbook</figcaption>
+      </figure>
+      <dl class="editorial__facts">
+        <div><dt>Founded</dt><dd>MCMXXIV</dd></div>
+        <div><dt>Residences</dt><dd>12 cities</dd></div>
+        <div><dt>Membership</dt><dd>By invitation</dd></div>
+      </dl>
+    </aside>
+
+    <!-- ===== Auth card ===== -->
+    <main class="card">
+      <header class="card__brand">
+        <svg class="monogram" viewBox="0 0 64 64" aria-hidden="true">
+          <defs>
+            <linearGradient id="goldGrad" x1="0" y1="0" x2="1" y2="1">
+              <stop offset="0" stop-color="#f6e7b8"/>
+              <stop offset=".45" stop-color="#c9a24d"/>
+              <stop offset="1" stop-color="#8a6a2a"/>
+            </linearGradient>
+          </defs>
+          <circle cx="32" cy="32" r="30" fill="none" stroke="url(#goldGrad)" stroke-width="1"/>
+          <circle cx="32" cy="32" r="26" fill="none" stroke="url(#goldGrad)" stroke-width=".5"/>
+          <path d="M20 44 L32 16 L44 44 M24.5 34 H39.5" fill="none" stroke="url(#goldGrad)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+        <p class="wordmark">Aurum <em>Private</em></p>
+      </header>
+
+      <!-- SIGN IN -->
+      <section class="screen is-active" id="login" data-screen aria-labelledby="login-title">
+        <h1 class="title" id="login-title" tabindex="-1">Welcome back</h1>
+        <p class="subtitle">Sign in with the email linked to your membership.</p>
+
+        <form class="form" id="login-form" novalidate>
+          <div class="field">
+            <input id="login-email" name="email" type="email" autocomplete="email" placeholder=" " required aria-describedby="login-email-error">
+            <label for="login-email">Email address</label>
+            <span class="field__line" aria-hidden="true"></span>
+            <p class="field__error" id="login-email-error" aria-live="polite"></p>
+          </div>
+          <div class="field">
+            <input id="login-password" name="password" type="password" autocomplete="current-password" placeholder=" " required minlength="8" aria-describedby="login-password-error">
+            <label for="login-password">Password</label>
+            <button class="reveal" type="button" data-toggle-password="login-password" aria-pressed="false">Show</button>
+            <span class="field__line" aria-hidden="true"></span>
+            <p class="field__error" id="login-password-error" aria-live="polite"></p>
+          </div>
+          <div class="form__row">
+            <label class="check"><input type="checkbox" name="remember" checked><span class="check__mark" aria-hidden="true"></span>Remember me</label>
+            <button class="link" type="button" data-goto="forgot">Forgotten password</button>
+          </div>
+          <button class="btn" type="submit"><span class="btn__label">Enter</span><span class="btn__spinner" aria-hidden="true"></span></button>
+        </form>
+
+        <p class="note">Not yet a member? <button class="link" type="button" data-goto="signup">Request membership</button></p>
+      </section>
+
+      <!-- TWO-STEP VERIFICATION -->
+      <section class="screen" id="verify" data-screen aria-labelledby="verify-title" hidden>
+        <h1 class="title" id="verify-title" tabindex="-1">A final step</h1>
+        <p class="subtitle">Enter the six-digit code we sent to your phone ending <span class="gold">•• 42</span>.</p>
+        <form class="form" id="verify-form" novalidate>
+          <fieldset class="otp" aria-describedby="otp-error">
+            <legend class="visually-hidden">Verification code</legend>
+            <input class="otp__box" type="text" inputmode="numeric" pattern="[0-9]*" maxlength="1" autocomplete="one-time-code" aria-label="Digit 1">
+            <input class="otp__box" type="text" inputmode="numeric" pattern="[0-9]*" maxlength="1" aria-label="Digit 2">
+            <input class="otp__box" type="text" inputmode="numeric" pattern="[0-9]*" maxlength="1" aria-label="Digit 3">
+            <span class="otp__dash" aria-hidden="true"></span>
+            <input class="otp__box" type="text" inputmode="numeric" pattern="[0-9]*" maxlength="1" aria-label="Digit 4">
+            <input class="otp__box" type="text" inputmode="numeric" pattern="[0-9]*" maxlength="1" aria-label="Digit 5">
+            <input class="otp__box" type="text" inputmode="numeric" pattern="[0-9]*" maxlength="1" aria-label="Digit 6">
+          </fieldset>
+          <p class="field__error field__error--center" id="otp-error" aria-live="polite"></p>
+          <button class="btn" type="submit"><span class="btn__label">Verify</span><span class="btn__spinner" aria-hidden="true"></span></button>
+        </form>
+        <p class="note">Wrong number? <button class="link" type="button" data-goto="login">Use another method</button></p>
+      </section>
+
+      <!-- REQUEST MEMBERSHIP -->
+      <section class="screen" id="signup" data-screen aria-labelledby="signup-title" hidden>
+        <h1 class="title" id="signup-title" tabindex="-1">Request membership</h1>
+        <p class="subtitle">Every application is read by a person, not a machine.</p>
+
+        <form class="form" id="signup-form" novalidate>
+          <div class="field">
+            <input id="signup-name" name="name" type="text" autocomplete="name" placeholder=" " required aria-describedby="signup-name-error">
+            <label for="signup-name">Full name</label>
+            <span class="field__line" aria-hidden="true"></span>
+            <p class="field__error" id="signup-name-error" aria-live="polite"></p>
+          </div>
+          <div class="field">
+            <input id="signup-email" name="email" type="email" autocomplete="email" placeholder=" " required aria-describedby="signup-email-error">
+            <label for="signup-email">Email address</label>
+            <span class="field__line" aria-hidden="true"></span>
+            <p class="field__error" id="signup-email-error" aria-live="polite"></p>
+          </div>
+          <div class="field">
+            <input id="signup-password" name="password" type="password" autocomplete="new-password" placeholder=" " required minlength="8" aria-describedby="signup-strength signup-password-error">
+            <label for="signup-password">Create a password</label>
+            <button class="reveal" type="button" data-toggle-password="signup-password" aria-pressed="false">Show</button>
+            <span class="field__line" aria-hidden="true"></span>
+            <div class="meter" aria-hidden="true"><span class="meter__fill" id="meter-fill"></span></div>
+            <p class="meter__text" id="signup-strength" aria-live="polite">At least 8 characters.</p>
+            <p class="field__error" id="signup-password-error" aria-live="polite"></p>
+          </div>
+
+          <fieldset class="tiers">
+            <legend>Preferred membership</legend>
+            <div class="tiers__grid">
+              <label class="tier">
+                <input type="radio" name="tier" value="residence" checked>
+                <span class="tier__card tier__card--silver">
+                  <span class="tier__name">Residence</span>
+                  <span class="tier__desc">One city</span>
+                </span>
+              </label>
+              <label class="tier">
+                <input type="radio" name="tier" value="global">
+                <span class="tier__card tier__card--gold">
+                  <span class="tier__name">Global</span>
+                  <span class="tier__desc">All 12 houses</span>
+                </span>
+              </label>
+              <label class="tier">
+                <input type="radio" name="tier" value="founder">
+                <span class="tier__card tier__card--black">
+                  <span class="tier__name">Founder</span>
+                  <span class="tier__desc">Invitation only</span>
+                </span>
+              </label>
+            </div>
+          </fieldset>
+
+          <label class="check"><input type="checkbox" name="terms" required aria-describedby="signup-terms-error"><span class="check__mark" aria-hidden="true"></span><span>I agree to the <a class="link" href="#house-rules">House Rules</a></span></label>
+          <p class="field__error" id="signup-terms-error" aria-live="polite"></p>
+
+          <button class="btn" type="submit"><span class="btn__label">Submit application</span><span class="btn__spinner" aria-hidden="true"></span></button>
+        </form>
+        <p class="note">Already a member? <button class="link" type="button" data-goto="login">Sign in</button></p>
+      </section>
+
+      <!-- FORGOT -->
+      <section class="screen" id="forgot" data-screen aria-labelledby="forgot-title" hidden>
+        <h1 class="title" id="forgot-title" tabindex="-1">Forgotten password</h1>
+        <p class="subtitle">We will send a discreet link to reset it. It expires in thirty minutes.</p>
+        <form class="form" id="forgot-form" novalidate>
+          <div class="field">
+            <input id="forgot-email" name="email" type="email" autocomplete="email" placeholder=" " required aria-describedby="forgot-email-error">
+            <label for="forgot-email">Email address</label>
+            <span class="field__line" aria-hidden="true"></span>
+            <p class="field__error" id="forgot-email-error" aria-live="polite"></p>
+          </div>
+          <button class="btn" type="submit"><span class="btn__label">Send reset link</span><span class="btn__spinner" aria-hidden="true"></span></button>
+        </form>
+        <p class="note"><button class="link" type="button" data-goto="login">Return to sign in</button></p>
+      </section>
+
+      <!-- SENT -->
+      <section class="screen screen--center" id="sent" data-screen aria-labelledby="sent-title" hidden>
+        <div class="seal" aria-hidden="true">
+          <svg viewBox="0 0 80 80"><circle cx="40" cy="40" r="36" fill="none" stroke="url(#goldGrad)" stroke-width="1"/><path class="seal__check" d="M26 41 l9 9 l19 -20" fill="none" stroke="url(#goldGrad)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </div>
+        <h1 class="title" id="sent-title" tabindex="-1">With our compliments</h1>
+        <p class="subtitle">A reset link is on its way to <span class="gold sent-email">your inbox</span>.</p>
+        <button class="btn btn--outline" type="button" data-goto="login"><span class="btn__label">Return to sign in</span></button>
+        <p class="note"><button class="link" type="button" id="resend" disabled>Resend in <span id="resend-timer">30</span> seconds</button></p>
+      </section>
+
+      <footer class="card__foot">
+        <a class="link link--quiet" href="#concierge">Concierge</a>
+        <span aria-hidden="true">·</span>
+        <a class="link link--quiet" href="#privacy">Privacy</a>
+        <span aria-hidden="true">·</span>
+        <a class="link link--quiet" href="#accessibility">Accessibility</a>
+      </footer>
+    </main>
+  </div>
+
+  <div class="toast" role="status" aria-live="polite"></div>
+  <script src="script.js"></script>
+</body>
+</html>
