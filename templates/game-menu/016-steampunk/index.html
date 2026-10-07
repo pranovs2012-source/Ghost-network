@@ -1,0 +1,287 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>AETHERWORKS — Game Menu</title>
+  <meta name="description" content="Steampunk airship game menu template: riveted brass plates, interlocking gears, steam pipes, a voyage chart level map, engineers with dial gauges and a boiler-burst game over.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display+SC:wght@700;900&amp;family=Alegreya:ital,wght@0,400;0,500;0,700;1,400&amp;display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <!-- ===== Workshop backdrop: lamp glow, gears (SVG built in script.js), pipes + steam ===== -->
+  <div class="backdrop" aria-hidden="true">
+    <div class="lamp"></div>
+    <div class="gears gears--left" data-gears="left"></div>
+    <div class="gears gears--right" data-gears="right"></div>
+    <div class="pipes">
+      <span class="pipe pipe--a"></span><span class="pipe pipe--b"></span><span class="pipe pipe--c"></span>
+      <div class="steam" id="steam"></div>
+    </div>
+  </div>
+
+  <main class="app">
+
+    <!-- ================= MAIN ================= -->
+    <section class="screen screen--main is-active" id="main" data-screen aria-labelledby="main-title">
+      <div class="hero">
+        <div class="airship airship--hero" aria-hidden="true" data-airship></div>
+        <div class="plaque">
+          <p class="plaque__pre">The Royal Society of Aeronauts presents</p>
+          <h1 class="logo" id="main-title" tabindex="-1">Aether<span>works</span></h1>
+          <p class="plaque__post">Chapter II · The Brass Armada</p>
+        </div>
+      </div>
+      <nav class="plate-menu" aria-label="Main menu">
+        <button class="plate" type="button" data-goto="play"><span class="plate__cog" aria-hidden="true" data-cog></span><span class="plate__text"><span class="plate__label">Set Sail</span><span class="plate__sub">Continue · Port Gallowmere</span></span></button>
+        <button class="plate" type="button" data-goto="levels"><span class="plate__cog" aria-hidden="true" data-cog></span><span class="plate__text"><span class="plate__label">Voyage Chart</span><span class="plate__sub">5 of 7 ports charted</span></span></button>
+        <button class="plate" type="button" data-goto="characters"><span class="plate__cog" aria-hidden="true" data-cog></span><span class="plate__text"><span class="plate__label">Engineers’ Guild</span><span class="plate__sub">Choose your chief engineer</span></span></button>
+        <button class="plate" type="button" data-goto="leaderboard"><span class="plate__cog" aria-hidden="true" data-cog></span><span class="plate__text"><span class="plate__label">Hall of Inventors</span><span class="plate__sub">Ranked 12th this season</span></span></button>
+        <button class="plate" type="button" data-goto="settings"><span class="plate__cog" aria-hidden="true" data-cog></span><span class="plate__text"><span class="plate__label">The Workshop</span><span class="plate__sub">Machinery · Sound · Controls</span></span></button>
+        <button class="plate plate--copper" type="button" data-goto="quit"><span class="plate__cog" aria-hidden="true" data-cog></span><span class="plate__text"><span class="plate__label">Abandon Ship</span><span class="plate__sub">Quit to desktop</span></span></button>
+      </nav>
+      <footer class="ticker">
+        <span class="ticker__item"><span class="lamp-dot" aria-hidden="true"></span>Boiler 212 psi</span>
+        <span class="ticker__item">Coal 8 tons</span>
+        <span class="ticker__item">Ver. 1.18.77</span>
+      </footer>
+    </section>
+
+    <!-- ================= PLAY ================= -->
+    <section class="screen screen--play" id="play" data-screen aria-labelledby="play-title" hidden>
+      <h1 class="visually-hidden" id="play-title" tabindex="-1">Under way — sailing to Port Gallowmere</h1>
+      <div class="sky" aria-hidden="true">
+        <span class="sun"></span>
+        <span class="cloud cloud--1"></span><span class="cloud cloud--2"></span><span class="cloud cloud--3"></span><span class="cloud cloud--4"></span>
+        <span class="hills"></span>
+      </div>
+      <div class="hud">
+        <div class="hud__gauge">
+          <svg class="dial" viewBox="0 0 100 100" aria-hidden="true">
+            <circle cx="50" cy="50" r="46" class="dial__rim"/>
+            <circle cx="50" cy="50" r="40" class="dial__face"/>
+            <path d="M25.96 74.04 A34 34 0 1 1 74.04 74.04" class="dial__track"/>
+            <path d="M74.04 25.96 A34 34 0 0 1 74.04 74.04" class="dial__red"/>
+            <g class="dial__needle" id="pressure-needle"><path d="M50 50 L48 52 L50 20 L52 52Z"/></g>
+            <circle cx="50" cy="50" r="5" class="dial__hub"/>
+          </svg>
+          <p class="hud__label">Pressure <strong id="pressure">0</strong> psi</p>
+        </div>
+        <div class="hud__stats">
+          <p>Altitude <strong id="altitude">0</strong> ft</p>
+          <p>Distance <strong id="distance">0.0</strong> mi</p>
+          <p>Cogs <strong id="cogs">0</strong></p>
+        </div>
+        <button class="valve" type="button" data-goto="pause"><span class="visually-hidden">Pause</span><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5h3v14H8zM13 5h3v14h-3z"/></svg></button>
+      </div>
+      <div class="airship airship--play" aria-hidden="true" data-airship></div>
+      <div class="play-foot">
+        <p class="play-foot__eta">Bound for <strong>Port Gallowmere</strong> · ETA <strong id="eta">06:00</strong></p>
+        <button class="btn btn--copper" type="button" data-goto="gameover">Simulate boiler burst</button>
+      </div>
+    </section>
+
+    <!-- ================= PAUSE ================= -->
+    <section class="screen screen--dim" id="pause" data-screen aria-labelledby="pause-title" hidden>
+      <div class="frame frame--narrow">
+        <div class="frame__inner">
+          <div class="pocketwatch" aria-hidden="true"><span class="pocketwatch__hand pocketwatch__hand--h"></span><span class="pocketwatch__hand pocketwatch__hand--m"></span></div>
+          <h1 class="frame__title" id="pause-title" tabindex="-1">Engines Idling</h1>
+          <p class="frame__text">The airship drifts at anchor. Take a breath of fresh aether.</p>
+          <nav class="list-menu" aria-label="Pause menu">
+            <button class="list-btn" type="button" data-goto="play">Resume voyage</button>
+            <button class="list-btn" type="button" data-goto="play" data-action="checkpoint">Return to last port</button>
+            <button class="list-btn" type="button" data-goto="settings">The Workshop</button>
+            <button class="list-btn" type="button" data-goto="main">Main menu</button>
+          </nav>
+        </div>
+      </div>
+    </section>
+
+    <!-- ================= SETTINGS ================= -->
+    <section class="screen" id="settings" data-screen aria-labelledby="settings-title" hidden>
+      <div class="frame">
+        <div class="frame__inner">
+          <div class="frame__head">
+            <button class="valve" type="button" data-goto="main" data-back><span class="visually-hidden">Back</span><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M15 5l-7 7 7 7" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round"/></svg></button>
+            <h1 class="frame__title" id="settings-title" tabindex="-1">The Workshop</h1>
+          </div>
+          <div class="tabs" role="tablist" aria-label="Settings groups">
+            <button class="tab" role="tab" type="button" id="t-machinery" aria-controls="p-machinery" aria-selected="true">Machinery</button>
+            <button class="tab" role="tab" type="button" id="t-sound" aria-controls="p-sound" aria-selected="false" tabindex="-1">Sound</button>
+            <button class="tab" role="tab" type="button" id="t-controls" aria-controls="p-controls" aria-selected="false" tabindex="-1">Controls</button>
+          </div>
+          <form id="settings-form" class="settings">
+            <div class="pane" role="tabpanel" id="p-machinery" aria-labelledby="t-machinery">
+              <div class="set"><label for="s-gears">Gear speed</label><input class="range" type="range" id="s-gears" name="gears" min="0" max="3" step="0.25" value="1"><output for="s-gears">1×</output></div>
+              <div class="set"><label for="s-steam">Steam vents</label><input class="range" type="range" id="s-steam" name="steam" min="0" max="12" value="6"><output for="s-steam">6</output></div>
+              <div class="set"><label for="s-lamp">Lamp glow</label><input class="range" type="range" id="s-lamp" name="lamp" min="0" max="100" value="70"><output for="s-lamp">70</output></div>
+              <div class="set set--switch"><label for="s-sepia">Sepia photograph mode</label><input type="checkbox" class="toggle" id="s-sepia" name="sepia" role="switch"></div>
+            </div>
+            <div class="pane" role="tabpanel" id="p-sound" aria-labelledby="t-sound" hidden>
+              <div class="set"><label for="s-master">Master volume</label><input class="range" type="range" id="s-master" name="master" min="0" max="100" value="80"><output for="s-master">80</output></div>
+              <div class="set"><label for="s-music">Brass band</label><input class="range" type="range" id="s-music" name="music" min="0" max="100" value="60"><output for="s-music">60</output></div>
+              <div class="set set--switch"><label for="s-clanks">Clanks &amp; whistles</label><input type="checkbox" class="toggle" id="s-clanks" name="clanks" role="switch"></div>
+            </div>
+            <div class="pane" role="tabpanel" id="p-controls" aria-labelledby="t-controls" hidden>
+              <div class="set"><label for="s-sens">Rudder sensitivity</label><input class="range" type="range" id="s-sens" name="sens" min="1" max="10" value="5"><output for="s-sens">5</output></div>
+              <div class="set set--switch"><label for="s-invert">Invert altitude lever</label><input type="checkbox" class="toggle" id="s-invert" name="invert" role="switch"></div>
+              <fieldset class="set set--choice">
+                <legend>Difficulty</legend>
+                <div class="chips">
+                  <input type="radio" id="d-apprentice" name="difficulty" value="apprentice"><label for="d-apprentice">Apprentice</label>
+                  <input type="radio" id="d-journeyman" name="difficulty" value="journeyman" checked><label for="d-journeyman">Journeyman</label>
+                  <input type="radio" id="d-master" name="difficulty" value="master"><label for="d-master">Master</label>
+                </div>
+              </fieldset>
+            </div>
+            <div class="settings__actions">
+              <button class="btn btn--ghost" type="button" id="reset-settings">Factory defaults</button>
+              <button class="btn" type="submit">Save settings</button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </section>
+
+    <!-- ================= VOYAGE CHART (levels) ================= -->
+    <section class="screen" id="levels" data-screen aria-labelledby="levels-title" hidden>
+      <div class="frame frame--wide">
+        <div class="frame__inner">
+          <div class="frame__head">
+            <button class="valve" type="button" data-goto="main"><span class="visually-hidden">Back to main menu</span><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M15 5l-7 7 7 7" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round"/></svg></button>
+            <h1 class="frame__title" id="levels-title" tabindex="-1">Voyage Chart</h1>
+          </div>
+          <div class="chart">
+            <div class="map" id="map">
+              <svg class="map__art" viewBox="0 0 100 60" preserveAspectRatio="none" aria-hidden="true">
+                <path class="land" d="M4 12 C10 4 22 6 26 12 C30 18 24 24 28 30 C31 36 22 42 14 38 C6 34 2 26 6 20 C2 18 2 14 4 12Z"/>
+                <path class="land" d="M40 34 C46 28 58 30 60 38 C62 46 54 54 46 52 C38 50 34 40 40 34Z"/>
+                <path class="land" d="M64 6 C72 2 86 4 92 10 C98 16 94 26 86 26 C80 26 78 20 72 20 C66 20 60 12 64 6Z"/>
+                <path class="land" d="M78 40 C82 36 90 38 92 44 C94 50 88 56 82 54 C76 52 74 44 78 40Z"/>
+                <path class="land land--small" d="M34 8 C36 6 40 7 40 10 C40 13 36 14 34 12 C33 11 33 9 34 8Z"/>
+                <path class="route" id="route" d=""/>
+                <path class="route route--done" id="route-done" d=""/>
+              </svg>
+              <div class="compass" aria-hidden="true"><span>N</span></div>
+              <div class="map__pins" id="map-pins" role="radiogroup" aria-label="Ports"></div>
+            </div>
+            <div class="port" id="port" aria-live="polite">
+              <p class="port__chapter" id="port-chapter"></p>
+              <h2 class="port__name" id="port-name">Port</h2>
+              <p class="port__desc" id="port-desc"></p>
+              <dl class="port__facts" id="port-facts"></dl>
+              <p class="port__cogs" id="port-cogs"></p>
+              <button class="btn" type="button" data-goto="play" id="port-go">Plot course</button>
+            </div>
+          </div>
+          <p class="hint">Use arrow keys to move between ports</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ================= ENGINEERS' GUILD (characters) ================= -->
+    <section class="screen" id="characters" data-screen aria-labelledby="characters-title" hidden>
+      <div class="frame frame--wide">
+        <div class="frame__inner">
+          <div class="frame__head">
+            <button class="valve" type="button" data-goto="main"><span class="visually-hidden">Back to main menu</span><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M15 5l-7 7 7 7" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round"/></svg></button>
+            <h1 class="frame__title" id="characters-title" tabindex="-1">Engineers’ Guild</h1>
+          </div>
+          <div class="guild">
+            <div class="guild__list" id="eng-list" role="radiogroup" aria-label="Engineers"></div>
+            <div class="guild__detail" id="eng-detail" aria-live="polite">
+              <div class="cameo" id="eng-portrait" aria-hidden="true"></div>
+              <div class="guild__info">
+                <p class="guild__trade" id="eng-trade"></p>
+                <h2 class="guild__name" id="eng-name">Engineer</h2>
+                <p class="guild__bio" id="eng-bio"></p>
+                <p class="guild__gadget">Signature contraption: <strong id="eng-gadget"></strong></p>
+                <dl class="dials" id="eng-stats"></dl>
+              </div>
+            </div>
+          </div>
+          <div class="frame__foot">
+            <p class="hint">Use arrow keys to browse engineers</p>
+            <button class="btn" type="button" data-goto="main" data-action="hire">Sign contract</button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ================= BOILER BURST (game over) ================= -->
+    <section class="screen screen--burst" id="gameover" data-screen aria-labelledby="gameover-title" hidden>
+      <div class="burst-gauge" aria-hidden="true">
+        <svg viewBox="0 0 100 100">
+          <circle cx="50" cy="50" r="46" class="dial__rim"/>
+          <circle cx="50" cy="50" r="40" class="dial__face"/>
+          <path d="M25.96 74.04 A34 34 0 1 1 74.04 74.04" class="dial__track"/>
+          <path d="M74.04 25.96 A34 34 0 0 1 74.04 74.04" class="dial__red"/>
+          <path d="M30 18 L42 34 L36 40 L50 56 L46 62 L58 80" class="crack"/>
+          <g class="dial__needle dial__needle--burst"><path d="M50 50 L48 52 L50 20 L52 52Z"/></g>
+          <circle cx="50" cy="50" r="5" class="dial__hub"/>
+        </svg>
+        <span class="burst-puff"></span><span class="burst-puff"></span><span class="burst-puff"></span><span class="burst-puff"></span>
+      </div>
+      <div class="frame frame--narrow">
+        <div class="frame__inner">
+          <h1 class="frame__title frame__title--big" id="gameover-title" tabindex="-1">Boiler Burst!</h1>
+          <p class="frame__text">The pressure gauge gave up at <strong>412 psi</strong>. The crew floats gently home by parachute.</p>
+          <dl class="ledger">
+            <div><dt>Miles flown</dt><dd id="go-miles">0</dd></div>
+            <div><dt>Cogs collected</dt><dd id="go-cogs">0</dd></div>
+            <div><dt>Final score</dt><dd id="go-score">0</dd></div>
+          </dl>
+          <nav class="list-menu list-menu--row" aria-label="Boiler burst options">
+            <button class="btn" type="button" data-goto="play" data-action="retry">Patch &amp; retry</button>
+            <button class="btn btn--ghost" type="button" data-goto="leaderboard">Hall of Inventors</button>
+            <button class="btn btn--ghost" type="button" data-goto="main">Main menu</button>
+          </nav>
+        </div>
+      </div>
+    </section>
+
+    <!-- ================= HALL OF INVENTORS (leaderboard) ================= -->
+    <section class="screen" id="leaderboard" data-screen aria-labelledby="leaderboard-title" hidden>
+      <div class="frame frame--wide">
+        <div class="frame__inner">
+          <div class="frame__head">
+            <button class="valve" type="button" data-goto="main"><span class="visually-hidden">Back to main menu</span><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M15 5l-7 7 7 7" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round"/></svg></button>
+            <h1 class="frame__title" id="leaderboard-title" tabindex="-1">Hall of Inventors</h1>
+          </div>
+          <div class="tabs" role="tablist" aria-label="Ranking type">
+            <button class="tab" role="tab" type="button" id="h-miles" aria-controls="h-panel" aria-selected="true" data-board="miles">Longest voyage</button>
+            <button class="tab" role="tab" type="button" id="h-patents" aria-controls="h-panel" aria-selected="false" data-board="patents" tabindex="-1">Most patents</button>
+          </div>
+          <div class="table-wrap" id="h-panel" role="tabpanel" aria-labelledby="h-miles">
+            <table class="hall">
+              <caption class="visually-hidden">Inventor rankings</caption>
+              <thead><tr><th scope="col">Rank</th><th scope="col">Inventor</th><th scope="col" class="col-ship">Airship</th><th scope="col" id="h-metric">Miles</th></tr></thead>
+              <tbody id="h-body"></tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ================= QUIT ================= -->
+    <section class="screen screen--dim" id="quit" data-screen aria-labelledby="quit-title" hidden>
+      <div class="frame frame--narrow">
+        <div class="frame__inner">
+          <h1 class="frame__title" id="quit-title" tabindex="-1">Abandon Ship?</h1>
+          <p class="frame__text">Your logbook has been inked and filed. The skies will keep.</p>
+          <nav class="list-menu" aria-label="Quit confirmation">
+            <button class="list-btn" type="button" data-goto="main">Stay aboard</button>
+            <button class="list-btn list-btn--warn" type="button" data-goto="main" data-action="quit">Abandon ship</button>
+          </nav>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <div class="toast" role="status" aria-live="polite"></div>
+  <script src="script.js"></script>
+</body>
+</html>
