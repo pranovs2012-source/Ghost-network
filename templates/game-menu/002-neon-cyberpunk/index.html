@@ -1,0 +1,319 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>NEON//DRIFT — Game Menu</title>
+  <meta name="description" content="Neon cyberpunk game menu template with main menu, pause, settings, level select, character select, game over and leaderboard screens.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Chakra+Petch:wght@400;500;600;700&amp;family=Orbitron:wght@600;800;900&amp;display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <!-- ===== Background: skyline, neon rain, scanlines (pure CSS) ===== -->
+  <div class="scene" aria-hidden="true">
+    <div class="scene__sky"></div>
+    <div class="scene__sun"></div>
+    <div class="skyline skyline--far"></div>
+    <div class="skyline skyline--near"></div>
+    <div class="scene__rain"></div>
+    <div class="scene__floor"></div>
+    <div class="scene__scanlines"></div>
+    <div class="scene__vignette"></div>
+  </div>
+
+  <main class="app" id="app">
+
+    <!-- ================= MAIN MENU ================= -->
+    <section class="screen screen--main is-active" id="main" data-screen aria-labelledby="main-title">
+      <div class="title-block">
+        <p class="kicker"><span class="blink" aria-hidden="true">▮</span> SYSTEM ONLINE · BUILD 2.0.77</p>
+        <h1 class="logo" id="main-title" tabindex="-1" data-text="NEON//DRIFT">NEON//DRIFT</h1>
+        <p class="tagline">Outrun the grid. Rewrite the city.</p>
+      </div>
+
+      <nav class="menu" aria-label="Main menu">
+        <button class="menu__item" type="button" data-goto="play"><span class="menu__index">01</span><span class="menu__label">Continue</span><span class="menu__meta">Sector 04 · 62%</span></button>
+        <button class="menu__item" type="button" data-goto="levels"><span class="menu__index">02</span><span class="menu__label">Level Select</span><span class="menu__meta">12 sectors</span></button>
+        <button class="menu__item" type="button" data-goto="characters"><span class="menu__index">03</span><span class="menu__label">Runners</span><span class="menu__meta">4 unlocked</span></button>
+        <button class="menu__item" type="button" data-goto="leaderboard"><span class="menu__index">04</span><span class="menu__label">Leaderboard</span><span class="menu__meta">Rank #128</span></button>
+        <button class="menu__item" type="button" data-goto="settings"><span class="menu__index">05</span><span class="menu__label">Settings</span><span class="menu__meta">Audio · Video</span></button>
+        <button class="menu__item menu__item--danger" type="button" data-goto="quit"><span class="menu__index">06</span><span class="menu__label">Quit</span><span class="menu__meta">Jack out</span></button>
+      </nav>
+
+      <footer class="statusbar">
+        <span><span class="dot dot--ok" aria-hidden="true"></span>Net link stable · 24 ms</span>
+        <span class="statusbar__keys"><kbd>↑</kbd><kbd>↓</kbd> Navigate <kbd>Enter</kbd> Select <kbd>Esc</kbd> Back</span>
+      </footer>
+    </section>
+
+    <!-- ================= IN-GAME (demo HUD) ================= -->
+    <section class="screen screen--play" id="play" data-screen aria-labelledby="play-title" hidden>
+      <h1 class="visually-hidden" id="play-title" tabindex="-1">In game — Sector 04</h1>
+      <div class="hud">
+        <div class="hud__block">
+          <span class="hud__label">Integrity</span>
+          <div class="bar" role="meter" aria-label="Integrity" aria-valuemin="0" aria-valuemax="100" aria-valuenow="72"><span class="bar__fill" style="--value:72%"></span></div>
+        </div>
+        <div class="hud__block hud__block--center">
+          <span class="hud__label">Score</span>
+          <output class="hud__score" id="live-score">000000</output>
+        </div>
+        <button class="icon-btn" type="button" data-goto="pause" aria-label="Pause game (Esc)">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="6" y="5" width="4" height="14"/><rect x="14" y="5" width="4" height="14"/></svg>
+        </button>
+      </div>
+
+      <div class="play-stage" aria-hidden="true">
+        <svg class="road" viewBox="0 0 100 100" preserveAspectRatio="none">
+          <defs>
+            <linearGradient id="roadFade" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="0" stop-color="var(--neon-2)" stop-opacity="0"/>
+              <stop offset="1" stop-color="var(--neon-2)"/>
+            </linearGradient>
+          </defs>
+          <path d="M46 0 L4 100 M54 0 L96 100" stroke="url(#roadFade)" />
+          <path class="road__center" d="M50 0 L50 100" />
+        </svg>
+        <div class="runner"></div>
+      </div>
+
+      <div class="play-actions">
+        <p class="hint">Demo gameplay screen · press <kbd>Esc</kbd> to pause</p>
+        <button class="btn btn--ghost" type="button" data-goto="gameover">Simulate crash</button>
+      </div>
+    </section>
+
+    <!-- ================= PAUSE ================= -->
+    <section class="screen screen--overlay" id="pause" data-screen aria-labelledby="pause-title" hidden>
+      <div class="panel panel--narrow">
+        <p class="kicker">// SIMULATION HALTED</p>
+        <h1 class="panel__title glitch" id="pause-title" tabindex="-1" data-text="PAUSED">PAUSED</h1>
+        <dl class="mini-stats">
+          <div><dt>Sector</dt><dd>04</dd></div>
+          <div><dt>Time</dt><dd>03:42</dd></div>
+          <div><dt>Shards</dt><dd>117</dd></div>
+        </dl>
+        <nav class="menu menu--compact" aria-label="Pause menu">
+          <button class="menu__item" type="button" data-goto="play"><span class="menu__label">Resume</span></button>
+          <button class="menu__item" type="button" data-goto="play" data-action="restart"><span class="menu__label">Restart sector</span></button>
+          <button class="menu__item" type="button" data-goto="settings"><span class="menu__label">Settings</span></button>
+          <button class="menu__item menu__item--danger" type="button" data-goto="main"><span class="menu__label">Quit to menu</span></button>
+        </nav>
+      </div>
+    </section>
+
+    <!-- ================= SETTINGS ================= -->
+    <section class="screen" id="settings" data-screen aria-labelledby="settings-title" hidden>
+      <div class="panel">
+        <header class="panel__head">
+          <button class="back-btn" type="button" data-goto="main" data-back aria-label="Back">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M15 5l-7 7 7 7"/></svg>
+          </button>
+          <h1 class="panel__title" id="settings-title" tabindex="-1">Settings</h1>
+        </header>
+
+        <div class="tabs" role="tablist" aria-label="Settings sections">
+          <button class="tab" role="tab" type="button" id="tab-audio" aria-controls="pane-audio" aria-selected="true">Audio</button>
+          <button class="tab" role="tab" type="button" id="tab-video" aria-controls="pane-video" aria-selected="false" tabindex="-1">Video</button>
+          <button class="tab" role="tab" type="button" id="tab-gameplay" aria-controls="pane-gameplay" aria-selected="false" tabindex="-1">Gameplay</button>
+        </div>
+
+        <form class="settings" id="settings-form">
+          <div class="pane" role="tabpanel" id="pane-audio" aria-labelledby="tab-audio">
+            <div class="setting">
+              <label for="vol-master">Master volume</label>
+              <input type="range" id="vol-master" name="master" min="0" max="100" value="80">
+              <output for="vol-master" class="setting__value">80</output>
+            </div>
+            <div class="setting">
+              <label for="vol-music">Music</label>
+              <input type="range" id="vol-music" name="music" min="0" max="100" value="60">
+              <output for="vol-music" class="setting__value">60</output>
+            </div>
+            <div class="setting">
+              <label for="vol-sfx">Sound effects</label>
+              <input type="range" id="vol-sfx" name="sfx" min="0" max="100" value="70">
+              <output for="vol-sfx" class="setting__value">70</output>
+            </div>
+            <div class="setting setting--switch">
+              <label for="ui-sounds">Menu sounds</label>
+              <input type="checkbox" id="ui-sounds" name="uiSounds" role="switch" class="switch">
+            </div>
+          </div>
+
+          <div class="pane" role="tabpanel" id="pane-video" aria-labelledby="tab-video" hidden>
+            <div class="setting">
+              <label for="brightness">Brightness</label>
+              <input type="range" id="brightness" name="brightness" min="50" max="150" value="100">
+              <output for="brightness" class="setting__value">100</output>
+            </div>
+            <div class="setting setting--switch">
+              <label for="scanlines">CRT scanlines</label>
+              <input type="checkbox" id="scanlines" name="scanlines" role="switch" class="switch" checked>
+            </div>
+            <div class="setting setting--switch">
+              <label for="rain">Neon rain</label>
+              <input type="checkbox" id="rain" name="rain" role="switch" class="switch" checked>
+            </div>
+            <div class="setting">
+              <label for="quality">Quality preset</label>
+              <select id="quality" name="quality">
+                <option value="low">Low</option>
+                <option value="medium">Medium</option>
+                <option value="high" selected>High</option>
+                <option value="ultra">Ultra</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="pane" role="tabpanel" id="pane-gameplay" aria-labelledby="tab-gameplay" hidden>
+            <fieldset class="setting setting--segmented">
+              <legend>Difficulty</legend>
+              <div class="segmented">
+                <input type="radio" id="diff-easy" name="difficulty" value="easy"><label for="diff-easy">Rookie</label>
+                <input type="radio" id="diff-normal" name="difficulty" value="normal" checked><label for="diff-normal">Runner</label>
+                <input type="radio" id="diff-hard" name="difficulty" value="hard"><label for="diff-hard">Ghost</label>
+              </div>
+            </fieldset>
+            <div class="setting setting--switch">
+              <label for="shake">Screen shake</label>
+              <input type="checkbox" id="shake" name="shake" role="switch" class="switch" checked>
+            </div>
+            <div class="setting setting--switch">
+              <label for="subtitles">Subtitles</label>
+              <input type="checkbox" id="subtitles" name="subtitles" role="switch" class="switch">
+            </div>
+          </div>
+
+          <div class="settings__actions">
+            <button class="btn btn--ghost" type="button" id="reset-settings">Reset defaults</button>
+            <button class="btn btn--primary" type="submit">Apply</button>
+          </div>
+        </form>
+      </div>
+    </section>
+
+    <!-- ================= LEVEL SELECT ================= -->
+    <section class="screen" id="levels" data-screen aria-labelledby="levels-title" hidden>
+      <div class="panel panel--wide">
+        <header class="panel__head">
+          <button class="back-btn" type="button" data-goto="main" aria-label="Back to main menu">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M15 5l-7 7 7 7"/></svg>
+          </button>
+          <h1 class="panel__title" id="levels-title" tabindex="-1">Select Sector</h1>
+          <p class="panel__meta"><span id="stars-total">0</span> / 36 <span class="star" aria-hidden="true">★</span></p>
+        </header>
+        <ul class="level-grid" id="level-grid" aria-label="Sectors"></ul>
+        <div class="panel__footer">
+          <p class="selected-level" id="selected-level" aria-live="polite">Sector 01 · Neon Alley</p>
+          <button class="btn btn--primary" type="button" data-goto="play">Deploy</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- ================= CHARACTER SELECT ================= -->
+    <section class="screen" id="characters" data-screen aria-labelledby="characters-title" hidden>
+      <div class="panel panel--wide">
+        <header class="panel__head">
+          <button class="back-btn" type="button" data-goto="main" aria-label="Back to main menu">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M15 5l-7 7 7 7"/></svg>
+          </button>
+          <h1 class="panel__title" id="characters-title" tabindex="-1">Choose Runner</h1>
+        </header>
+
+        <div class="char-select">
+          <button class="arrow-btn" type="button" id="char-prev" aria-label="Previous runner">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M15 5l-7 7 7 7"/></svg>
+          </button>
+
+          <div class="char-card" id="char-card" aria-live="polite">
+            <div class="char-portrait" id="char-portrait"></div>
+            <div class="char-info">
+              <p class="char-class" id="char-class">Netrunner</p>
+              <h2 class="char-name" id="char-name">VEX</h2>
+              <p class="char-bio" id="char-bio"></p>
+              <dl class="char-stats" id="char-stats"></dl>
+            </div>
+          </div>
+
+          <button class="arrow-btn" type="button" id="char-next" aria-label="Next runner">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 5l7 7-7 7"/></svg>
+          </button>
+        </div>
+
+        <div class="char-dots" id="char-dots" role="group" aria-label="Runners"></div>
+
+        <div class="panel__footer">
+          <p class="hint"><kbd>←</kbd><kbd>→</kbd> to browse</p>
+          <button class="btn btn--primary" type="button" data-goto="main" data-action="select-character">Lock in</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- ================= GAME OVER ================= -->
+    <section class="screen screen--overlay" id="gameover" data-screen aria-labelledby="gameover-title" hidden>
+      <div class="panel panel--narrow panel--danger">
+        <p class="kicker kicker--danger">// CONNECTION TERMINATED</p>
+        <h1 class="panel__title glitch glitch--danger" id="gameover-title" tabindex="-1" data-text="GAME OVER">GAME OVER</h1>
+        <div class="score-card">
+          <p class="score-card__label">Final score</p>
+          <p class="score-card__value" id="final-score">0</p>
+          <p class="score-card__best">Personal best <strong>184,220</strong> · <span class="badge">New rank: Chrome</span></p>
+        </div>
+        <dl class="mini-stats">
+          <div><dt>Distance</dt><dd>8.4 km</dd></div>
+          <div><dt>Combos</dt><dd>×27</dd></div>
+          <div><dt>Shards</dt><dd>117</dd></div>
+        </dl>
+        <nav class="menu menu--compact" aria-label="Game over options">
+          <button class="menu__item" type="button" data-goto="play" data-action="restart"><span class="menu__label">Retry</span></button>
+          <button class="menu__item" type="button" data-goto="leaderboard"><span class="menu__label">Leaderboard</span></button>
+          <button class="menu__item" type="button" data-goto="main"><span class="menu__label">Main menu</span></button>
+        </nav>
+      </div>
+    </section>
+
+    <!-- ================= LEADERBOARD ================= -->
+    <section class="screen" id="leaderboard" data-screen aria-labelledby="leaderboard-title" hidden>
+      <div class="panel panel--wide">
+        <header class="panel__head">
+          <button class="back-btn" type="button" data-goto="main" aria-label="Back to main menu">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M15 5l-7 7 7 7"/></svg>
+          </button>
+          <h1 class="panel__title" id="leaderboard-title" tabindex="-1">Leaderboard</h1>
+        </header>
+        <div class="tabs" role="tablist" aria-label="Leaderboard range">
+          <button class="tab" role="tab" type="button" id="lb-global" aria-controls="lb-panel" aria-selected="true" data-board="global">Global</button>
+          <button class="tab" role="tab" type="button" id="lb-weekly" aria-controls="lb-panel" aria-selected="false" data-board="weekly" tabindex="-1">Weekly</button>
+          <button class="tab" role="tab" type="button" id="lb-friends" aria-controls="lb-panel" aria-selected="false" data-board="friends" tabindex="-1">Friends</button>
+        </div>
+        <div class="table-wrap" id="lb-panel" role="tabpanel" aria-labelledby="lb-global">
+          <table class="board">
+            <caption class="visually-hidden">Top runners</caption>
+            <thead><tr><th scope="col">Rank</th><th scope="col">Runner</th><th scope="col">Sector</th><th scope="col">Score</th></tr></thead>
+            <tbody id="lb-body"></tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <!-- ================= QUIT ================= -->
+    <section class="screen screen--overlay" id="quit" data-screen aria-labelledby="quit-title" hidden>
+      <div class="panel panel--narrow">
+        <p class="kicker">// CONFIRM</p>
+        <h1 class="panel__title" id="quit-title" tabindex="-1">Jack out?</h1>
+        <p class="panel__text">Unsaved progress in Sector 04 will be lost.</p>
+        <nav class="menu menu--compact" aria-label="Quit confirmation">
+          <button class="menu__item" type="button" data-goto="main"><span class="menu__label">Stay connected</span></button>
+          <button class="menu__item menu__item--danger" type="button" data-goto="main" data-action="quit"><span class="menu__label">Quit game</span></button>
+        </nav>
+      </div>
+    </section>
+  </main>
+
+  <div class="toast" role="status" aria-live="polite"></div>
+  <script src="script.js"></script>
+</body>
+</html>
