@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Raster — Sign in</title>
+  <meta name="description" content="Swiss minimal login, sign-up and password reset template.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&amp;family=Inter+Tight:wght@400;500;600;800;900&amp;display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body data-screen-current="login">
+  <div class="grid-lines" aria-hidden="true"></div>
+
+  <div class="page">
+    <!-- ===== Poster column ===== -->
+    <header class="poster">
+      <div class="meta">
+        <a class="brand" href="#login" data-goto="login" aria-label="Raster Studio, go to sign in">
+          <span class="brand__mark" aria-hidden="true"></span>Raster Studio
+        </a>
+        <span class="meta__item mono">Est. 2026</span>
+        <span class="meta__item mono"><span class="visually-hidden">Local time in </span>Zürich <time id="clock">--:--</time></span>
+        <button class="theme-toggle mono" type="button" id="theme-toggle" aria-pressed="false">
+          <span class="theme-toggle__dot" aria-hidden="true"></span><span class="theme-toggle__label">Dark</span>
+        </button>
+      </div>
+
+      <div class="poster__stage" aria-hidden="true">
+        <span class="disc"></span>
+        <p class="headline" id="headline"><span>Sign</span><span>in.</span></p>
+      </div>
+
+      <nav class="steps" aria-label="Account pages">
+        <button type="button" class="step" data-goto="login" data-step="login"><span class="mono">01</span> Sign in</button>
+        <button type="button" class="step" data-goto="signup" data-step="signup"><span class="mono">02</span> Create account</button>
+        <button type="button" class="step" data-goto="forgot" data-step="forgot"><span class="mono">03</span> Reset password</button>
+      </nav>
+    </header>
+
+    <!-- ===== Form column ===== -->
+    <main class="panel">
+
+      <!-- SIGN IN -->
+      <section class="screen is-active" id="login" data-screen aria-labelledby="login-title">
+        <p class="eyebrow mono">01 — Account</p>
+        <h1 id="login-title" tabindex="-1">Sign in to Raster</h1>
+        <p class="lead">Good design is as little design as possible. So is a good login.</p>
+
+        <form class="form" id="login-form" novalidate>
+          <div class="field">
+            <label for="login-email">Email address</label>
+            <input id="login-email" name="email" type="email" autocomplete="email" required aria-describedby="login-email-error">
+            <p class="field__error" id="login-email-error" aria-live="polite"></p>
+          </div>
+          <div class="field">
+            <div class="field__top">
+              <label for="login-password">Password</label>
+              <button type="button" class="text-btn" data-toggle-password="login-password" aria-pressed="false">Show</button>
+            </div>
+            <input id="login-password" name="password" type="password" autocomplete="current-password" required minlength="8" aria-describedby="login-password-error">
+            <p class="field__error" id="login-password-error" aria-live="polite"></p>
+          </div>
+          <div class="row">
+            <label class="check"><input type="checkbox" name="remember"><span class="check__box" aria-hidden="true"></span>Remember this device</label>
+            <button type="button" class="link" data-goto="forgot">Forgot password?</button>
+          </div>
+          <button class="btn" type="submit"><span class="btn__label">Sign in</span><span class="btn__arrow" aria-hidden="true">→</span></button>
+        </form>
+
+        <p class="switch">No account yet? <button type="button" class="link" data-goto="signup">Create one</button></p>
+      </section>
+
+      <!-- SIGN UP -->
+      <section class="screen" id="signup" data-screen aria-labelledby="signup-title" hidden>
+        <p class="eyebrow mono">02 — Register</p>
+        <h1 id="signup-title" tabindex="-1">Create an account</h1>
+        <p class="lead">Two minutes. Four fields. No nonsense.</p>
+
+        <form class="form" id="signup-form" novalidate>
+          <div class="form__cols">
+            <div class="field">
+              <label for="signup-first">First name</label>
+              <input id="signup-first" name="first" type="text" autocomplete="given-name" required aria-describedby="signup-first-error">
+              <p class="field__error" id="signup-first-error" aria-live="polite"></p>
+            </div>
+            <div class="field">
+              <label for="signup-last">Last name</label>
+              <input id="signup-last" name="last" type="text" autocomplete="family-name" required aria-describedby="signup-last-error">
+              <p class="field__error" id="signup-last-error" aria-live="polite"></p>
+            </div>
+          </div>
+          <div class="field">
+            <label for="signup-email">Email address</label>
+            <input id="signup-email" name="email" type="email" autocomplete="email" required aria-describedby="signup-email-error">
+            <p class="field__error" id="signup-email-error" aria-live="polite"></p>
+          </div>
+          <div class="field">
+            <div class="field__top">
+              <label for="signup-password">Password</label>
+              <button type="button" class="text-btn" data-toggle-password="signup-password" aria-pressed="false">Show</button>
+            </div>
+            <input id="signup-password" name="password" type="password" autocomplete="new-password" required minlength="8" aria-describedby="rules signup-password-error">
+            <ul class="rules mono" id="rules" aria-label="Password requirements">
+              <li data-rule="length">8+ characters</li>
+              <li data-rule="case">Upper &amp; lower case</li>
+              <li data-rule="number">A number</li>
+              <li data-rule="symbol">A symbol</li>
+            </ul>
+            <p class="field__error" id="signup-password-error" aria-live="polite"></p>
+          </div>
+          <label class="check"><input type="checkbox" name="terms" required aria-describedby="signup-terms-error"><span class="check__box" aria-hidden="true"></span><span>I accept the <a class="link" href="#terms">terms of service</a></span></label>
+          <p class="field__error" id="signup-terms-error" aria-live="polite"></p>
+          <button class="btn" type="submit"><span class="btn__label">Create account</span><span class="btn__arrow" aria-hidden="true">→</span></button>
+        </form>
+
+        <p class="switch">Already registered? <button type="button" class="link" data-goto="login">Sign in</button></p>
+      </section>
+
+      <!-- FORGOT -->
+      <section class="screen" id="forgot" data-screen aria-labelledby="forgot-title" hidden>
+        <p class="eyebrow mono">03 — Recovery</p>
+        <h1 id="forgot-title" tabindex="-1">Reset your password</h1>
+        <p class="lead">Type your email. We will send a single-use link that works for 30 minutes.</p>
+
+        <form class="form" id="forgot-form" novalidate>
+          <div class="field">
+            <label for="forgot-email">Email address</label>
+            <input id="forgot-email" name="email" type="email" autocomplete="email" required aria-describedby="forgot-email-error">
+            <p class="field__error" id="forgot-email-error" aria-live="polite"></p>
+          </div>
+          <button class="btn" type="submit"><span class="btn__label">Send reset link</span><span class="btn__arrow" aria-hidden="true">→</span></button>
+        </form>
+
+        <p class="switch"><button type="button" class="link" data-goto="login">← Back to sign in</button></p>
+      </section>
+
+      <!-- SENT -->
+      <section class="screen" id="sent" data-screen aria-labelledby="sent-title" hidden>
+        <p class="eyebrow mono">04 — Done</p>
+        <h1 id="sent-title" tabindex="-1">Link sent.</h1>
+        <p class="lead">Check <strong class="sent-email">your inbox</strong> and follow the link to choose a new password.</p>
+        <div class="countdown" aria-hidden="true"><span class="countdown__bar"></span></div>
+        <p class="switch switch--left"><button type="button" class="link" id="resend" disabled>Resend available in <span id="resend-timer">30</span>s</button></p>
+        <button class="btn" type="button" data-goto="login"><span class="btn__label">Back to sign in</span><span class="btn__arrow" aria-hidden="true">→</span></button>
+      </section>
+
+      <footer class="panel__foot mono">
+        <span>© 2026 Raster Studio</span>
+        <a class="link" href="#privacy">Privacy</a>
+        <a class="link" href="#help">Help</a>
+      </footer>
+    </main>
+  </div>
+
+  <div class="toast" role="status" aria-live="polite"></div>
+  <script src="script.js"></script>
+</body>
+</html>
