@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Aurora Glass — Sign in</title>
+  <meta name="description" content="Glassmorphism login, sign-up and password reset screens.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&amp;family=Sora:wght@500;600;700&amp;display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <!-- Animated aurora background (pure CSS) -->
+  <div class="aurora" aria-hidden="true">
+    <span class="aurora__blob aurora__blob--1"></span>
+    <span class="aurora__blob aurora__blob--2"></span>
+    <span class="aurora__blob aurora__blob--3"></span>
+    <span class="aurora__grain"></span>
+  </div>
+
+  <main class="layout">
+    <!-- Left: brand / pitch panel (desktop) -->
+    <aside class="pitch" aria-label="About Aurora">
+      <a class="brand" href="#login" data-goto="login">
+        <svg class="brand__mark" viewBox="0 0 40 40" aria-hidden="true">
+          <defs>
+            <linearGradient id="brandGrad" x1="0" y1="0" x2="1" y2="1">
+              <stop offset="0" stop-color="var(--aurora-1)"/>
+              <stop offset="1" stop-color="var(--aurora-3)"/>
+            </linearGradient>
+          </defs>
+          <path d="M20 3 L36 34 H4 Z" fill="none" stroke="url(#brandGrad)" stroke-width="3" stroke-linejoin="round"/>
+          <circle cx="20" cy="24" r="5" fill="url(#brandGrad)"/>
+        </svg>
+        <span class="brand__name">Aurora</span>
+      </a>
+
+      <h2 class="pitch__title">Your workspace,<br><span class="gradient-text">beautifully clear.</span></h2>
+      <p class="pitch__text">Plan, ship and celebrate together. One calm place for every project your team touches.</p>
+
+      <ul class="chips">
+        <li class="chip glass"><span class="chip__value">99.99%</span><span class="chip__label">uptime</span></li>
+        <li class="chip glass"><span class="chip__value">2.4k</span><span class="chip__label">teams onboard</span></li>
+        <li class="chip glass"><span class="chip__value">SOC 2</span><span class="chip__label">compliant</span></li>
+      </ul>
+
+      <figure class="quote glass">
+        <blockquote>“We replaced four tools with one. Onboarding new people now takes minutes, not days.”</blockquote>
+        <figcaption>
+          <span class="avatar" aria-hidden="true">MR</span>
+          <span><strong>Mara Ruiz</strong><br><span class="muted">Head of Product, Northwind Labs</span></span>
+        </figcaption>
+      </figure>
+    </aside>
+
+    <!-- Right: auth card with switchable screens -->
+    <div class="card glass">
+
+      <!-- SIGN IN -->
+      <section class="screen is-active" id="login" data-screen aria-labelledby="login-title">
+        <header class="screen__head">
+          <h1 id="login-title" tabindex="-1">Welcome back</h1>
+          <p class="muted">Sign in to continue to your workspace.</p>
+        </header>
+
+        <form class="form" id="login-form" novalidate>
+          <div class="field">
+            <label for="login-email">Email</label>
+            <div class="input-wrap">
+              <svg class="input-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 6h16v12H4z M4 7l8 6 8-6" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/></svg>
+              <input id="login-email" name="email" type="email" autocomplete="email" placeholder="you@company.com" required aria-describedby="login-email-error">
+            </div>
+            <p class="field__error" id="login-email-error" aria-live="polite"></p>
+          </div>
+
+          <div class="field">
+            <div class="field__row">
+              <label for="login-password">Password</label>
+              <button type="button" class="link" data-goto="forgot">Forgot password?</button>
+            </div>
+            <div class="input-wrap">
+              <svg class="input-icon" viewBox="0 0 24 24" aria-hidden="true"><rect x="5" y="10" width="14" height="10" rx="2" fill="none" stroke="currentColor" stroke-width="1.8"/><path d="M8 10V7a4 4 0 0 1 8 0v3" fill="none" stroke="currentColor" stroke-width="1.8"/></svg>
+              <input id="login-password" name="password" type="password" autocomplete="current-password" placeholder="Enter your password" required minlength="8" aria-describedby="login-password-error">
+              <button type="button" class="toggle-pass" aria-label="Show password" aria-pressed="false" data-toggle-password="login-password">
+                <svg viewBox="0 0 24 24" aria-hidden="true"><path class="eye-open" d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7S2 12 2 12z" fill="none" stroke="currentColor" stroke-width="1.8"/><circle class="eye-open" cx="12" cy="12" r="3" fill="none" stroke="currentColor" stroke-width="1.8"/><path class="eye-slash" d="M4 4l16 16" stroke="currentColor" stroke-width="1.8"/></svg>
+              </button>
+            </div>
+            <p class="field__error" id="login-password-error" aria-live="polite"></p>
+          </div>
+
+          <label class="check">
+            <input type="checkbox" name="remember" checked>
+            <span class="check__box" aria-hidden="true"></span>
+            <span>Keep me signed in</span>
+          </label>
+
+          <button class="btn btn--primary" type="submit">
+            <span class="btn__label">Sign in</span>
+            <span class="spinner" aria-hidden="true"></span>
+          </button>
+        </form>
+
+        <div class="divider"><span>or continue with</span></div>
+
+        <div class="alt-buttons">
+          <button type="button" class="btn btn--ghost" data-demo="Magic link sent (demo)">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 19L19 5M14 5h5v5" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/><path d="M4 9l1-3 3-1-3-1-1-3-1 3-3 1 3 1z" transform="translate(3 3) scale(.8)" fill="currentColor"/></svg>
+            Magic link
+          </button>
+          <button type="button" class="btn btn--ghost" data-demo="Passkey prompt opened (demo)">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="9" cy="9" r="4" fill="none" stroke="currentColor" stroke-width="1.8"/><path d="M12 12l8 8M17 17l2-2M15 15l2-2" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
+            Passkey
+          </button>
+        </div>
+
+        <p class="switch">New to Aurora? <button type="button" class="link" data-goto="signup">Create an account</button></p>
+      </section>
+
+      <!-- SIGN UP -->
+      <section class="screen" id="signup" data-screen aria-labelledby="signup-title" hidden>
+        <header class="screen__head">
+          <h1 id="signup-title" tabindex="-1">Create your account</h1>
+          <p class="muted">Free for 14 days. No credit card needed.</p>
+        </header>
+
+        <form class="form" id="signup-form" novalidate>
+          <div class="field">
+            <label for="signup-name">Full name</label>
+            <div class="input-wrap">
+              <svg class="input-icon" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="8" r="4" fill="none" stroke="currentColor" stroke-width="1.8"/><path d="M4 20c1.5-4 4.5-6 8-6s6.5 2 8 6" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
+              <input id="signup-name" name="name" type="text" autocomplete="name" placeholder="Alex Morgan" required aria-describedby="signup-name-error">
+            </div>
+            <p class="field__error" id="signup-name-error" aria-live="polite"></p>
+          </div>
+
+          <div class="field">
+            <label for="signup-email">Work email</label>
+            <div class="input-wrap">
+              <svg class="input-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 6h16v12H4z M4 7l8 6 8-6" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/></svg>
+              <input id="signup-email" name="email" type="email" autocomplete="email" placeholder="you@company.com" required aria-describedby="signup-email-error">
+            </div>
+            <p class="field__error" id="signup-email-error" aria-live="polite"></p>
+          </div>
+
+          <div class="field">
+            <label for="signup-password">Password</label>
+            <div class="input-wrap">
+              <svg class="input-icon" viewBox="0 0 24 24" aria-hidden="true"><rect x="5" y="10" width="14" height="10" rx="2" fill="none" stroke="currentColor" stroke-width="1.8"/><path d="M8 10V7a4 4 0 0 1 8 0v3" fill="none" stroke="currentColor" stroke-width="1.8"/></svg>
+              <input id="signup-password" name="password" type="password" autocomplete="new-password" placeholder="At least 8 characters" required minlength="8" aria-describedby="strength-label signup-password-error">
+              <button type="button" class="toggle-pass" aria-label="Show password" aria-pressed="false" data-toggle-password="signup-password">
+                <svg viewBox="0 0 24 24" aria-hidden="true"><path class="eye-open" d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7S2 12 2 12z" fill="none" stroke="currentColor" stroke-width="1.8"/><circle class="eye-open" cx="12" cy="12" r="3" fill="none" stroke="currentColor" stroke-width="1.8"/><path class="eye-slash" d="M4 4l16 16" stroke="currentColor" stroke-width="1.8"/></svg>
+              </button>
+            </div>
+            <div class="strength" data-level="0">
+              <span class="strength__bar"></span><span class="strength__bar"></span><span class="strength__bar"></span><span class="strength__bar"></span>
+            </div>
+            <p class="strength__label muted" id="strength-label" aria-live="polite">Use 8+ characters with a mix of letters, numbers &amp; symbols.</p>
+            <p class="field__error" id="signup-password-error" aria-live="polite"></p>
+          </div>
+
+          <label class="check">
+            <input type="checkbox" name="terms" required aria-describedby="signup-terms-error">
+            <span class="check__box" aria-hidden="true"></span>
+            <span>I agree to the <a href="#terms" class="link">Terms</a> and <a href="#privacy" class="link">Privacy Policy</a></span>
+          </label>
+          <p class="field__error" id="signup-terms-error" aria-live="polite"></p>
+
+          <button class="btn btn--primary" type="submit">
+            <span class="btn__label">Create account</span>
+            <span class="spinner" aria-hidden="true"></span>
+          </button>
+        </form>
+
+        <p class="switch">Already have an account? <button type="button" class="link" data-goto="login">Sign in</button></p>
+      </section>
+
+      <!-- FORGOT PASSWORD -->
+      <section class="screen" id="forgot" data-screen aria-labelledby="forgot-title" hidden>
+        <button type="button" class="back" data-goto="login">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M15 5l-7 7 7 7" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          Back to sign in
+        </button>
+        <div class="icon-badge" aria-hidden="true">
+          <svg viewBox="0 0 24 24"><rect x="5" y="10" width="14" height="10" rx="2" fill="none" stroke="currentColor" stroke-width="1.6"/><path d="M8 10V7a4 4 0 0 1 7.5-2" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/><circle cx="12" cy="15" r="1.6" fill="currentColor"/></svg>
+        </div>
+        <header class="screen__head">
+          <h1 id="forgot-title" tabindex="-1">Forgot your password?</h1>
+          <p class="muted">Enter the email you signed up with and we’ll send you a secure reset link.</p>
+        </header>
+
+        <form class="form" id="forgot-form" novalidate>
+          <div class="field">
+            <label for="forgot-email">Email</label>
+            <div class="input-wrap">
+              <svg class="input-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 6h16v12H4z M4 7l8 6 8-6" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/></svg>
+              <input id="forgot-email" name="email" type="email" autocomplete="email" placeholder="you@company.com" required aria-describedby="forgot-email-error">
+            </div>
+            <p class="field__error" id="forgot-email-error" aria-live="polite"></p>
+          </div>
+          <button class="btn btn--primary" type="submit">
+            <span class="btn__label">Send reset link</span>
+            <span class="spinner" aria-hidden="true"></span>
+          </button>
+        </form>
+      </section>
+
+      <!-- RESET LINK SENT -->
+      <section class="screen" id="sent" data-screen aria-labelledby="sent-title" hidden>
+        <div class="icon-badge icon-badge--success" aria-hidden="true">
+          <svg viewBox="0 0 24 24"><path d="M5 12.5l4.5 4.5L19 7.5" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" class="draw"/></svg>
+        </div>
+        <header class="screen__head">
+          <h1 id="sent-title" tabindex="-1">Check your inbox</h1>
+          <p class="muted">We sent a reset link to <strong class="sent-email">your email</strong>. It expires in 30 minutes.</p>
+        </header>
+        <button type="button" class="btn btn--primary" data-goto="login">Back to sign in</button>
+        <p class="switch">Didn’t get it? <button type="button" class="link" id="resend" disabled>Resend in <span id="resend-timer">30</span>s</button></p>
+      </section>
+    </div>
+  </main>
+
+  <div class="toast glass" role="status" aria-live="polite"></div>
+
+  <script src="script.js"></script>
+</body>
+</html>

@@ -1,0 +1,9 @@
+{
+  "name": "template-qa",
+  "private": true,
+  "description": "QA harness for the UI template library (html-validate + axe-core + Playwright/Chromium)",
+  "dependencies": {
+    "axe-core": "^4.10.0",
+    "html-validate": "^11.16.0"
+  }
+}
