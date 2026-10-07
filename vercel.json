@@ -1,0 +1,28 @@
+{
+  "version": 2,
+  "name": "ghost-state-network",
+  "builds": [
+    {
+      "src": "api/signaling.js",
+      "use": "@vercel/node"
+    },
+    {
+      "src": "*.html",
+      "use": "@vercel/static"
+    },
+    {
+      "src": "*.js",
+      "use": "@vercel/static"
+    }
+  ],
+  "routes": [
+    {
+      "src": "/api/signaling",
+      "dest": "/api/signaling.js"
+    },
+    {
+      "src": "/(.*)",
+      "dest": "/$1"
+    }
+  ]
+}

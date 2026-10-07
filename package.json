@@ -1,0 +1,29 @@
+{
+  "name": "ghost-state-network",
+  "version": "1.0.0",
+  "description": "Cryptographic P2P Ghost Mesh Network with ECDSA Keypair Identity and WebRTC Shattered Shard Storage",
+  "main": "server.js",
+  "engines": {
+    "node": ">=18"
+  },
+  "scripts": {
+    "start": "node signaling-server.js",
+    "start:full": "node server.js",
+    "start:signaling": "node signaling-server.js",
+    "dev": "node server.js",
+    "test": "node test_handshake.js && node test_identity.js && node test_contacts.js && node test_phase4.js && node test_api.js"
+  },
+  "keywords": [
+    "p2p",
+    "webrtc",
+    "webcrypto",
+    "ecdsa",
+    "indexeddb",
+    "ghost-mesh"
+  ],
+  "author": "",
+  "license": "MIT",
+  "dependencies": {
+    "ws": "^8.16.0"
+  }
+}

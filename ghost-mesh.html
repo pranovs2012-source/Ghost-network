@@ -1,0 +1,337 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Ghost Mesh: Zero-Server P2P Node</title>
+    <style>
+        body { background: #0a0a0a; color: #00ff66; font-family: 'Courier New', monospace; padding: 25px; margin: 0; }
+        .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+        .panel { border: 1px solid #00ff66; padding: 15px; background: #111; border-radius: 4px; }
+        textarea, input, button { width: 100%; background: #1a1a1a; color: #00ff66; border: 1px solid #00ff66; padding: 10px; box-sizing: border-box; font-family: monospace; margin-bottom: 10px; }
+        button { cursor: pointer; font-weight: bold; text-transform: uppercase; background: #003311; }
+        button:hover { background: #005522; }
+        .log { height: 150px; overflow-y: auto; background: #000; border: 1px solid #333; padding: 10px; font-size: 12px; color: #888; }
+        h3 { margin-top: 0; border-bottom: 1px solid #333; padding-bottom: 5px; }
+    </style>
+</head>
+<body>
+
+    <h2>⚡ GHOST MESH // VOLATILE MEMORY NODE</h2>
+    <p>Status: <span id="node-status" style="color: red; font-weight: bold;">OFFLINE (SEARCHING...)</span></p>
+
+    <div class="grid">
+        <div class="panel">
+            <h3>1. VOLATILE RAM INJECTOR</h3>
+            <input type="text" id="msg-input" placeholder="Inject text into peer RAM..." disabled>
+            <button id="btn-send" onclick="sendToPeerRAM()" disabled>Transmit to RAM</button>
+            
+            <h4>Active Memory Mirror:</h4>
+            <div id="ram-mirror" style="background:#000; padding:10px; min-height:50px; border:1px dashed #00ff66;">[Empty] Waiting for peer connection...</div>
+        </div>
+
+        <div class="panel">
+            <h3>2. SYSTEM STATUS</h3>
+            <div id="sys-log" class="log"></div>
+        </div>
+    </div>
+
+    <br>
+    <div class="panel">
+        <h3>NETWORK ACTIVITY LOG</h3>
+        <div id="activity-log" class="log"></div>
+    </div>
+
+    <br>
+    <div class="panel">
+        <h3>RECEIVED FILES</h3>
+        <div id="received-files" style="min-height:40px; color:#ccc;"></div>
+    </div>
+
+    <br>
+    
+
+    <script>
+        let peerConnections = {}; // Stores RTCPeerConnection objects: { peerId: pc }
+        let dataChannels = {};    // Stores Data Channels: { peerId: channel }
+        let pendingCandidates = {}; // { peerId: [candidates] }
+        let myNodeId = null;
+        let wsSignal = null;
+
+        function log(message) {
+            const consoleDiv = document.getElementById('activity-log');
+            if (consoleDiv) {
+                consoleDiv.innerHTML += `[${new Date().toLocaleTimeString()}] ${message}<br>`;
+                consoleDiv.scrollTop = consoleDiv.scrollHeight;
+            }
+        }
+
+        function createPeerConnection(peerId, isInitiator) {
+            if (peerConnections[peerId]) {
+                try { peerConnections[peerId].close(); } catch (e) {}
+            }
+
+            const pc = new RTCPeerConnection({
+                iceServers: [
+                    { urls: 'stun:stun.l.google.com:19302' },
+                    { urls: 'stun:stun1.l.google.com:19302' }
+                ]
+            });
+
+            peerConnections[peerId] = pc;
+
+            pc.onicecandidate = (e) => {
+                if (e.candidate && wsSignal && wsSignal.readyState === WebSocket.OPEN) {
+                    wsSignal.send(JSON.stringify({ target: peerId, candidate: e.candidate }));
+                }
+            };
+
+            pc.oniceconnectionstatechange = () => {
+                if (['failed', 'disconnected', 'closed'].includes(pc.iceConnectionState)) {
+                    log(`ICE connection dropped for peer [${peerId}].`);
+                    cleanPeer(peerId);
+                }
+            };
+
+            if (isInitiator) {
+                const channel = pc.createDataChannel("ghostRAMPipe");
+                bindChannelEvents(peerId, channel);
+
+                pc.createOffer().then(offer => {
+                    return pc.setLocalDescription(offer);
+                }).then(() => {
+                    wsSignal.send(JSON.stringify({ target: peerId, sdp: pc.localDescription }));
+                    log(`Initiator: Offer sent to peer [${peerId}]...`);
+                }).catch(e => log(`Offer error for peer [${peerId}]: ${e.message}`));
+            } else {
+                pc.ondatachannel = (event) => {
+                    bindChannelEvents(peerId, event.channel);
+                };
+            }
+
+            return pc;
+        }
+
+        function bindChannelEvents(peerId, channel) {
+            dataChannels[peerId] = channel;
+
+            channel.onopen = () => {
+                const count = Object.keys(dataChannels).filter(id => dataChannels[id].readyState === 'open').length;
+                document.getElementById('node-status').innerText = `ONLINE (CONNECTED MESH: ${count} PEER${count > 1 ? 'S' : ''})`;
+                document.getElementById('node-status').style.color = "#00ff66";
+                document.getElementById('msg-input').disabled = false;
+                document.getElementById('btn-send').disabled = false;
+                log(`Direct WebRTC RAM channel opened with peer [${peerId}].`);
+            };
+
+            channel.onmessage = (event) => {
+                let packet = null;
+                try { packet = JSON.parse(event.data); } catch (e) { packet = null; }
+
+                if (packet && packet.type === 'FILE_HEADER') {
+                    window._incomingFiles = window._incomingFiles || {};
+                    const key = `peer:${packet.fileId}`;
+                    window._incomingFiles[key] = { fileName: packet.fileName, totalChunks: packet.totalChunks, chunks: [], received: 0 };
+                    log(`Incoming file transfer started from [${peerId}]: ${packet.fileName}`);
+                    return;
+                }
+
+                if (packet && packet.type === 'FILE_CHUNK') {
+                    window._incomingFiles = window._incomingFiles || {};
+                    const key = `peer:${packet.fileId}`;
+                    const transfer = window._incomingFiles[key];
+                    if (!transfer) { log(`Unknown file chunk for ${packet.fileId}`); return; }
+                    transfer.chunks[packet.chunkIndex] = packet.payload; // base64
+                    transfer.received += 1;
+                    log(`Received chunk ${packet.chunkIndex+1}/${transfer.totalChunks} for ${transfer.fileName}`);
+                    if (transfer.received === transfer.totalChunks) {
+                        const byteArrays = transfer.chunks.map(b64 => {
+                            const bin = atob(b64);
+                            const arr = new Uint8Array(bin.length);
+                            for (let i = 0; i < bin.length; i++) arr[i] = bin.charCodeAt(i);
+                            return arr;
+                        });
+                        const blob = new Blob(byteArrays);
+                        const url = URL.createObjectURL(blob);
+
+                        const receivedBox = document.getElementById('received-files');
+                        const card = document.createElement('div');
+                        card.style.borderTop = '1px solid #333'; card.style.padding = '8px 0';
+                        const title = document.createElement('div'); title.style.fontWeight = 'bold'; title.style.color = '#fff'; title.textContent = transfer.fileName; card.appendChild(title);
+                        const links = document.createElement('div'); links.style.marginTop = '6px';
+                        const open = document.createElement('a'); open.href = url; open.target = '_blank'; open.textContent = 'Open'; open.style.marginRight='12px'; links.appendChild(open);
+                        const download = document.createElement('a'); download.href = url; download.download = transfer.fileName; download.textContent = 'Download'; links.appendChild(download);
+                        card.appendChild(links);
+                        const ext = transfer.fileName.split('.').pop().toLowerCase();
+                        const imageExts = ['png','jpg','jpeg','gif','webp','svg'];
+                        const textExts = ['txt','md','json','js','html','css','csv'];
+                        if (imageExts.includes(ext)) { const img = document.createElement('img'); img.src = url; img.style.maxWidth='200px'; img.style.display='block'; img.style.marginTop='8px'; card.appendChild(img); }
+                        else if (textExts.includes(ext)) { const pre = document.createElement('pre'); pre.style.maxHeight='200px'; pre.style.overflow='auto'; pre.style.whiteSpace='pre-wrap'; pre.style.marginTop='8px'; pre.style.color='#ddd'; blob.text().then(t=>pre.textContent=t).catch(()=>pre.textContent='[Preview unavailable]'); card.appendChild(pre); }
+                        receivedBox.appendChild(card);
+                        log(`File transfer complete: ${transfer.fileName}`);
+                        delete window._incomingFiles[key];
+                    }
+                    return;
+                }
+
+                const incomingText = event.data;
+                if (incomingText === "___GHOST_SIGNAL_DISCONNECT___") {
+                    log(`Peer [${peerId}] disconnected.`);
+                    cleanPeer(peerId);
+                    return;
+                }
+                document.getElementById('ram-mirror').innerText = incomingText;
+                log(`Inbound Memory Sync from [${peerId}]: "${incomingText}"`);
+            };
+
+            channel.onclose = () => {
+                log(`DataChannel closed with peer [${peerId}].`);
+                cleanPeer(peerId);
+            };
+
+            channel.onerror = (err) => {
+                log(`DataChannel error with peer [${peerId}].`);
+                cleanPeer(peerId);
+            };
+        }
+
+        function cleanPeer(peerId) {
+            if (peerConnections[peerId]) {
+                try { peerConnections[peerId].close(); } catch (e) {}
+                delete peerConnections[peerId];
+            }
+            delete dataChannels[peerId];
+
+            const activeCount = Object.keys(dataChannels).filter(id => dataChannels[id].readyState === 'open').length;
+            if (activeCount === 0) {
+                document.getElementById('node-status').innerText = "WAITING (PEER LOST)";
+                document.getElementById('node-status').style.color = "red";
+                document.getElementById('msg-input').disabled = true;
+                document.getElementById('btn-send').disabled = true;
+            } else {
+                document.getElementById('node-status').innerText = `ONLINE (CONNECTED MESH: ${activeCount} PEER(S))`;
+            }
+        }
+
+        function sendToPeerRAM() {
+            const inputField = document.getElementById('msg-input');
+            const message = inputField.value;
+            if (!message) return;
+
+            let sentCount = 0;
+            Object.keys(dataChannels).forEach(peerId => {
+                if (dataChannels[peerId] && dataChannels[peerId].readyState === 'open') {
+                    dataChannels[peerId].send(message);
+                    sentCount++;
+                }
+            });
+
+            log(`Outbound Memory Sync: Dispatched "${message}" to ${sentCount} peer(s).`);
+            inputField.value = '';
+        }
+
+        function connectToSignalingServer() {
+            const wsUrl = 'wss://ghost-server-kcpx.onrender.com';
+            wsSignal = new WebSocket(wsUrl);
+
+            wsSignal.onopen = () => {
+                log("Connected to signaling server.");
+            };
+
+            wsSignal.onmessage = async (message) => {
+                try {
+                    const packet = JSON.parse(message.data);
+
+                    if (packet.type === 'INIT') {
+                        myNodeId = packet.yourId;
+                        log(`Node registered. Unique ID: [${myNodeId}]`);
+                        if (packet.existingPeers && packet.existingPeers.length > 0) {
+                            log(`Discovered ${packet.existingPeers.length} existing peer(s). Connecting...`);
+                            packet.existingPeers.forEach(peerId => {
+                                createPeerConnection(peerId, true);
+                            });
+                        } else {
+                            log("You are the first node online. Awaiting peers to connect...");
+                            document.getElementById('node-status').innerText = "WAITING (FIRST PEER)";
+                            document.getElementById('node-status').style.color = "orange";
+                        }
+                        return;
+                    }
+
+                    if (packet.type === 'PEER_JOINED') {
+                        log(`New peer joined network: [${packet.newPeerId}]. Preparing receiver...`);
+                        createPeerConnection(packet.newPeerId, false);
+                        return;
+                    }
+
+                    if (packet.type === 'PEER_LEFT') {
+                        log(`Peer [${packet.peerId}] left network.`);
+                        cleanPeer(packet.peerId);
+                        return;
+                    }
+
+                    const peerId = packet.sender;
+                    if (!peerId) return;
+
+                    let pc = peerConnections[peerId];
+                    if (!pc && packet.sdp && packet.sdp.type === 'offer') {
+                        pc = createPeerConnection(peerId, false);
+                    }
+
+                    if (!pc) return;
+
+                    if (packet.sdp && packet.sdp.type === 'offer') {
+                        log(`SDP Offer received from peer [${peerId}]. Auto-accepting...`);
+                        await pc.setRemoteDescription(new RTCSessionDescription(packet.sdp));
+
+                        if (pendingCandidates[peerId]) {
+                            for (const cand of pendingCandidates[peerId]) {
+                                await pc.addIceCandidate(new RTCIceCandidate(cand)).catch(e => {});
+                            }
+                            delete pendingCandidates[peerId];
+                        }
+
+                        const answer = await pc.createAnswer();
+                        await pc.setLocalDescription(answer);
+                        wsSignal.send(JSON.stringify({ target: peerId, sdp: pc.localDescription }));
+                        log(`SDP Answer sent to peer [${peerId}].`);
+                    } else if (packet.sdp && packet.sdp.type === 'answer') {
+                        log(`SDP Answer received from peer [${peerId}]. Completing handshake...`);
+                        await pc.setRemoteDescription(new RTCSessionDescription(packet.sdp));
+
+                        if (pendingCandidates[peerId]) {
+                            for (const cand of pendingCandidates[peerId]) {
+                                await pc.addIceCandidate(new RTCIceCandidate(cand)).catch(e => {});
+                            }
+                            delete pendingCandidates[peerId];
+                        }
+                    } else if (packet.candidate) {
+                        if (pc.remoteDescription && pc.remoteDescription.type) {
+                            await pc.addIceCandidate(new RTCIceCandidate(packet.candidate)).catch(e => {});
+                        } else {
+                            pendingCandidates[peerId] = pendingCandidates[peerId] || [];
+                            pendingCandidates[peerId].push(packet.candidate);
+                        }
+                    }
+                } catch (e) {
+                    console.error("Error handling signaling packet:", e);
+                }
+            };
+
+            wsSignal.onerror = (error) => {
+                log("WebSocket error observed.");
+            };
+
+            wsSignal.onclose = () => {
+                log("Disconnected from signaling server.");
+                document.getElementById('node-status').innerText = "OFFLINE (DISCONNECTED)";
+                document.getElementById('node-status').style.color = "red";
+            };
+        }
+
+        window.addEventListener('DOMContentLoaded', () => {
+            log("Ghost Mesh node initializing...");
+            connectToSignalingServer();
+        });
+    </script>
+</body>
+</html>
