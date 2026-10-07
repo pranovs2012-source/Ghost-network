@@ -32,3 +32,4 @@ aurora-glass (glassmorphism), neon-cyberpunk, swiss-minimal, pixel-arcade, dark-
 | 1 | #001–#010 | `internal/bundles/bundle-1.md` · `downloads/bundle-1.zip` |
 | 011 | login | Forest Fern | `templates/login/011-forest-fern/` | `login-011-forest-fern.zip` | Calm botanical login whose forest follows the real time of day — dawn, day, dusk, night — with a growing-tree password meter. |
 | 012 | game-menu | Space Odyssey | `templates/game-menu/012-space-odyssey/` | `game-menu-012-space-odyssey.zip` | Cosmic exploration menus — parallax starfield with warp, spinning CSS planets, crew manifest and a drifting signal-lost screen. |
+| 013 | login | Neumorphism | `templates/login/013-neumorphism/` | `login-013-neumorphism.zip` | Calm soft-UI login that still passes contrast — passkey fingerprint scan, strength ring, 4 accents and dark soft mode. |
