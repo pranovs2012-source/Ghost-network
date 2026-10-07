@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="en" data-palette="sunset">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>NIGHTDRIVE — Sign in</title>
+  <meta name="description" content="Synthwave login, sign-up and password reset template with a neon sunset, moving grid, VHS glitches and a working cassette deck.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Kanit:ital,wght@0,400;0,500;0,600;1,800&amp;family=Mr+Dafoe&amp;display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <!-- ===== Scene: stars, striped sun, wireframe mountains, palms, moving grid ===== -->
+  <div class="scene" aria-hidden="true">
+    <div class="stars"></div>
+    <div class="sun"></div>
+    <svg class="mountains" viewBox="0 0 1200 200" preserveAspectRatio="none">
+      <path class="mountains__back" d="M0 200 L0 120 L90 60 L170 110 L260 30 L350 105 L430 70 L520 130 L600 80 L690 140 L770 50 L860 115 L950 65 L1040 120 L1120 40 L1200 100 L1200 200Z"/>
+      <path class="mountains__front" d="M0 200 L0 160 L120 110 L210 150 L300 95 L400 160 L480 130 L560 170 L640 135 L740 175 L820 120 L920 160 L1010 105 L1100 150 L1200 125 L1200 200Z"/>
+    </svg>
+    <div class="floor"><div class="grid"></div></div>
+    <svg class="palm palm--left" viewBox="0 0 200 320"><path d="M98 320 C104 250 100 180 112 110 L118 110 C110 180 114 250 110 320Z"/><path d="M115 112 C80 70 40 70 4 96 C44 80 78 86 112 116Z M115 112 C90 60 60 36 22 34 C62 46 90 72 112 114Z M116 110 C130 60 160 40 196 46 C160 56 136 76 120 114Z M116 112 C150 86 182 92 200 118 C176 104 148 104 118 118Z M114 110 C110 70 120 30 140 4 C130 40 124 74 120 112Z"/></svg>
+    <svg class="palm palm--right" viewBox="0 0 200 320"><path d="M98 320 C104 250 100 180 112 110 L118 110 C110 180 114 250 110 320Z"/><path d="M115 112 C80 70 40 70 4 96 C44 80 78 86 112 116Z M115 112 C90 60 60 36 22 34 C62 46 90 72 112 114Z M116 110 C130 60 160 40 196 46 C160 56 136 76 120 114Z M116 112 C150 86 182 92 200 118 C176 104 148 104 118 118Z M114 110 C110 70 120 30 140 4 C130 40 124 74 120 112Z"/></svg>
+  </div>
+  <div class="vhs" aria-hidden="true"></div>
+
+  <header class="topbar">
+    <p class="rec" aria-hidden="true"><span class="rec__dot"></span>REC · CH 03</p>
+    <button class="chip" type="button" id="palette" aria-describedby="palette-desc">Palette: <span id="palette-name">Sunset</span></button>
+    <span class="visually-hidden" id="palette-desc">Switches between the sunset and midnight color schemes</span>
+  </header>
+
+  <main class="layout">
+    <div class="intro">
+      <p class="logo"><span class="logo__word">NIGHTDRIVE</span><span class="logo__script" aria-hidden="true">Members</span></p>
+      <p class="tagline">The after-hours club for people who drive with the windows down.</p>
+
+      <section class="deck" aria-label="Music player">
+        <div class="cassette" aria-hidden="true">
+          <div class="cassette__label"><span>SIDE A</span><span id="cassette-title">NIGHTDRIVE MIX</span></div>
+          <div class="cassette__window"><span class="reel"></span><span class="tape"></span><span class="reel"></span></div>
+        </div>
+        <div class="deck__body">
+          <p class="deck__now"><span class="deck__label">Now playing</span> <span id="track-name">01 · Neon Horizon</span></p>
+          <div class="eq" aria-hidden="true"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></div>
+          <div class="deck__controls">
+            <button class="deck__btn" type="button" id="prev-track"><span class="visually-hidden">Previous track</span><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 5h2v14H6zM20 5v14L9 12z"/></svg></button>
+            <button class="deck__btn deck__btn--play" type="button" id="play" aria-pressed="false"><span class="visually-hidden">Play music</span><svg class="i-play" viewBox="0 0 24 24" aria-hidden="true"><path d="M7 4v16l13-8z"/></svg><svg class="i-pause" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 4h4v16H6zM14 4h4v16h-4z"/></svg></button>
+            <button class="deck__btn" type="button" id="next-track"><span class="visually-hidden">Next track</span><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 5h2v14h-2zM4 5v14l11-7z"/></svg></button>
+            <span class="counter" aria-hidden="true" id="counter">000</span>
+          </div>
+        </div>
+      </section>
+    </div>
+
+    <div class="card" id="card">
+      <!-- LOGIN -->
+      <section class="screen is-active" id="login" data-screen aria-labelledby="login-title">
+        <p class="eyebrow">Members only · Est. 1986</p>
+        <h1 class="title" id="login-title" tabindex="-1">Welcome back, driver</h1>
+        <form class="form" id="login-form" novalidate>
+          <div class="field">
+            <label for="login-email">Email</label>
+            <input id="login-email" name="email" type="email" autocomplete="email" placeholder="you@nightdrive.club" required aria-describedby="login-email-error">
+            <p class="error" id="login-email-error" aria-live="polite"></p>
+          </div>
+          <div class="field">
+            <label for="login-password">Password</label>
+            <div class="input-wrap">
+              <input id="login-password" name="password" type="password" autocomplete="current-password" required minlength="8" aria-describedby="login-password-error">
+              <button class="peek" type="button" data-toggle-password="login-password" aria-pressed="false"><span class="visually-hidden">Show password</span><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 5C6.5 5 2.7 9.2 1.5 12c1.2 2.8 5 7 10.5 7s9.3-4.2 10.5-7C21.3 9.2 17.5 5 12 5zm0 11a4 4 0 1 1 0-8 4 4 0 0 1 0 8zm0-2a2 2 0 1 0 0-4 2 2 0 0 0 0 4z"/></svg></button>
+            </div>
+            <p class="error" id="login-password-error" aria-live="polite"></p>
+          </div>
+          <div class="row">
+            <label class="switch"><input type="checkbox" name="remember" role="switch"><span class="switch__track" aria-hidden="true"></span>Keep me in the fast lane</label>
+            <button class="link" type="button" data-goto="forgot">Forgot password?</button>
+          </div>
+          <button class="btn" type="submit"><span class="btn__label">Start engine</span></button>
+        </form>
+        <p class="switcher">New to the club? <button class="link" type="button" data-goto="signup">Get your pass</button></p>
+      </section>
+
+      <!-- SIGN UP -->
+      <section class="screen" id="signup" data-screen aria-labelledby="signup-title" hidden>
+        <p class="eyebrow">Membership · Free forever</p>
+        <h1 class="title" id="signup-title" tabindex="-1">Get your pass</h1>
+        <form class="form" id="signup-form" novalidate>
+          <div class="field">
+            <label for="signup-name">Driver name</label>
+            <input id="signup-name" name="name" type="text" autocomplete="nickname" required minlength="2" aria-describedby="signup-name-error">
+            <p class="error" id="signup-name-error" aria-live="polite"></p>
+          </div>
+          <div class="field">
+            <label for="signup-email">Email</label>
+            <input id="signup-email" name="email" type="email" autocomplete="email" required aria-describedby="signup-email-error">
+            <p class="error" id="signup-email-error" aria-live="polite"></p>
+          </div>
+          <div class="field">
+            <label for="signup-password">Password</label>
+            <div class="input-wrap">
+              <input id="signup-password" name="password" type="password" autocomplete="new-password" required minlength="8" aria-describedby="signup-strength signup-password-error">
+              <button class="peek" type="button" data-toggle-password="signup-password" aria-pressed="false"><span class="visually-hidden">Show password</span><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 5C6.5 5 2.7 9.2 1.5 12c1.2 2.8 5 7 10.5 7s9.3-4.2 10.5-7C21.3 9.2 17.5 5 12 5zm0 11a4 4 0 1 1 0-8 4 4 0 0 1 0 8zm0-2a2 2 0 1 0 0-4 2 2 0 0 0 0 4z"/></svg></button>
+            </div>
+            <div class="meter" aria-hidden="true" id="meter"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></div>
+            <p class="meter__text" id="signup-strength" aria-live="polite">Strength: not set</p>
+            <p class="error" id="signup-password-error" aria-live="polite"></p>
+          </div>
+          <label class="check"><input type="checkbox" name="terms" required aria-describedby="signup-terms-error"><span class="check__box" aria-hidden="true"></span>I agree to the <a class="link" href="#terms">club rules</a></label>
+          <p class="error" id="signup-terms-error" aria-live="polite"></p>
+          <button class="btn" type="submit"><span class="btn__label">Print my pass</span></button>
+        </form>
+        <p class="switcher">Already a member? <button class="link" type="button" data-goto="login">Sign in</button></p>
+      </section>
+
+      <!-- FORGOT -->
+      <section class="screen" id="forgot" data-screen aria-labelledby="forgot-title" hidden>
+        <p class="eyebrow">Rewind</p>
+        <h1 class="title" id="forgot-title" tabindex="-1">Lost your key?</h1>
+        <p class="lede">Enter your email and we’ll send a reset link before the song ends.</p>
+        <form class="form" id="forgot-form" novalidate>
+          <div class="field">
+            <label for="forgot-email">Email</label>
+            <input id="forgot-email" name="email" type="email" autocomplete="email" required aria-describedby="forgot-email-error">
+            <p class="error" id="forgot-email-error" aria-live="polite"></p>
+          </div>
+          <button class="btn" type="submit"><span class="btn__label">Send reset link</span></button>
+        </form>
+        <p class="switcher"><button class="link" type="button" data-goto="login">Back to sign in</button></p>
+      </section>
+
+      <!-- SENT -->
+      <section class="screen screen--sent" id="sent" data-screen aria-labelledby="sent-title" hidden>
+        <div class="postcard" aria-hidden="true">
+          <svg viewBox="0 0 120 80"><rect x="4" y="8" width="112" height="68" rx="6" class="pc-body"/><path d="M8 14 L60 50 L112 14" class="pc-flap"/><path d="M8 72 L46 40 M112 72 L74 40" class="pc-flap"/></svg>
+        </div>
+        <h1 class="title" id="sent-title" tabindex="-1">Check your inbox</h1>
+        <p class="lede">A reset link is cruising to <strong class="sent-email">your inbox</strong>. It expires in 30 minutes.</p>
+        <button class="btn" type="button" data-goto="login"><span class="btn__label">Back to sign in</span></button>
+        <button class="link" type="button" id="resend" disabled>Resend in <span id="resend-timer">30</span>s</button>
+      </section>
+    </div>
+  </main>
+
+  <p class="vcr" aria-hidden="true"><span>PLAY</span> <span id="vcr-time">PM 11:59</span> <span id="vcr-date">OCT 07 1986</span></p>
+  <div class="toast" role="status" aria-live="polite"></div>
+  <script src="script.js"></script>
+</body>
+</html>
