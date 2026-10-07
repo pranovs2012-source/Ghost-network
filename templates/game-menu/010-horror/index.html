@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>WHISPERWOOD — Game Menu</title>
+  <meta name="description" content="Horror game menu template: flashlight main menu, found-footage HUD, gamma calibration, corkboard chapter select, survivor case files, game over and survivors' log.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=IM+Fell+English+SC&amp;family=Special+Elite&amp;family=Caveat:wght@600&amp;display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <!-- ===== Night forest + fog (CSS only) ===== -->
+  <div class="night" aria-hidden="true">
+    <div class="night__sky"></div>
+    <div class="night__moon"></div>
+    <div class="night__house"></div>
+    <div class="night__trees night__trees--back"></div>
+    <div class="night__trees night__trees--front"></div>
+    <div class="fog fog--1"></div>
+    <div class="fog fog--2"></div>
+    <div class="lightning"></div>
+  </div>
+  <div class="flashlight" id="flashlight" aria-hidden="true"></div>
+  <div class="grain" id="grain" aria-hidden="true"></div>
+
+  <main class="app">
+
+    <!-- ================= MAIN ================= -->
+    <section class="screen screen--main is-active" id="main" data-screen aria-labelledby="main-title">
+      <div class="title-wrap">
+        <p class="pre">a story you should not finish</p>
+        <h1 class="game-title" id="main-title" tabindex="-1">Whisperwood</h1>
+        <p class="post">Night <span class="redact">four</span> of seven</p>
+      </div>
+      <nav class="notes" aria-label="Main menu">
+        <button class="note-btn" type="button" data-goto="play"><span class="note-btn__label">Continue</span><span class="note-btn__aside">the cellar door is open</span></button>
+        <button class="note-btn" type="button" data-goto="levels"><span class="note-btn__label">Chapters</span><span class="note-btn__aside">4 of 7 remembered</span></button>
+        <button class="note-btn" type="button" data-goto="characters"><span class="note-btn__label">Survivors</span><span class="note-btn__aside">case files</span></button>
+        <button class="note-btn" type="button" data-goto="leaderboard"><span class="note-btn__label">Survivors’ Log</span><span class="note-btn__aside">who lasted longest</span></button>
+        <button class="note-btn" type="button" data-goto="settings"><span class="note-btn__label">Settings</span><span class="note-btn__aside">calibrate the dark</span></button>
+        <button class="note-btn note-btn--leave" type="button" data-goto="quit"><span class="note-btn__label">Leave</span><span class="note-btn__aside">if you can</span></button>
+      </nav>
+      <p class="warning">This experience contains darkness, sudden sounds and themes of fear. <span class="warning__hint">Move your light to look around.</span></p>
+    </section>
+
+    <!-- ================= PLAY (found footage) ================= -->
+    <section class="screen screen--play" id="play" data-screen aria-labelledby="play-title" hidden>
+      <h1 class="visually-hidden" id="play-title" tabindex="-1">In game — The Cellar</h1>
+      <div class="cam">
+        <div class="cam__top">
+          <span class="rec"><span class="rec__dot" aria-hidden="true"></span>REC</span>
+          <span class="cam__time" id="cam-time">00:00:00</span>
+          <span class="battery" role="img" aria-label="Battery low"><span class="battery__level"></span></span>
+        </div>
+        <div class="cam__corners" aria-hidden="true"><span></span><span></span><span></span><span></span></div>
+        <p class="cam__date">OCT 31 1997 · CAM 2</p>
+        <p class="whisper" id="whisper" aria-live="polite"></p>
+        <div class="cam__bottom">
+          <div class="sanity">
+            <span class="sanity__label">Sanity</span>
+            <span class="sanity__bar"><span id="sanity-fill" style="--v:64%"></span></span>
+          </div>
+          <div class="cam__actions">
+            <button class="btn btn--ghost" type="button" data-goto="pause">Hold breath <span class="kbd-hint">(Esc)</span></button>
+            <button class="btn btn--blood" type="button" data-goto="gameover">Open the door</button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ================= PAUSE ================= -->
+    <section class="screen screen--dim" id="pause" data-screen aria-labelledby="pause-title" hidden>
+      <div class="polaroid-card">
+        <div class="polaroid-card__photo" aria-hidden="true"><span class="figure"></span></div>
+        <h1 class="polaroid-card__title" id="pause-title" tabindex="-1">Hold your breath</h1>
+        <p class="polaroid-card__text">The house is listening. Nothing moves while you wait.</p>
+        <nav class="type-menu" aria-label="Pause menu">
+          <button class="type-btn" type="button" data-goto="play">Keep going</button>
+          <button class="type-btn" type="button" data-goto="play" data-action="checkpoint">Return to last candle</button>
+          <button class="type-btn" type="button" data-goto="settings">Settings</button>
+          <button class="type-btn" type="button" data-goto="main">Abandon the night</button>
+        </nav>
+      </div>
+    </section>
+
+    <!-- ================= SETTINGS (with gamma calibration) ================= -->
+    <section class="screen" id="settings" data-screen aria-labelledby="settings-title" hidden>
+      <div class="sheet">
+        <div class="sheet__head">
+          <button class="back" type="button" data-goto="main" data-back><span aria-hidden="true">←</span><span class="visually-hidden">Back</span></button>
+          <h1 class="sheet__title" id="settings-title" tabindex="-1">Settings</h1>
+        </div>
+        <div class="tabs" role="tablist" aria-label="Settings sections">
+          <button class="tab" role="tab" type="button" id="t-gamma" aria-controls="p-gamma" aria-selected="true">Darkness</button>
+          <button class="tab" role="tab" type="button" id="t-sound" aria-controls="p-sound" aria-selected="false" tabindex="-1">Sound</button>
+          <button class="tab" role="tab" type="button" id="t-comfort" aria-controls="p-comfort" aria-selected="false" tabindex="-1">Comfort</button>
+        </div>
+        <form id="settings-form" class="sheet__form">
+          <div class="pane" role="tabpanel" id="p-gamma" aria-labelledby="t-gamma">
+            <p class="calib__text">Adjust until the left mark is <em>barely</em> visible and the right one is clearly visible.</p>
+            <div class="calib" aria-hidden="true">
+              <span class="calib__mark calib__mark--faint"></span>
+              <span class="calib__mark calib__mark--mid"></span>
+              <span class="calib__mark calib__mark--clear"></span>
+            </div>
+            <div class="row"><label for="s-gamma">Gamma</label><input class="slider" type="range" id="s-gamma" name="gamma" min="60" max="160" value="100"><output for="s-gamma">100</output></div>
+            <div class="row row--switch"><label for="s-flashlight">Flashlight follows cursor</label><input type="checkbox" class="switch" id="s-flashlight" name="flashlight" role="switch" checked></div>
+          </div>
+          <div class="pane" role="tabpanel" id="p-sound" aria-labelledby="t-sound" hidden>
+            <div class="row"><label for="s-master">Master</label><input class="slider" type="range" id="s-master" name="master" min="0" max="100" value="80"><output for="s-master">80</output></div>
+            <div class="row"><label for="s-ambience">Ambience</label><input class="slider" type="range" id="s-ambience" name="ambience" min="0" max="100" value="70"><output for="s-ambience">70</output></div>
+            <div class="row row--switch"><label for="s-heartbeat">Heartbeat menu sounds</label><input type="checkbox" class="switch" id="s-heartbeat" name="heartbeat" role="switch"></div>
+          </div>
+          <div class="pane" role="tabpanel" id="p-comfort" aria-labelledby="t-comfort" hidden>
+            <div class="row row--switch"><label for="s-grain">Film grain</label><input type="checkbox" class="switch" id="s-grain" name="grain" role="switch" checked></div>
+            <div class="row row--switch"><label for="s-lightning">Lightning flashes</label><input type="checkbox" class="switch" id="s-lightning" name="lightning" role="switch" checked></div>
+            <div class="row row--switch"><label for="s-jump">Jump scares</label><input type="checkbox" class="switch" id="s-jump" name="jumpScares" role="switch" checked></div>
+            <fieldset class="row row--choice">
+              <legend>Fear level</legend>
+              <div class="choices">
+                <input type="radio" id="f-uneasy" name="fear" value="uneasy"><label for="f-uneasy">Uneasy</label>
+                <input type="radio" id="f-dread" name="fear" value="dread" checked><label for="f-dread">Dread</label>
+                <input type="radio" id="f-terror" name="fear" value="terror"><label for="f-terror">Terror</label>
+              </div>
+            </fieldset>
+          </div>
+          <div class="sheet__actions">
+            <button class="btn btn--ghost" type="button" id="reset-settings">Reset</button>
+            <button class="btn btn--blood" type="submit">Save</button>
+          </div>
+        </form>
+      </div>
+    </section>
+
+    <!-- ================= CHAPTERS (corkboard) ================= -->
+    <section class="screen" id="levels" data-screen aria-labelledby="levels-title" hidden>
+      <div class="board">
+        <div class="sheet__head sheet__head--board">
+          <button class="back back--light" type="button" data-goto="main"><span aria-hidden="true">←</span><span class="visually-hidden">Back to main menu</span></button>
+          <h1 class="board__title" id="levels-title" tabindex="-1">Chapters</h1>
+        </div>
+        <svg class="board__string" id="board-string" aria-hidden="true"></svg>
+        <ul class="photos" id="photos" aria-label="Chapters"></ul>
+        <div class="board__foot">
+          <p class="scrawl" id="chosen-chapter" aria-live="polite"></p>
+          <button class="btn btn--blood" type="button" data-goto="play">Relive it</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- ================= SURVIVORS (case files) ================= -->
+    <section class="screen" id="characters" data-screen aria-labelledby="characters-title" hidden>
+      <div class="files">
+        <div class="sheet__head sheet__head--board">
+          <button class="back back--light" type="button" data-goto="main"><span aria-hidden="true">←</span><span class="visually-hidden">Back to main menu</span></button>
+          <h1 class="board__title" id="characters-title" tabindex="-1">Survivors</h1>
+        </div>
+        <div class="tabs tabs--folders" id="file-tabs" role="tablist" aria-label="Case files"></div>
+        <div class="casefile" id="casefile" role="tabpanel" aria-labelledby="file-tab-0">
+          <span class="clip" aria-hidden="true"></span>
+          <div class="casefile__photo" id="cf-photo" aria-hidden="true"><span class="figure"></span></div>
+          <div class="casefile__body">
+            <p class="casefile__no" id="cf-no">CASE 1997-031</p>
+            <h2 class="casefile__name" id="cf-name">Survivor</h2>
+            <p class="casefile__note" id="cf-note"></p>
+            <dl class="traits" id="cf-traits"></dl>
+          </div>
+          <span class="stamp" id="cf-stamp" aria-hidden="true">MISSING</span>
+        </div>
+        <div class="board__foot">
+          <p class="scrawl scrawl--light">← → to read other files</p>
+          <button class="btn btn--blood" type="button" data-goto="main" data-action="pick">Play as them</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- ================= GAME OVER ================= -->
+    <section class="screen screen--dead" id="gameover" data-screen aria-labelledby="gameover-title" hidden>
+      <div class="drips" aria-hidden="true"></div>
+      <div class="dead">
+        <h1 class="dead__title" id="gameover-title" tabindex="-1">They found you</h1>
+        <p class="dead__text">You lasted <strong id="dead-time">0</strong> minutes in the dark.</p>
+        <nav class="type-menu type-menu--row" aria-label="Game over options">
+          <button class="type-btn" type="button" data-goto="play" data-action="retry">Try again</button>
+          <button class="type-btn" type="button" data-goto="leaderboard">Survivors’ log</button>
+          <button class="type-btn" type="button" data-goto="main">Wake up</button>
+        </nav>
+      </div>
+    </section>
+
+    <!-- ================= SURVIVORS' LOG ================= -->
+    <section class="screen" id="leaderboard" data-screen aria-labelledby="leaderboard-title" hidden>
+      <div class="journal">
+        <div class="sheet__head">
+          <button class="back" type="button" data-goto="main"><span aria-hidden="true">←</span><span class="visually-hidden">Back to main menu</span></button>
+          <h1 class="sheet__title" id="leaderboard-title" tabindex="-1">Survivors’ Log</h1>
+        </div>
+        <div class="tabs" role="tablist" aria-label="Log period">
+          <button class="tab" role="tab" type="button" id="l-all" aria-controls="l-panel" aria-selected="true" data-board="all">All nights</button>
+          <button class="tab" role="tab" type="button" id="l-tonight" aria-controls="l-panel" aria-selected="false" data-board="tonight" tabindex="-1">Tonight</button>
+        </div>
+        <div id="l-panel" role="tabpanel" aria-labelledby="l-all">
+          <ol class="log" id="log"></ol>
+        </div>
+      </div>
+    </section>
+
+    <!-- ================= QUIT ================= -->
+    <section class="screen screen--dim" id="quit" data-screen aria-labelledby="quit-title" hidden>
+      <div class="polaroid-card polaroid-card--plain">
+        <h1 class="polaroid-card__title" id="quit-title" tabindex="-1">Leave Whisperwood?</h1>
+        <p class="polaroid-card__text">It will still be here when you come back.</p>
+        <nav class="type-menu" aria-label="Quit confirmation">
+          <button class="type-btn" type="button" data-goto="main">Stay</button>
+          <button class="type-btn type-btn--red" type="button" data-goto="main" data-action="quit">Leave</button>
+        </nav>
+      </div>
+    </section>
+  </main>
+
+  <div class="toast" role="status" aria-live="polite"></div>
+  <script src="script.js"></script>
+</body>
+</html>
