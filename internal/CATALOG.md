@@ -18,7 +18,7 @@ Alternate categories: odd numbers = login, even numbers = game-menu.
 
 ## Themes used (never repeat)
 
-aurora-glass (glassmorphism), neon-cyberpunk, swiss-minimal, pixel-arcade, dark-luxury, fantasy-rpg-bloom, scifi-hud, forest-fern
+aurora-glass (glassmorphism), neon-cyberpunk, swiss-minimal, pixel-arcade, dark-luxury, fantasy-rpg-bloom, scifi-hud, forest-fern-odyssey
 
 ## Theme backlog (pick the next unused one)
 
@@ -31,3 +31,4 @@ aurora-glass (glassmorphism), neon-cyberpunk, swiss-minimal, pixel-arcade, dark-
 |---|---|---|
 | 1 | #001–#010 | `internal/bundles/bundle-1.md` · `downloads/bundle-1.zip` |
 | 011 | login | Forest Fern | `templates/login/011-forest-fern/` | `login-011-forest-fern.zip` | Calm botanical login whose forest follows the real time of day — dawn, day, dusk, night — with a growing-tree password meter. |
+| 012 | game-menu | Space Odyssey | `templates/game-menu/012-space-odyssey/` | `game-menu-012-space-odyssey.zip` | Cosmic exploration menus — parallax starfield with warp, spinning CSS planets, crew manifest and a drifting signal-lost screen. |

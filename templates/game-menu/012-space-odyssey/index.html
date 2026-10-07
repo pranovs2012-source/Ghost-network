@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>STELLAR ATLAS — Game Menu</title>
+  <meta name="description" content="Space exploration game menu template: parallax starfield, planet carousel destination select, crew manifest, warp-speed HUD, signal lost game over and explorers' hall.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Exo+2:wght@300;500;700;800&amp;family=Space+Grotesk:wght@400;500;700&amp;display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <!-- ===== Cosmos: nebula (CSS) + starfield (canvas) + ringed planet ===== -->
+  <div class="cosmos" aria-hidden="true">
+    <div class="nebula"><span></span><span></span><span></span></div>
+    <canvas class="stars" id="stars"></canvas>
+    <div class="giant"><span class="giant__ring"></span><span class="giant__ring giant__ring--front"></span></div>
+    <span class="shooting"></span>
+  </div>
+
+  <main class="app">
+
+    <!-- ================= MAIN ================= -->
+    <section class="screen screen--main is-active" id="main" data-screen aria-labelledby="main-title">
+      <header class="hero">
+        <p class="hero__pre">Chart the unknown</p>
+        <h1 class="logo" id="main-title" tabindex="-1">Stellar <span>Atlas</span></h1>
+        <p class="hero__post">Season 3 · The Outer Rim</p>
+      </header>
+      <nav class="orbit-menu" aria-label="Main menu">
+        <button class="orbit" type="button" data-goto="play"><span class="orbit__planet" style="--p:#7ad3ff" aria-hidden="true"><i></i></span><span class="orbit__text"><span class="orbit__label">Launch</span><span class="orbit__sub">Resume voyage · Kepler Reach</span></span></button>
+        <button class="orbit" type="button" data-goto="levels"><span class="orbit__planet" style="--p:#ffb46b" aria-hidden="true"><i></i></span><span class="orbit__text"><span class="orbit__label">Destinations</span><span class="orbit__sub">6 worlds charted</span></span></button>
+        <button class="orbit" type="button" data-goto="characters"><span class="orbit__planet" style="--p:#c79bff" aria-hidden="true"><i></i></span><span class="orbit__text"><span class="orbit__label">Crew</span><span class="orbit__sub">4 specialists aboard</span></span></button>
+        <button class="orbit" type="button" data-goto="leaderboard"><span class="orbit__planet" style="--p:#ff7fb6" aria-hidden="true"><i></i></span><span class="orbit__text"><span class="orbit__label">Explorers’ Hall</span><span class="orbit__sub">Rank 57 of 12,480</span></span></button>
+        <button class="orbit" type="button" data-goto="settings"><span class="orbit__planet" style="--p:#6be3c0" aria-hidden="true"><i></i></span><span class="orbit__text"><span class="orbit__label">Ship Settings</span><span class="orbit__sub">Audio · Visuals · Controls</span></span></button>
+        <button class="orbit orbit--dim" type="button" data-goto="quit"><span class="orbit__planet" style="--p:#9aa0c8" aria-hidden="true"><i></i></span><span class="orbit__text"><span class="orbit__label">Return to Earth</span><span class="orbit__sub">Quit</span></span></button>
+      </nav>
+      <footer class="ship-status">
+        <span><span class="led" aria-hidden="true"></span>Hull 100%</span>
+        <span>Fuel 82%</span>
+        <span>Day 214 of voyage</span>
+      </footer>
+    </section>
+
+    <!-- ================= PLAY (warp) ================= -->
+    <section class="screen screen--play" id="play" data-screen aria-labelledby="play-title" hidden>
+      <h1 class="visually-hidden" id="play-title" tabindex="-1">In flight — warping to Kepler Reach</h1>
+      <div class="flight-top">
+        <div class="gauge"><span class="gauge__label">Oxygen</span><span class="gauge__bar"><span style="--v:88%;--c:#7ad3ff"></span></span></div>
+        <div class="gauge"><span class="gauge__label">Fuel</span><span class="gauge__bar"><span id="fuel" style="--v:82%;--c:#ffb46b"></span></span></div>
+        <button class="round-btn" type="button" data-goto="pause"><span class="visually-hidden">Pause</span><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5h3v14H8zM13 5h3v14h-3z"/></svg></button>
+      </div>
+      <div class="ship" aria-hidden="true">
+        <svg viewBox="0 0 120 120"><path d="M60 8 C72 30 76 52 74 78 L86 92 L74 94 L70 104 L60 96 L50 104 L46 94 L34 92 L46 78 C44 52 48 30 60 8Z" fill="#e8ecff" stroke="#9aa6e0" stroke-width="2"/><circle cx="60" cy="46" r="8" fill="#7ad3ff" stroke="#3b4a8f" stroke-width="2"/><path d="M52 98 L60 118 L68 98Z" class="ship__flame"/></svg>
+      </div>
+      <div class="flight-bottom">
+        <p class="speed"><span id="speed">0.00</span> <small>× light speed</small></p>
+        <p class="eta">ETA Kepler Reach <strong id="eta">04:12</strong></p>
+        <button class="btn btn--ghost" type="button" data-goto="gameover">Simulate hull breach</button>
+      </div>
+    </section>
+
+    <!-- ================= PAUSE ================= -->
+    <section class="screen screen--dim" id="pause" data-screen aria-labelledby="pause-title" hidden>
+      <div class="panel panel--narrow">
+        <div class="mini-planet" aria-hidden="true"><span class="mini-planet__clouds"></span></div>
+        <h1 class="panel__title" id="pause-title" tabindex="-1">Systems on standby</h1>
+        <p class="panel__text">The ship drifts quietly in orbit.</p>
+        <nav class="list-menu" aria-label="Pause menu">
+          <button class="list-btn" type="button" data-goto="play">Resume flight</button>
+          <button class="list-btn" type="button" data-goto="play" data-action="checkpoint">Restart from last beacon</button>
+          <button class="list-btn" type="button" data-goto="settings">Ship settings</button>
+          <button class="list-btn" type="button" data-goto="main">Return to bridge</button>
+        </nav>
+      </div>
+    </section>
+
+    <!-- ================= SETTINGS ================= -->
+    <section class="screen" id="settings" data-screen aria-labelledby="settings-title" hidden>
+      <div class="panel">
+        <div class="panel__head">
+          <button class="round-btn" type="button" data-goto="main" data-back><span class="visually-hidden">Back</span><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M15 5l-7 7 7 7" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/></svg></button>
+          <h1 class="panel__title" id="settings-title" tabindex="-1">Ship Settings</h1>
+        </div>
+        <div class="tabs" role="tablist" aria-label="Settings groups">
+          <button class="tab" role="tab" type="button" id="t-visual" aria-controls="p-visual" aria-selected="true">Visuals</button>
+          <button class="tab" role="tab" type="button" id="t-audio" aria-controls="p-audio" aria-selected="false" tabindex="-1">Audio</button>
+          <button class="tab" role="tab" type="button" id="t-controls" aria-controls="p-controls" aria-selected="false" tabindex="-1">Controls</button>
+        </div>
+        <form id="settings-form" class="settings">
+          <div class="pane" role="tabpanel" id="p-visual" aria-labelledby="t-visual">
+            <div class="set"><label for="s-density">Star density</label><input class="range" type="range" id="s-density" name="density" min="100" max="900" step="50" value="450"><output for="s-density">450</output></div>
+            <div class="set"><label for="s-hue">Nebula hue</label><input class="range range--hue" type="range" id="s-hue" name="hue" min="0" max="360" value="0"><output for="s-hue">0°</output></div>
+            <div class="set set--switch"><label for="s-parallax">Mouse parallax</label><input type="checkbox" class="toggle" id="s-parallax" name="parallax" role="switch" checked></div>
+            <div class="set set--switch"><label for="s-shooting">Shooting stars</label><input type="checkbox" class="toggle" id="s-shooting" name="shooting" role="switch" checked></div>
+          </div>
+          <div class="pane" role="tabpanel" id="p-audio" aria-labelledby="t-audio" hidden>
+            <div class="set"><label for="s-master">Master</label><input class="range" type="range" id="s-master" name="master" min="0" max="100" value="80"><output for="s-master">80</output></div>
+            <div class="set"><label for="s-music">Soundtrack</label><input class="range" type="range" id="s-music" name="music" min="0" max="100" value="65"><output for="s-music">65</output></div>
+            <div class="set set--switch"><label for="s-blips">Interface blips</label><input type="checkbox" class="toggle" id="s-blips" name="blips" role="switch"></div>
+          </div>
+          <div class="pane" role="tabpanel" id="p-controls" aria-labelledby="t-controls" hidden>
+            <div class="set"><label for="s-sens">Steering sensitivity</label><input class="range" type="range" id="s-sens" name="sens" min="1" max="10" value="5"><output for="s-sens">5</output></div>
+            <div class="set set--switch"><label for="s-invert">Invert pitch</label><input type="checkbox" class="toggle" id="s-invert" name="invert" role="switch"></div>
+            <fieldset class="set set--choice">
+              <legend>Assist level</legend>
+              <div class="chips">
+                <input type="radio" id="a-full" name="assist" value="full"><label for="a-full">Full</label>
+                <input type="radio" id="a-some" name="assist" value="some" checked><label for="a-some">Some</label>
+                <input type="radio" id="a-none" name="assist" value="none"><label for="a-none">Pilot</label>
+              </div>
+            </fieldset>
+          </div>
+          <div class="settings__actions">
+            <button class="btn btn--ghost" type="button" id="reset-settings">Reset</button>
+            <button class="btn" type="submit">Save settings</button>
+          </div>
+        </form>
+      </div>
+    </section>
+
+    <!-- ================= DESTINATIONS (planet carousel) ================= -->
+    <section class="screen" id="levels" data-screen aria-labelledby="levels-title" hidden>
+      <div class="dest">
+        <div class="panel__head">
+          <button class="round-btn" type="button" data-goto="main"><span class="visually-hidden">Back to main menu</span><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M15 5l-7 7 7 7" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/></svg></button>
+          <h1 class="panel__title" id="levels-title" tabindex="-1">Destinations</h1>
+        </div>
+        <div class="carousel">
+          <button class="round-btn round-btn--big" type="button" id="dest-prev"><span class="visually-hidden">Previous destination</span><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M15 5l-7 7 7 7" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/></svg></button>
+          <div class="carousel__stage" id="dest-stage" aria-live="polite"></div>
+          <button class="round-btn round-btn--big" type="button" id="dest-next"><span class="visually-hidden">Next destination</span><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 5l7 7-7 7" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/></svg></button>
+        </div>
+        <div class="dest__info" id="dest-info">
+          <p class="dest__type" id="dest-type"></p>
+          <h2 class="dest__name" id="dest-name">Planet</h2>
+          <p class="dest__desc" id="dest-desc"></p>
+          <dl class="dest__facts" id="dest-facts"></dl>
+          <button class="btn" type="button" data-goto="play" id="dest-go">Set course</button>
+        </div>
+        <div class="dots" id="dest-dots" role="group" aria-label="Choose destination"></div>
+      </div>
+    </section>
+
+    <!-- ================= CREW ================= -->
+    <section class="screen" id="characters" data-screen aria-labelledby="characters-title" hidden>
+      <div class="panel panel--wide">
+        <div class="panel__head">
+          <button class="round-btn" type="button" data-goto="main"><span class="visually-hidden">Back to main menu</span><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M15 5l-7 7 7 7" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/></svg></button>
+          <h1 class="panel__title" id="characters-title" tabindex="-1">Crew Manifest</h1>
+        </div>
+        <div class="crew">
+          <div class="crew__list" id="crew-list" role="radiogroup" aria-label="Crew members"></div>
+          <div class="crew__detail" id="crew-detail" aria-live="polite">
+            <div class="helmet" id="crew-helmet" aria-hidden="true"></div>
+            <p class="crew__role" id="crew-role"></p>
+            <h2 class="crew__name" id="crew-name">Crew</h2>
+            <p class="crew__bio" id="crew-bio"></p>
+            <dl class="skills" id="crew-skills"></dl>
+          </div>
+        </div>
+        <div class="panel__foot">
+          <p class="hint">Use arrow keys to browse the crew</p>
+          <button class="btn" type="button" data-goto="main" data-action="captain">Make captain</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- ================= SIGNAL LOST ================= -->
+    <section class="screen screen--lost" id="gameover" data-screen aria-labelledby="gameover-title" hidden>
+      <div class="drifter" aria-hidden="true">
+        <svg viewBox="0 0 80 100"><circle cx="40" cy="26" r="20" fill="#e8ecff" stroke="#9aa6e0" stroke-width="2"/><ellipse cx="42" cy="26" rx="13" ry="10" fill="#27306b"/><ellipse cx="46" cy="22" rx="4" ry="2.5" fill="#7ad3ff" opacity=".7"/><rect x="22" y="44" width="36" height="34" rx="12" fill="#e8ecff" stroke="#9aa6e0" stroke-width="2"/><rect x="8" y="48" width="16" height="10" rx="5" fill="#e8ecff" transform="rotate(-30 16 53)"/><rect x="56" y="48" width="16" height="10" rx="5" fill="#e8ecff" transform="rotate(40 64 53)"/><rect x="26" y="76" width="10" height="20" rx="5" fill="#e8ecff" transform="rotate(10 31 86)"/><rect x="44" y="76" width="10" height="20" rx="5" fill="#e8ecff" transform="rotate(-15 49 86)"/><path d="M58 70 C80 80 70 96 92 100" fill="none" stroke="#9aa6e0" stroke-width="2" stroke-dasharray="4 4"/></svg>
+      </div>
+      <div class="lost">
+        <h1 class="lost__title" id="gameover-title" tabindex="-1">Signal lost</h1>
+        <p class="lost__text">Your last transmission reached Earth <strong id="lost-years">0</strong> years after launch.</p>
+        <dl class="lost__stats">
+          <div><dt>Distance</dt><dd id="lost-dist">0 ly</dd></div>
+          <div><dt>Worlds found</dt><dd id="lost-worlds">0</dd></div>
+          <div><dt>Score</dt><dd id="lost-score">0</dd></div>
+        </dl>
+        <nav class="list-menu list-menu--row" aria-label="Signal lost options">
+          <button class="btn" type="button" data-goto="play" data-action="relaunch">Relaunch</button>
+          <button class="btn btn--ghost" type="button" data-goto="leaderboard">Explorers’ Hall</button>
+          <button class="btn btn--ghost" type="button" data-goto="main">Bridge</button>
+        </nav>
+      </div>
+    </section>
+
+    <!-- ================= EXPLORERS' HALL ================= -->
+    <section class="screen" id="leaderboard" data-screen aria-labelledby="leaderboard-title" hidden>
+      <div class="panel panel--wide">
+        <div class="panel__head">
+          <button class="round-btn" type="button" data-goto="main"><span class="visually-hidden">Back to main menu</span><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M15 5l-7 7 7 7" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/></svg></button>
+          <h1 class="panel__title" id="leaderboard-title" tabindex="-1">Explorers’ Hall</h1>
+        </div>
+        <div class="tabs" role="tablist" aria-label="Ranking type">
+          <button class="tab" role="tab" type="button" id="h-dist" aria-controls="h-panel" aria-selected="true" data-board="distance">Farthest</button>
+          <button class="tab" role="tab" type="button" id="h-worlds" aria-controls="h-panel" aria-selected="false" data-board="worlds" tabindex="-1">Most worlds</button>
+        </div>
+        <div class="table-wrap" id="h-panel" role="tabpanel" aria-labelledby="h-dist">
+          <table class="hall">
+            <caption class="visually-hidden">Explorer rankings</caption>
+            <thead><tr><th scope="col">#</th><th scope="col">Explorer</th><th scope="col" class="col-ship">Ship</th><th scope="col" id="h-metric">Distance</th></tr></thead>
+            <tbody id="h-body"></tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <!-- ================= QUIT ================= -->
+    <section class="screen screen--dim" id="quit" data-screen aria-labelledby="quit-title" hidden>
+      <div class="panel panel--narrow">
+        <h1 class="panel__title" id="quit-title" tabindex="-1">Return to Earth?</h1>
+        <p class="panel__text">Your logbook is saved. The stars will wait.</p>
+        <nav class="list-menu" aria-label="Quit confirmation">
+          <button class="list-btn" type="button" data-goto="main">Keep exploring</button>
+          <button class="list-btn list-btn--warn" type="button" data-goto="main" data-action="quit">Return home</button>
+        </nav>
+      </div>
+    </section>
+  </main>
+
+  <div class="toast" role="status" aria-live="polite"></div>
+  <script src="script.js"></script>
+</body>
+</html>
