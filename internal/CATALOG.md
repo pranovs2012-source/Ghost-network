@@ -29,3 +29,4 @@ aurora-glass (glassmorphism), neon-cyberpunk, swiss-minimal, pixel-arcade, dark-
 
 | Bundle | Templates | File |
 |---|---|---|
+| 1 | #001–#010 | `internal/bundles/bundle-1.md` · `downloads/bundle-1.zip` |
