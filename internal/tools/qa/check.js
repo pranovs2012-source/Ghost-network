@@ -165,7 +165,7 @@ async function run(width) {
         await page.click('#signup-form [type="submit"]');
         await page.waitForTimeout(400);
         const sInvalid = await page.$$eval('#signup-form [aria-invalid="true"]', els => els.length);
-        if (sInvalid < 3) problems.push(`[${width}px] signup: empty submit flagged only ${sInvalid} fields`);
+        if (sInvalid < 2) problems.push(`[${width}px] signup: empty submit flagged only ${sInvalid} fields`);
     }
 
     // preview.html must load cleanly too

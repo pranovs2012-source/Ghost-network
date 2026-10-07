@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Puffy — Log in</title>
+  <meta name="description" content="Pastel login and sign-up template with an animated mascot, 3-step sign-up and password reset.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600;700&amp;family=Nunito:wght@400;600;700;800&amp;display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="blobs" aria-hidden="true">
+    <span class="blob blob--1"></span>
+    <span class="blob blob--2"></span>
+    <span class="blob blob--3"></span>
+    <span class="blob blob--4"></span>
+    <span class="sparkle sparkle--1"></span>
+    <span class="sparkle sparkle--2"></span>
+    <span class="sparkle sparkle--3"></span>
+  </div>
+
+  <main class="shell">
+    <div class="card">
+      <!-- Mascot: eyes follow the pointer, closes them for passwords -->
+      <div class="mascot" id="mascot" aria-hidden="true">
+        <svg viewBox="0 0 160 110">
+          <defs>
+            <linearGradient id="puff" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="0" stop-color="#ffffff"/>
+              <stop offset="1" stop-color="#f3ecff"/>
+            </linearGradient>
+          </defs>
+          <path class="mascot__body" d="M36 96c-18 0-30-12-30-27s12-26 27-26c3-19 19-33 40-33 17 0 31 10 37 24 3-1 6-1 9-1 18 0 33 14 33 32s-15 31-33 31z" fill="url(#puff)" stroke="#d8c8ff" stroke-width="3"/>
+          <ellipse cx="52" cy="70" rx="9" ry="6" fill="#ffc6d9" opacity=".8"/>
+          <ellipse cx="114" cy="70" rx="9" ry="6" fill="#ffc6d9" opacity=".8"/>
+          <g class="mascot__eyes">
+            <g class="eye"><ellipse cx="66" cy="58" rx="7" ry="9" fill="#3b2f5c"/><circle class="pupil" cx="68" cy="55" r="2.6" fill="#fff"/></g>
+            <g class="eye"><ellipse cx="100" cy="58" rx="7" ry="9" fill="#3b2f5c"/><circle class="pupil" cx="102" cy="55" r="2.6" fill="#fff"/></g>
+          </g>
+          <g class="mascot__closed" opacity="0">
+            <path d="M58 58q8 7 16 0M92 58q8 7 16 0" fill="none" stroke="#3b2f5c" stroke-width="3.5" stroke-linecap="round"/>
+          </g>
+          <path class="mascot__mouth" d="M78 72q5 5 10 0" fill="none" stroke="#3b2f5c" stroke-width="3" stroke-linecap="round"/>
+        </svg>
+        <span class="mascot__bubble" id="mascot-bubble">Hi there!</span>
+      </div>
+
+      <!-- LOG IN -->
+      <section class="screen is-active" id="login" data-screen aria-labelledby="login-title">
+        <h1 class="title" id="login-title" tabindex="-1">Welcome back!</h1>
+        <p class="subtitle">Log in to keep your streak going.</p>
+
+        <form class="form" id="login-form" novalidate>
+          <div class="field">
+            <label for="login-email">Email</label>
+            <input id="login-email" name="email" type="email" autocomplete="email" placeholder="you@example.com" required aria-describedby="login-email-error">
+            <p class="field__error" id="login-email-error" aria-live="polite"></p>
+          </div>
+          <div class="field">
+            <label for="login-password">Password</label>
+            <div class="field__wrap">
+              <input id="login-password" name="password" type="password" autocomplete="current-password" placeholder="Your secret password" required minlength="8" aria-describedby="login-password-error" data-shy>
+              <button class="peek" type="button" data-toggle-password="login-password" aria-pressed="false" aria-label="Show password">
+                <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7S2 12 2 12z"/><circle cx="12" cy="12" r="3"/></svg>
+              </button>
+            </div>
+            <p class="field__error" id="login-password-error" aria-live="polite"></p>
+          </div>
+          <div class="row">
+            <label class="toggle"><input type="checkbox" name="remember" role="switch" checked><span class="toggle__track" aria-hidden="true"></span>Stay logged in</label>
+            <button class="link" type="button" data-goto="forgot">Forgot it?</button>
+          </div>
+          <button class="btn btn--primary" type="submit"><span class="btn__label">Log in</span><span class="dots" aria-hidden="true"><span></span><span></span><span></span></span></button>
+        </form>
+
+        <div class="or"><span>or</span></div>
+        <button class="btn btn--soft" type="button" data-demo="We emailed you a magic link (demo)">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 6h16v12H4z M4 7l8 6 8-6"/></svg>
+          Email me a magic link
+        </button>
+
+        <p class="switch">New here? <button class="link" type="button" data-goto="signup">Create an account</button></p>
+      </section>
+
+      <!-- SIGN UP (3 steps) -->
+      <section class="screen" id="signup" data-screen aria-labelledby="signup-title" hidden>
+        <h1 class="title" id="signup-title" tabindex="-1">Join the fluff!</h1>
+        <ol class="stepper" aria-label="Sign-up progress">
+          <li class="stepper__step is-current" aria-current="step"><span class="stepper__dot">1</span><span class="stepper__label">Account</span></li>
+          <li class="stepper__step"><span class="stepper__dot">2</span><span class="stepper__label">Profile</span></li>
+          <li class="stepper__step"><span class="stepper__dot">3</span><span class="stepper__label">Vibes</span></li>
+        </ol>
+
+        <form class="form" id="signup-form" novalidate>
+          <fieldset class="step is-active" data-step="1">
+            <legend class="visually-hidden">Step 1 of 3: Account</legend>
+            <div class="field">
+              <label for="signup-email">Email</label>
+              <input id="signup-email" name="email" type="email" autocomplete="email" placeholder="you@example.com" required aria-describedby="signup-email-error">
+              <p class="field__error" id="signup-email-error" aria-live="polite"></p>
+            </div>
+            <div class="field">
+              <label for="signup-password">Password</label>
+              <div class="field__wrap">
+                <input id="signup-password" name="password" type="password" autocomplete="new-password" placeholder="8+ characters" required minlength="8" aria-describedby="signup-hint signup-password-error" data-shy>
+                <button class="peek" type="button" data-toggle-password="signup-password" aria-pressed="false" aria-label="Show password">
+                  <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7S2 12 2 12z"/><circle cx="12" cy="12" r="3"/></svg>
+                </button>
+              </div>
+              <div class="flowers" aria-hidden="true"><span></span><span></span><span></span><span></span></div>
+              <p class="hint" id="signup-hint" aria-live="polite">Grow all four flowers for a super-strong password.</p>
+              <p class="field__error" id="signup-password-error" aria-live="polite"></p>
+            </div>
+          </fieldset>
+
+          <fieldset class="step" data-step="2" hidden>
+            <legend class="visually-hidden">Step 2 of 3: Profile</legend>
+            <div class="field">
+              <label for="signup-name">Display name</label>
+              <input id="signup-name" name="name" type="text" autocomplete="nickname" placeholder="What should we call you?" required aria-describedby="signup-name-error">
+              <p class="field__error" id="signup-name-error" aria-live="polite"></p>
+            </div>
+            <div class="field">
+              <span class="field__label" id="color-label">Avatar color</span>
+              <div class="swatches" role="radiogroup" aria-labelledby="color-label">
+                <label class="swatch"><input type="radio" name="color" value="#ffb3c7" checked><span style="--c:#ffb3c7"></span><span class="visually-hidden">Bubblegum</span></label>
+                <label class="swatch"><input type="radio" name="color" value="#b9e6ff"><span style="--c:#b9e6ff"></span><span class="visually-hidden">Sky</span></label>
+                <label class="swatch"><input type="radio" name="color" value="#c9f2d0"><span style="--c:#c9f2d0"></span><span class="visually-hidden">Mint</span></label>
+                <label class="swatch"><input type="radio" name="color" value="#fff1a8"><span style="--c:#fff1a8"></span><span class="visually-hidden">Lemon</span></label>
+                <label class="swatch"><input type="radio" name="color" value="#dccbff"><span style="--c:#dccbff"></span><span class="visually-hidden">Lilac</span></label>
+              </div>
+            </div>
+            <div class="avatar-preview" aria-hidden="true"><span class="avatar" id="avatar">P</span><span class="avatar-preview__name" id="avatar-name">Your name</span></div>
+          </fieldset>
+
+          <fieldset class="step" data-step="3" hidden>
+            <legend class="visually-hidden">Step 3 of 3: Vibes</legend>
+            <p class="field__label" id="vibes-label">What are you here for? <span class="hint">Pick any</span></p>
+            <div class="chips" role="group" aria-labelledby="vibes-label">
+              <label class="chip"><input type="checkbox" name="vibes" value="journaling"><span>Journaling</span></label>
+              <label class="chip"><input type="checkbox" name="vibes" value="habits" checked><span>Habits</span></label>
+              <label class="chip"><input type="checkbox" name="vibes" value="mood"><span>Mood tracking</span></label>
+              <label class="chip"><input type="checkbox" name="vibes" value="focus"><span>Focus timer</span></label>
+              <label class="chip"><input type="checkbox" name="vibes" value="gratitude"><span>Gratitude</span></label>
+            </div>
+            <label class="toggle toggle--block"><input type="checkbox" name="terms" role="switch" required aria-describedby="signup-terms-error"><span class="toggle__track" aria-hidden="true"></span><span>I agree to the <a class="link" href="#terms">terms</a> &amp; <a class="link" href="#privacy">privacy policy</a></span></label>
+            <p class="field__error" id="signup-terms-error" aria-live="polite"></p>
+          </fieldset>
+
+          <div class="step-nav">
+            <button class="btn btn--soft" type="button" id="step-back" hidden>Back</button>
+            <button class="btn btn--primary" type="submit" id="step-next"><span class="btn__label">Next</span><span class="dots" aria-hidden="true"><span></span><span></span><span></span></span></button>
+          </div>
+        </form>
+
+        <p class="switch">Already fluffy? <button class="link" type="button" data-goto="login">Log in</button></p>
+      </section>
+
+      <!-- FORGOT -->
+      <section class="screen" id="forgot" data-screen aria-labelledby="forgot-title" hidden>
+        <h1 class="title" id="forgot-title" tabindex="-1">Oops, forgot?</h1>
+        <p class="subtitle">It happens to the best of us. We’ll send a link to make a new one.</p>
+        <form class="form" id="forgot-form" novalidate>
+          <div class="field">
+            <label for="forgot-email">Email</label>
+            <input id="forgot-email" name="email" type="email" autocomplete="email" placeholder="you@example.com" required aria-describedby="forgot-email-error">
+            <p class="field__error" id="forgot-email-error" aria-live="polite"></p>
+          </div>
+          <button class="btn btn--primary" type="submit"><span class="btn__label">Send reset link</span><span class="dots" aria-hidden="true"><span></span><span></span><span></span></span></button>
+        </form>
+        <p class="switch"><button class="link" type="button" data-goto="login">Back to log in</button></p>
+      </section>
+
+      <!-- SENT -->
+      <section class="screen screen--center" id="sent" data-screen aria-labelledby="sent-title" hidden>
+        <div class="plane" aria-hidden="true">
+          <svg viewBox="0 0 120 80"><path class="plane__trail" d="M4 70c20-6 30-24 52-26" fill="none" stroke="#c9b6ff" stroke-width="3" stroke-dasharray="4 7" stroke-linecap="round"/><path d="M58 40l56-30-22 56-12-20z" fill="#fff" stroke="#8f6cf0" stroke-width="3" stroke-linejoin="round"/><path d="M80 46l34-36" stroke="#8f6cf0" stroke-width="3" stroke-linecap="round"/></svg>
+        </div>
+        <h1 class="title" id="sent-title" tabindex="-1">Link is flying your way!</h1>
+        <p class="subtitle">Check <strong class="sent-email">your inbox</strong> (and the spam folder, just in case).</p>
+        <button class="btn btn--primary" type="button" data-goto="login"><span class="btn__label">Back to log in</span></button>
+        <p class="switch"><button class="link" type="button" id="resend" disabled>Resend in <span id="resend-timer">30</span>s</button></p>
+      </section>
+    </div>
+  </main>
+
+  <div class="confetti" id="confetti" aria-hidden="true"></div>
+  <div class="toast" role="status" aria-live="polite"></div>
+  <script src="script.js"></script>
+</body>
+</html>

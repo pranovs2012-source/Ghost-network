@@ -11,10 +11,11 @@ Alternate categories: odd numbers = login, even numbers = game-menu.
 | 004 | game-menu | Pixel Arcade | `templates/game-menu/004-pixel-arcade/` | `game-menu-004-pixel-arcade.zip` | Full 8-bit menu kit — PRESS START title, world map, pixel heroes, CONTINUE? countdown and high scores, with 3 palettes and chiptune beeps. |
 | 005 | login | Dark Luxury | `templates/login/005-dark-luxury/` | `login-005-dark-luxury.zip` | Black-and-gold members-club login with foil type, floating labels, 2-step code entry and membership tier cards. |
 | 006 | game-menu | Fantasy RPG | `templates/game-menu/006-fantasy-rpg/` | `game-menu-006-fantasy-rpg.zip` | Storybook RPG menus in parchment & gilt — flip-card heroes, quest log, campfire pause and a hall of legends with heraldic shields. |
+| 007 | login | Pastel Bloom | `templates/login/007-pastel-bloom/` | `login-007-pastel-bloom.zip` | Bouncy pastel login with a cloud mascot that watches you type, 3-step sign-up, flower strength meter and confetti. |
 
 ## Themes used (never repeat)
 
-aurora-glass (glassmorphism), neon-cyberpunk, swiss-minimal, pixel-arcade, dark-luxury, fantasy-rpg
+aurora-glass (glassmorphism), neon-cyberpunk, swiss-minimal, pixel-arcade, dark-luxury, fantasy-rpg-bloom
 
 ## Theme backlog (pick the next unused one)
 
