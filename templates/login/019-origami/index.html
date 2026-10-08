@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en" data-paper="vermilion">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>FOLD — Sign in</title>
+  <meta name="description" content="Paper and origami login, sign-up and password reset template: unfolding screens, an origami crane, a fold-the-crane password meter and paper planes.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Young+Serif&amp;family=Figtree:wght@400;500;600;700&amp;display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="scraps" aria-hidden="true">
+    <span class="scrap scrap--1"></span><span class="scrap scrap--2"></span><span class="scrap scrap--3"></span>
+    <span class="scrap scrap--4"></span><span class="scrap scrap--5"></span><span class="scrap scrap--6"></span>
+  </div>
+
+  <main class="layout">
+    <div class="intro">
+      <p class="brand"><span class="brand__mark" aria-hidden="true"></span>Fold</p>
+      <svg class="crane" viewBox="0 0 200 160" aria-hidden="true">
+        <polygon class="p-dark wing" points="92,90 128,88 166,12"/>
+        <polygon class="p-shadow" points="146,98 132,92 186,46"/>
+        <polygon class="p-mid" points="56,100 72,94 26,40"/>
+        <polygon class="p-dark" points="26,40 14,52 32,46"/>
+        <polygon class="p-light" points="50,98 100,84 152,98 100,120"/>
+        <polygon class="p-shade" points="50,98 152,98 100,120"/>
+        <polygon class="p-base wing" points="74,94 132,92 58,14"/>
+        <polygon class="p-mid wing" points="74,94 98,93 58,14"/>
+      </svg>
+      <p class="intro__title">Unfold your best ideas.</p>
+      <p class="intro__text">A calm workspace for notes, sketches and plans — crafted one crease at a time.</p>
+      <fieldset class="papers">
+        <legend>Choose your paper</legend>
+        <div class="papers__row">
+          <input type="radio" name="paper" id="paper-vermilion" value="vermilion" checked><label for="paper-vermilion" style="--c:#c8432a"><span class="visually-hidden">Vermilion</span></label>
+          <input type="radio" name="paper" id="paper-indigo" value="indigo"><label for="paper-indigo" style="--c:#3557a6"><span class="visually-hidden">Indigo</span></label>
+          <input type="radio" name="paper" id="paper-teal" value="teal"><label for="paper-teal" style="--c:#26766d"><span class="visually-hidden">Teal</span></label>
+          <input type="radio" name="paper" id="paper-mustard" value="mustard"><label for="paper-mustard" style="--c:#d9a019"><span class="visually-hidden">Mustard</span></label>
+        </div>
+      </fieldset>
+    </div>
+
+    <div class="sheet" id="sheet">
+      <!-- LOGIN -->
+      <section class="screen is-active" id="login" data-screen aria-labelledby="login-title">
+        <h1 class="title" id="login-title" tabindex="-1">Welcome back</h1>
+        <p class="lede">Sign in to pick up where you left off.</p>
+        <form class="form" id="login-form" novalidate>
+          <div class="field">
+            <label for="login-email">Email</label>
+            <input id="login-email" name="email" type="email" autocomplete="email" required aria-describedby="login-email-error">
+            <p class="error" id="login-email-error" aria-live="polite"></p>
+          </div>
+          <div class="field">
+            <div class="field__top"><label for="login-password">Password</label><button class="link link--small" type="button" data-goto="forgot">Forgot?</button></div>
+            <div class="input-wrap">
+              <input id="login-password" name="password" type="password" autocomplete="current-password" required minlength="8" aria-describedby="login-password-error">
+              <button class="peek" type="button" data-toggle-password="login-password" aria-pressed="false">Show</button>
+            </div>
+            <p class="error" id="login-password-error" aria-live="polite"></p>
+          </div>
+          <label class="check"><input type="checkbox" name="remember"><span class="check__box" aria-hidden="true"></span>Remember me on this device</label>
+          <button class="btn" type="submit"><span class="btn__label">Sign in</span><svg class="btn__plane" viewBox="0 0 24 24" aria-hidden="true"><path d="M2 11 22 3l-6 18-4-7-10-3zm10 3 2 4 3-10-5 6z"/></svg></button>
+        </form>
+        <p class="switcher">New here? <button class="link" type="button" data-goto="signup">Create an account</button></p>
+      </section>
+
+      <!-- SIGN UP -->
+      <section class="screen" id="signup" data-screen aria-labelledby="signup-title" hidden>
+        <h1 class="title" id="signup-title" tabindex="-1">Start a fresh sheet</h1>
+        <p class="lede">Free for personal projects. No credit card needed.</p>
+        <form class="form" id="signup-form" novalidate>
+          <div class="field">
+            <label for="signup-name">Your name</label>
+            <input id="signup-name" name="name" type="text" autocomplete="name" required minlength="2" aria-describedby="signup-name-error">
+            <p class="error" id="signup-name-error" aria-live="polite"></p>
+          </div>
+          <div class="field">
+            <label for="signup-email">Email</label>
+            <input id="signup-email" name="email" type="email" autocomplete="email" required aria-describedby="signup-email-error">
+            <p class="error" id="signup-email-error" aria-live="polite"></p>
+          </div>
+          <div class="field">
+            <label for="signup-password">Password</label>
+            <div class="input-wrap">
+              <input id="signup-password" name="password" type="password" autocomplete="new-password" required minlength="8" aria-describedby="signup-strength signup-password-error">
+              <button class="peek" type="button" data-toggle-password="signup-password" aria-pressed="false">Show</button>
+            </div>
+            <div class="fold-meter">
+              <svg class="fold-meter__crane" id="fold-crane" viewBox="0 0 200 160" aria-hidden="true">
+                <rect class="fm-sheet" x="62" y="42" width="76" height="76" transform="rotate(45 100 80)"/>
+                <polygon class="p-light" points="50,98 100,84 152,98 100,120"/>
+                <polygon class="p-mid" points="56,100 72,94 26,40"/>
+                <polygon class="p-shadow" points="146,98 132,92 186,46"/>
+                <polygon class="p-dark" points="92,90 128,88 166,12"/>
+                <polygon class="p-base" points="74,94 132,92 58,14"/>
+              </svg>
+              <p class="fold-meter__text" id="signup-strength" aria-live="polite">Strength: not folded yet</p>
+            </div>
+            <p class="error" id="signup-password-error" aria-live="polite"></p>
+          </div>
+          <label class="check"><input type="checkbox" name="terms" required aria-describedby="signup-terms-error"><span class="check__box" aria-hidden="true"></span>I agree to the <a class="link" href="#terms">terms</a></label>
+          <p class="error" id="signup-terms-error" aria-live="polite"></p>
+          <button class="btn" type="submit"><span class="btn__label">Create account</span></button>
+        </form>
+        <p class="switcher">Already have an account? <button class="link" type="button" data-goto="login">Sign in</button></p>
+      </section>
+
+      <!-- FORGOT -->
+      <section class="screen" id="forgot" data-screen aria-labelledby="forgot-title" hidden>
+        <h1 class="title" id="forgot-title" tabindex="-1">Forgot your password?</h1>
+        <p class="lede">It happens. We’ll fold a reset link into a paper plane and send it your way.</p>
+        <form class="form" id="forgot-form" novalidate>
+          <div class="field">
+            <label for="forgot-email">Email</label>
+            <input id="forgot-email" name="email" type="email" autocomplete="email" required aria-describedby="forgot-email-error">
+            <p class="error" id="forgot-email-error" aria-live="polite"></p>
+          </div>
+          <button class="btn" type="submit"><span class="btn__label">Send reset link</span></button>
+        </form>
+        <p class="switcher"><button class="link" type="button" data-goto="login">Back to sign in</button></p>
+      </section>
+
+      <!-- SENT -->
+      <section class="screen screen--sent" id="sent" data-screen aria-labelledby="sent-title" hidden>
+        <div class="flight" aria-hidden="true">
+          <svg viewBox="0 0 260 120">
+            <path class="flight__trail" d="M10 100 C60 20 120 120 170 50 S230 40 236 62"/>
+            <g class="flight__envelope"><rect x="214" y="54" width="40" height="28" rx="3"/><path d="M214 56 L234 72 L254 56"/></g>
+          </svg>
+          <svg class="flight__plane" viewBox="0 0 24 24"><path d="M2 11 22 3l-6 18-4-7-10-3zm10 3 2 4 3-10-5 6z"/></svg>
+        </div>
+        <h1 class="title" id="sent-title" tabindex="-1">Check your inbox</h1>
+        <p class="lede">A reset link just landed at <strong class="sent-email">your inbox</strong>. It expires in 30 minutes.</p>
+        <button class="btn" type="button" data-goto="login"><span class="btn__label">Back to sign in</span></button>
+        <button class="link" type="button" id="resend" disabled>Resend in <span id="resend-timer">30</span>s</button>
+      </section>
+    </div>
+  </main>
+
+  <svg class="plane-fly" id="plane-fly" viewBox="0 0 24 24" aria-hidden="true"><path d="M2 11 22 3l-6 18-4-7-10-3zm10 3 2 4 3-10-5 6z"/></svg>
+  <div class="toast" role="status" aria-live="polite"></div>
+  <script src="script.js"></script>
+</body>
+</html>

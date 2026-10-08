@@ -18,12 +18,12 @@ Alternate categories: odd numbers = login, even numbers = game-menu.
 
 ## Themes used (never repeat)
 
-aurora-glass (glassmorphism), neon-cyberpunk, swiss-minimal, pixel-arcade, dark-luxury, fantasy-rpg-bloom, scifi-hud, forest-fern-odyssey-pop, retro-terminal
+aurora-glass (glassmorphism), neon-cyberpunk, swiss-minimal, pixel-arcade, dark-luxury, fantasy-rpg-bloom, scifi-hud, forest-fern-odyssey-pop, retro-terminal, origami
 
 ## Theme backlog (pick the next unused one)
 
 - game-menu: horror, space, cartoon, steampunk, underwater, samurai ink, post-apocalyptic, candy/kawaii, racing/motorsport, medieval stone, western frontier
-- login: pastel, brutalist, neumorphism, synthwave, paper/origami, art deco, newspaper editorial, claymorphism, bauhaus, ocean wave, desert sand
+- login: pastel, brutalist, neumorphism, synthwave, art deco, newspaper editorial, claymorphism, bauhaus, ocean wave, desert sand
 
 ## Bundles
 
@@ -38,3 +38,4 @@ aurora-glass (glassmorphism), neon-cyberpunk, swiss-minimal, pixel-arcade, dark-
 | 016 | game-menu | Steampunk | `templates/game-menu/016-steampunk/` | `game-menu-016-steampunk.zip` | Brass-and-steam airship menu with turning SVG gears, a voyage chart map, dial-gauge engineer stats and a boiler-burst game over. |
 | 017 | login | Synthwave | `templates/login/017-synthwave/` | `login-017-synthwave.zip` | Retrowave neon-sunset login with a driving grid, VHS glitch transitions and a cassette deck that plays a live synth loop. |
 | 018 | game-menu | Underwater | `templates/game-menu/018-underwater/` | `game-menu-018-underwater.zip` | Deep-sea menu where every screen dives deeper — light rays, bubbles, jellyfish, a zone-based dive chart and a submarine hangar. |
+| 019 | login | Paper Origami | `templates/login/019-origami/` | `login-019-origami.zip` | Tactile paper-craft login with unfolding screens, an origami crane in your choice of paper, a fold-the-crane password meter and paper planes. |
