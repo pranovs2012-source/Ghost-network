@@ -40,3 +40,4 @@ aurora-glass, neon-cyberpunk, swiss-minimal, pixel-arcade, dark-luxury, fantasy-
 | Bundle | Templates | File |
 |---|---|---|
 | 1 | #001–#010 | `internal/bundles/bundle-1.md` · `downloads/bundle-1.zip` |
+| 2 | #011–#020 | `internal/bundles/bundle-2.md` · `downloads/bundle-2.zip` |
