@@ -6,7 +6,7 @@ Usage:
 
 Run only after internal/tools/qa/check.js passes for the folder.
 """
-import pathlib, subprocess, sys, time
+import pathlib, re, subprocess, sys, time
 
 ROOT = pathlib.Path(__file__).resolve().parents[2]
 BRANCH = "ccr-b2a60efe-sk85z1"
@@ -30,7 +30,7 @@ def main(folder, theme, line, backlog_label=""):
     lines = catalog.read_text().split("\n")
     if any(l.startswith(f"| {number} |") for l in lines):
         sys.exit(f"catalog already has #{number}")
-    last = max(i for i, l in enumerate(lines) if l.startswith("| 0") or l.startswith("| 1"))
+    last = max(i for i, l in enumerate(lines) if re.match(r"^\| \d{3} \|", l))
     lines.insert(last + 1, f"| {number} | {category} | {theme} | `templates/{category}/{src.name}/` | `{zip_name}` | {line} |")
     text = "\n".join(lines)
     marker = "## Themes used (never repeat)\n\n"
@@ -38,10 +38,14 @@ def main(folder, theme, line, backlog_label=""):
     used, tail = rest.split("\n", 1)
     text = head + marker + used + f", {slug}" + "\n" + tail
     if backlog_label:
-        for sep in (f", {backlog_label}", f"{backlog_label}, "):
-            if sep in text:
-                text = text.replace(sep, "", 1)
+        # Only touch the backlog section, never the "Themes used" line.
+        bmark = "## Theme backlog"
+        before, backlog = text.split(bmark, 1)
+        for sep in (f", {backlog_label}", f": {backlog_label}, ", f"{backlog_label}, "):
+            if sep in backlog:
+                backlog = backlog.replace(sep, ": " if sep.startswith(":") else "", 1)
                 break
+        text = before + bmark + backlog
     catalog.write_text(text)
 
     run("git", "add", "-A", "templates", "internal", "downloads")

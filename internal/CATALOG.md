@@ -15,21 +15,6 @@ Alternate categories: odd numbers = login, even numbers = game-menu.
 | 008 | game-menu | Sci-Fi HUD | `templates/game-menu/008-scifi-hud/` | `game-menu-008-scifi-hud.zip` | Holographic tactical command menus — radar, mission briefings with hologram globe, pilot radar charts and live key rebinding. |
 | 009 | login | Brutalist | `templates/login/009-brutalist/` | `login-009-brutalist.zip` | Loud hard-edged login with hard shadows, acid yellow, invert mode, caps-lock warning and live username check. |
 | 010 | game-menu | Horror | `templates/game-menu/010-horror/` | `game-menu-010-horror.zip` | Atmospheric horror menus — cursor flashlight, found-footage HUD, gamma calibration, corkboard chapters and case files, with comfort options. |
-
-## Themes used (never repeat)
-
-aurora-glass (glassmorphism), neon-cyberpunk, swiss-minimal, pixel-arcade, dark-luxury, fantasy-rpg-bloom, scifi-hud, forest-fern-odyssey-pop, retro-terminal, origami
-
-## Theme backlog (pick the next unused one)
-
-- game-menu: horror, space, cartoon, steampunk, underwater, samurai ink, post-apocalyptic, candy/kawaii, racing/motorsport, medieval stone, western frontier
-- login: pastel, brutalist, neumorphism, synthwave, art deco, newspaper editorial, claymorphism, bauhaus, ocean wave, desert sand
-
-## Bundles
-
-| Bundle | Templates | File |
-|---|---|---|
-| 1 | #001–#010 | `internal/bundles/bundle-1.md` · `downloads/bundle-1.zip` |
 | 011 | login | Forest Fern | `templates/login/011-forest-fern/` | `login-011-forest-fern.zip` | Calm botanical login whose forest follows the real time of day — dawn, day, dusk, night — with a growing-tree password meter. |
 | 012 | game-menu | Space Odyssey | `templates/game-menu/012-space-odyssey/` | `game-menu-012-space-odyssey.zip` | Cosmic exploration menus — parallax starfield with warp, spinning CSS planets, crew manifest and a drifting signal-lost screen. |
 | 013 | login | Neumorphism | `templates/login/013-neumorphism/` | `login-013-neumorphism.zip` | Calm soft-UI login that still passes contrast — passkey fingerprint scan, strength ring, 4 accents and dark soft mode. |
@@ -39,3 +24,18 @@ aurora-glass (glassmorphism), neon-cyberpunk, swiss-minimal, pixel-arcade, dark-
 | 017 | login | Synthwave | `templates/login/017-synthwave/` | `login-017-synthwave.zip` | Retrowave neon-sunset login with a driving grid, VHS glitch transitions and a cassette deck that plays a live synth loop. |
 | 018 | game-menu | Underwater | `templates/game-menu/018-underwater/` | `game-menu-018-underwater.zip` | Deep-sea menu where every screen dives deeper — light rays, bubbles, jellyfish, a zone-based dive chart and a submarine hangar. |
 | 019 | login | Paper Origami | `templates/login/019-origami/` | `login-019-origami.zip` | Tactile paper-craft login with unfolding screens, an origami crane in your choice of paper, a fold-the-crane password meter and paper planes. |
+
+## Themes used (never repeat)
+
+aurora-glass, neon-cyberpunk, swiss-minimal, pixel-arcade, dark-luxury, fantasy-rpg, pastel-bloom, scifi-hud, brutalist, horror, forest-fern, space-odyssey, neumorphism, cartoon-pop, retro-terminal, steampunk, synthwave, underwater, origami
+
+## Theme backlog (pick the next unused one)
+
+- game-menu: samurai ink, post-apocalyptic, candy/kawaii, racing/motorsport, medieval stone, western frontier
+- login: art deco, newspaper editorial, claymorphism, bauhaus, ocean wave, desert sand
+
+## Bundles
+
+| Bundle | Templates | File |
+|---|---|---|
+| 1 | #001–#010 | `internal/bundles/bundle-1.md` · `downloads/bundle-1.zip` |
