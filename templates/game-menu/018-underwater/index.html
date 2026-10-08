@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>ABYSSAL — Game Menu</title>
+  <meta name="description" content="Underwater game menu template: every screen dives deeper, with light rays, bubbles, glowing jellyfish, a depth-chart level select, submarine hangar and hull-breach game over.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Comfortaa:wght@500;700&amp;family=Outfit:wght@300;400;500;600&amp;display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <!-- ===== Ocean: tall gradient that scrolls with depth, light rays, particles, kelp, jellyfish ===== -->
+  <div class="sea" aria-hidden="true">
+    <div class="ocean" id="ocean"></div>
+    <div class="rays"><span></span><span></span><span></span><span></span><span></span></div>
+    <canvas class="particles" id="particles"></canvas>
+    <div class="jellies" id="jellies"></div>
+    <svg class="kelp kelp--left" viewBox="0 0 160 400" preserveAspectRatio="xMidYMax meet"><path d="M40 400 C30 320 60 260 40 190 C22 130 50 70 36 0" /><path d="M80 400 C92 330 64 280 84 210 C100 150 74 110 90 50" /><path d="M120 400 C112 350 136 300 122 240 C110 190 130 150 124 110" /></svg>
+    <svg class="kelp kelp--right" viewBox="0 0 160 400" preserveAspectRatio="xMidYMax meet"><path d="M40 400 C30 320 60 260 40 190 C22 130 50 70 36 0" /><path d="M80 400 C92 330 64 280 84 210 C100 150 74 110 90 50" /><path d="M120 400 C112 350 136 300 122 240 C110 190 130 150 124 110" /></svg>
+    <div class="gauge">
+      <span class="gauge__label">Depth</span>
+      <div class="gauge__ruler"><span class="gauge__mark" id="gauge-mark"></span></div>
+      <span class="gauge__value" id="gauge-value">0 m</span>
+    </div>
+  </div>
+
+  <main class="app">
+
+    <!-- ================= MAIN ================= -->
+    <section class="screen screen--main is-active" id="main" data-screen data-depth="0" aria-labelledby="main-title">
+      <header class="hero">
+        <p class="hero__pre">An expedition into the deep</p>
+        <h1 class="logo" id="main-title" tabindex="-1">Abyssal</h1>
+        <p class="hero__post">Expedition 04 · The Lantern Reef</p>
+      </header>
+      <nav class="dive-menu" aria-label="Main menu">
+        <button class="dive-btn" type="button" data-goto="play"><span class="dive-btn__icon" aria-hidden="true"></span><span class="dive-btn__text"><span class="dive-btn__label">Dive</span><span class="dive-btn__sub">Continue · Lantern Reef, 1,100 m</span></span></button>
+        <button class="dive-btn" type="button" data-goto="levels"><span class="dive-btn__icon" aria-hidden="true"></span><span class="dive-btn__text"><span class="dive-btn__label">Dive Chart</span><span class="dive-btn__sub">5 of 8 sites explored</span></span></button>
+        <button class="dive-btn" type="button" data-goto="characters"><span class="dive-btn__icon" aria-hidden="true"></span><span class="dive-btn__text"><span class="dive-btn__label">Hangar</span><span class="dive-btn__sub">Choose your submersible</span></span></button>
+        <button class="dive-btn" type="button" data-goto="leaderboard"><span class="dive-btn__icon" aria-hidden="true"></span><span class="dive-btn__text"><span class="dive-btn__label">Deepest Dives</span><span class="dive-btn__sub">Ranked 9th worldwide</span></span></button>
+        <button class="dive-btn" type="button" data-goto="settings"><span class="dive-btn__icon" aria-hidden="true"></span><span class="dive-btn__text"><span class="dive-btn__label">Settings</span><span class="dive-btn__sub">Visuals · Audio · Controls</span></span></button>
+        <button class="dive-btn dive-btn--quiet" type="button" data-goto="quit"><span class="dive-btn__icon" aria-hidden="true"></span><span class="dive-btn__text"><span class="dive-btn__label">Surface</span><span class="dive-btn__sub">Quit the game</span></span></button>
+      </nav>
+    </section>
+
+    <!-- ================= PLAY ================= -->
+    <section class="screen screen--play" id="play" data-screen data-depth="0.55" aria-labelledby="play-title" hidden>
+      <h1 class="visually-hidden" id="play-title" tabindex="-1">Diving — Lantern Reef</h1>
+      <div class="hud">
+        <div class="hud__box">
+          <p class="hud__k">Depth</p>
+          <p class="hud__v"><span id="h-depth">1,100</span> m</p>
+        </div>
+        <div class="hud__box hud__box--wide">
+          <p class="hud__k">Oxygen</p>
+          <div class="o2"><span id="h-o2" style="--v:100%"></span></div>
+        </div>
+        <div class="hud__box">
+          <p class="hud__k">Pearls</p>
+          <p class="hud__v" id="h-pearls">0</p>
+        </div>
+        <button class="round-btn" type="button" data-goto="pause"><span class="visually-hidden">Pause</span><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5h3v14H8zM13 5h3v14h-3z"/></svg></button>
+      </div>
+      <div class="dive-stage" aria-hidden="true">
+        <div class="school school--a"></div>
+        <div class="school school--b"></div>
+        <div class="sonar"></div>
+        <div class="sub sub--play" id="play-sub"></div>
+      </div>
+      <div class="play-foot">
+        <p class="hint-pill">Hold steady — a pearl glimmers below</p>
+        <button class="btn btn--ghost" type="button" data-goto="gameover">Simulate hull breach</button>
+      </div>
+    </section>
+
+    <!-- ================= PAUSE ================= -->
+    <section class="screen screen--center" id="pause" data-screen data-depth="0.55" aria-labelledby="pause-title" hidden>
+      <div class="panel panel--narrow">
+        <div class="porthole" aria-hidden="true"><span class="porthole__fish"></span></div>
+        <h1 class="panel__title" id="pause-title" tabindex="-1">Holding position</h1>
+        <p class="panel__text">Engines idle. The reef glows quietly around you.</p>
+        <nav class="list-menu" aria-label="Pause menu">
+          <button class="list-btn" type="button" data-goto="play">Resume dive</button>
+          <button class="list-btn" type="button" data-goto="play" data-action="checkpoint">Return to last air pocket</button>
+          <button class="list-btn" type="button" data-goto="settings">Settings</button>
+          <button class="list-btn" type="button" data-goto="main">Main menu</button>
+        </nav>
+      </div>
+    </section>
+
+    <!-- ================= SETTINGS ================= -->
+    <section class="screen screen--center" id="settings" data-screen data-depth="0.12" aria-labelledby="settings-title" hidden>
+      <div class="panel">
+        <div class="panel__head">
+          <button class="round-btn" type="button" data-goto="main" data-back><span class="visually-hidden">Back</span><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M15 5l-7 7 7 7" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"/></svg></button>
+          <h1 class="panel__title" id="settings-title" tabindex="-1">Settings</h1>
+        </div>
+        <div class="tabs" role="tablist" aria-label="Settings groups">
+          <button class="tab" role="tab" type="button" id="t-visual" aria-controls="p-visual" aria-selected="true">Visuals</button>
+          <button class="tab" role="tab" type="button" id="t-audio" aria-controls="p-audio" aria-selected="false" tabindex="-1">Audio</button>
+          <button class="tab" role="tab" type="button" id="t-controls" aria-controls="p-controls" aria-selected="false" tabindex="-1">Controls</button>
+        </div>
+        <form id="settings-form" class="settings">
+          <div class="pane" role="tabpanel" id="p-visual" aria-labelledby="t-visual">
+            <div class="set"><label for="s-bubbles">Bubbles &amp; marine snow</label><input class="range" type="range" id="s-bubbles" name="bubbles" min="0" max="200" step="10" value="90"><output for="s-bubbles">90</output></div>
+            <div class="set"><label for="s-tint">Water tint</label><input class="range range--tint" type="range" id="s-tint" name="tint" min="-40" max="40" value="0"><output for="s-tint">0</output></div>
+            <div class="set set--switch"><label for="s-rays">Sun rays</label><input type="checkbox" class="toggle" id="s-rays" name="rays" role="switch" checked></div>
+            <div class="set set--switch"><label for="s-jellies">Jellyfish</label><input type="checkbox" class="toggle" id="s-jellies" name="jellies" role="switch" checked></div>
+          </div>
+          <div class="pane" role="tabpanel" id="p-audio" aria-labelledby="t-audio" hidden>
+            <div class="set"><label for="s-master">Master volume</label><input class="range" type="range" id="s-master" name="master" min="0" max="100" value="80"><output for="s-master">80</output></div>
+            <div class="set"><label for="s-ambience">Ocean ambience</label><input class="range" type="range" id="s-ambience" name="ambience" min="0" max="100" value="60"><output for="s-ambience">60</output></div>
+            <div class="set set--switch"><label for="s-pings">Bubble &amp; sonar sounds</label><input type="checkbox" class="toggle" id="s-pings" name="pings" role="switch"></div>
+          </div>
+          <div class="pane" role="tabpanel" id="p-controls" aria-labelledby="t-controls" hidden>
+            <div class="set"><label for="s-sens">Steering sensitivity</label><input class="range" type="range" id="s-sens" name="sens" min="1" max="10" value="5"><output for="s-sens">5</output></div>
+            <div class="set set--switch"><label for="s-invert">Invert dive controls</label><input type="checkbox" class="toggle" id="s-invert" name="invert" role="switch"></div>
+            <fieldset class="set set--choice">
+              <legend>Oxygen supply</legend>
+              <div class="chips">
+                <input type="radio" id="o-generous" name="oxygen" value="generous"><label for="o-generous">Generous</label>
+                <input type="radio" id="o-normal" name="oxygen" value="normal" checked><label for="o-normal">Normal</label>
+                <input type="radio" id="o-scarce" name="oxygen" value="scarce"><label for="o-scarce">Scarce</label>
+              </div>
+            </fieldset>
+          </div>
+          <div class="settings__actions">
+            <button class="btn btn--ghost" type="button" id="reset-settings">Reset</button>
+            <button class="btn" type="submit">Save settings</button>
+          </div>
+        </form>
+      </div>
+    </section>
+
+    <!-- ================= DIVE CHART (levels) ================= -->
+    <section class="screen screen--center" id="levels" data-screen data-depth="0.35" aria-labelledby="levels-title" hidden>
+      <div class="panel panel--wide">
+        <div class="panel__head">
+          <button class="round-btn" type="button" data-goto="main"><span class="visually-hidden">Back to main menu</span><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M15 5l-7 7 7 7" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"/></svg></button>
+          <h1 class="panel__title" id="levels-title" tabindex="-1">Dive Chart</h1>
+        </div>
+        <div class="chart">
+          <div class="cable" id="sites" role="radiogroup" aria-label="Dive sites"></div>
+          <div class="site" id="site" aria-live="polite">
+            <p class="site__zone" id="site-zone"></p>
+            <h2 class="site__name" id="site-name">Site</h2>
+            <p class="site__desc" id="site-desc"></p>
+            <dl class="site__facts" id="site-facts"></dl>
+            <p class="pearls" id="site-pearls"></p>
+            <button class="btn" type="button" data-goto="play" id="site-go">Dive here</button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ================= HANGAR (characters) ================= -->
+    <section class="screen screen--center" id="characters" data-screen data-depth="0.22" aria-labelledby="characters-title" hidden>
+      <div class="panel panel--wide">
+        <div class="panel__head">
+          <button class="round-btn" type="button" data-goto="main"><span class="visually-hidden">Back to main menu</span><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M15 5l-7 7 7 7" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"/></svg></button>
+          <h1 class="panel__title" id="characters-title" tabindex="-1">Hangar</h1>
+        </div>
+        <div class="hangar">
+          <div class="hangar__stage">
+            <button class="round-btn" type="button" id="sub-prev"><span class="visually-hidden">Previous submersible</span><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M15 5l-7 7 7 7" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"/></svg></button>
+            <div class="sub sub--hangar" id="hangar-sub" aria-hidden="true"></div>
+            <button class="round-btn" type="button" id="sub-next"><span class="visually-hidden">Next submersible</span><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 5l7 7-7 7" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"/></svg></button>
+          </div>
+          <div class="hangar__info" id="sub-info" aria-live="polite">
+            <p class="site__zone" id="sub-class"></p>
+            <h2 class="site__name" id="sub-name">Submersible</h2>
+            <p class="site__desc" id="sub-desc"></p>
+            <dl class="stats" id="sub-stats"></dl>
+            <fieldset class="lamps">
+              <legend>Lamp color</legend>
+              <div class="lamps__row" id="lamps"></div>
+            </fieldset>
+          </div>
+        </div>
+        <div class="panel__foot">
+          <p class="hint">Use the arrow keys to browse submersibles</p>
+          <button class="btn" type="button" data-goto="main" data-action="launch">Launch this sub</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- ================= HULL BREACH (game over) ================= -->
+    <section class="screen screen--center" id="gameover" data-screen data-depth="1" aria-labelledby="gameover-title" hidden>
+      <div class="sinking" aria-hidden="true">
+        <div class="sub sub--sinking" id="sinking-sub"></div>
+      </div>
+      <div class="panel panel--narrow">
+        <h1 class="panel__title panel__title--big" id="gameover-title" tabindex="-1">Hull breach</h1>
+        <p class="panel__text">The pressure won this time. Your escape pod is already rising to the surface.</p>
+        <dl class="results">
+          <div><dt>Max depth</dt><dd id="go-depth">0 m</dd></div>
+          <div><dt>Pearls</dt><dd id="go-pearls">0</dd></div>
+          <div><dt>Score</dt><dd id="go-score">0</dd></div>
+        </dl>
+        <nav class="list-menu list-menu--row" aria-label="Hull breach options">
+          <button class="btn" type="button" data-goto="play" data-action="redive">Dive again</button>
+          <button class="btn btn--ghost" type="button" data-goto="leaderboard">Deepest dives</button>
+          <button class="btn btn--ghost" type="button" data-goto="main">Main menu</button>
+        </nav>
+      </div>
+    </section>
+
+    <!-- ================= DEEPEST DIVES (leaderboard) ================= -->
+    <section class="screen screen--center" id="leaderboard" data-screen data-depth="0.45" aria-labelledby="leaderboard-title" hidden>
+      <div class="panel panel--wide">
+        <div class="panel__head">
+          <button class="round-btn" type="button" data-goto="main"><span class="visually-hidden">Back to main menu</span><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M15 5l-7 7 7 7" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"/></svg></button>
+          <h1 class="panel__title" id="leaderboard-title" tabindex="-1">Deepest Dives</h1>
+        </div>
+        <div class="tabs" role="tablist" aria-label="Ranking type">
+          <button class="tab" role="tab" type="button" id="b-depth" aria-controls="b-panel" aria-selected="true" data-board="depth">Depth</button>
+          <button class="tab" role="tab" type="button" id="b-pearls" aria-controls="b-panel" aria-selected="false" data-board="pearls" tabindex="-1">Pearls</button>
+        </div>
+        <div class="board" id="b-panel" role="tabpanel" aria-labelledby="b-depth">
+          <table class="ranks">
+            <caption class="visually-hidden">Diver rankings</caption>
+            <thead><tr><th scope="col">#</th><th scope="col">Diver</th><th scope="col" class="col-sub">Submersible</th><th scope="col" id="b-metric">Depth</th></tr></thead>
+            <tbody id="b-body"></tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <!-- ================= SURFACE (quit) ================= -->
+    <section class="screen screen--center" id="quit" data-screen data-depth="0" aria-labelledby="quit-title" hidden>
+      <div class="panel panel--narrow">
+        <h1 class="panel__title" id="quit-title" tabindex="-1">Surface already?</h1>
+        <p class="panel__text">Your dive log is saved. The ocean will still be here.</p>
+        <nav class="list-menu" aria-label="Quit confirmation">
+          <button class="list-btn" type="button" data-goto="main">Stay submerged</button>
+          <button class="list-btn list-btn--warn" type="button" data-goto="main" data-action="quit">Surface and quit</button>
+        </nav>
+      </div>
+    </section>
+  </main>
+
+  <div class="toast" role="status" aria-live="polite"></div>
+  <script src="script.js"></script>
+</body>
+</html>
