@@ -24,14 +24,15 @@ Alternate categories: odd numbers = login, even numbers = game-menu.
 | 017 | login | Synthwave | `templates/login/017-synthwave/` | `login-017-synthwave.zip` | Retrowave neon-sunset login with a driving grid, VHS glitch transitions and a cassette deck that plays a live synth loop. |
 | 018 | game-menu | Underwater | `templates/game-menu/018-underwater/` | `game-menu-018-underwater.zip` | Deep-sea menu where every screen dives deeper — light rays, bubbles, jellyfish, a zone-based dive chart and a submarine hangar. |
 | 019 | login | Paper Origami | `templates/login/019-origami/` | `login-019-origami.zip` | Tactile paper-craft login with unfolding screens, an origami crane in your choice of paper, a fold-the-crane password meter and paper planes. |
+| 020 | game-menu | Samurai Ink | `templates/game-menu/020-samurai-ink/` | `game-menu-020-samurai-ink.zip` | Ink-wash samurai menus with brush-sweep buttons, a hand-scroll stage path, ink-drawn warriors, an ensō pause and synthesized koto plucks. |
 
 ## Themes used (never repeat)
 
-aurora-glass, neon-cyberpunk, swiss-minimal, pixel-arcade, dark-luxury, fantasy-rpg, pastel-bloom, scifi-hud, brutalist, horror, forest-fern, space-odyssey, neumorphism, cartoon-pop, retro-terminal, steampunk, synthwave, underwater, origami
+aurora-glass, neon-cyberpunk, swiss-minimal, pixel-arcade, dark-luxury, fantasy-rpg, pastel-bloom, scifi-hud, brutalist, horror, forest-fern, space-odyssey, neumorphism, cartoon-pop, retro-terminal, steampunk, synthwave, underwater, origami, samurai-ink
 
 ## Theme backlog (pick the next unused one)
 
-- game-menu: samurai ink, post-apocalyptic, candy/kawaii, racing/motorsport, medieval stone, western frontier
+- game-menu: post-apocalyptic, candy/kawaii, racing/motorsport, medieval stone, western frontier
 - login: art deco, newspaper editorial, claymorphism, bauhaus, ocean wave, desert sand
 
 ## Bundles

@@ -1,0 +1,257 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>INKBLADE — Game Menu</title>
+  <meta name="description" content="Ink-wash samurai game menu template: rice paper, brush-sweep buttons, ink mountains, falling petals, a hand-scroll level path, ink warriors and an ensō pause screen.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Shippori+Mincho:wght@600;800&amp;family=Zen+Kaku+Gothic+New:wght@400;500;700&amp;display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <!-- Shared SVG filter: rough, inky edges for brush shapes -->
+  <svg class="defs" aria-hidden="true" focusable="false">
+    <filter id="ink-rough" x="-5%" y="-20%" width="110%" height="140%">
+      <feTurbulence type="fractalNoise" baseFrequency=".04 .9" numOctaves="2" seed="3" result="noise"/>
+      <feDisplacementMap in="SourceGraphic" in2="noise" scale="5"/>
+    </filter>
+    <filter id="ink-wash"><feGaussianBlur stdDeviation="2.4"/></filter>
+  </svg>
+
+  <!-- ===== Scenery: paper, red sun, ink mountains, bamboo, petals ===== -->
+  <div class="scenery" aria-hidden="true">
+    <div class="sun"></div>
+    <svg class="mountains" viewBox="0 0 1200 400" preserveAspectRatio="xMidYMax slice">
+      <path class="m m--far" d="M0 300 L120 210 L200 250 L330 140 L440 230 L560 170 L700 250 L820 160 L960 240 L1080 180 L1200 230 L1200 400 L0 400Z"/>
+      <path class="m m--mid" d="M0 330 L90 280 L210 320 L300 240 L420 310 L520 270 L640 330 L760 260 L880 320 L1000 250 L1120 300 L1200 280 L1200 400 L0 400Z"/>
+      <path class="m m--near" d="M0 370 L140 330 L260 360 L380 320 L520 370 L660 340 L800 375 L940 330 L1080 365 L1200 340 L1200 400 L0 400Z"/>
+    </svg>
+    <div class="mist"></div>
+    <svg class="bamboo" viewBox="0 0 80 600" preserveAspectRatio="xMidYMax meet">
+      <g class="bamboo__stalk"><rect x="30" y="0" width="14" height="600" rx="6"/><rect x="28" y="120" width="18" height="5" rx="2"/><rect x="28" y="260" width="18" height="5" rx="2"/><rect x="28" y="400" width="18" height="5" rx="2"/><rect x="28" y="530" width="18" height="5" rx="2"/></g>
+      <path class="bamboo__leaf" d="M44 118 C64 104 76 110 80 112 C70 120 58 124 44 122Z"/>
+      <path class="bamboo__leaf" d="M44 256 C70 250 78 258 80 262 C66 266 54 266 44 260Z"/>
+      <path class="bamboo__leaf" d="M30 396 C10 384 0 390 -4 394 C8 400 20 402 30 400Z"/>
+    </svg>
+    <div class="petals" id="petals"></div>
+  </div>
+
+  <main class="app">
+
+    <!-- ================= MAIN ================= -->
+    <section class="screen screen--main is-active" id="main" data-screen aria-labelledby="main-title">
+      <header class="title-block">
+        <p class="vertical" aria-hidden="true">The way of the wandering blade</p>
+        <div>
+          <h1 class="logo" id="main-title" tabindex="-1">Inkblade</h1>
+          <svg class="logo__stroke" viewBox="0 0 300 24" preserveAspectRatio="none" aria-hidden="true"><path d="M4 14 C60 4 160 2 292 8 C298 10 298 16 290 18 C180 24 80 24 8 20 C2 19 1 15 4 14Z"/></svg>
+          <p class="tagline">Chapter III · Autumn of the Silent Moon</p>
+        </div>
+        <span class="seal" aria-hidden="true">Ink<br>Blade</span>
+      </header>
+      <nav class="ink-menu" aria-label="Main menu">
+        <button class="ink-btn" type="button" data-goto="play"><span class="ink-btn__ink" aria-hidden="true"></span><span class="ink-btn__num" aria-hidden="true">01</span><span class="ink-btn__text"><span class="ink-btn__label">Continue</span><span class="ink-btn__sub">Paper Lantern Town</span></span></button>
+        <button class="ink-btn" type="button" data-goto="levels"><span class="ink-btn__ink" aria-hidden="true"></span><span class="ink-btn__num" aria-hidden="true">02</span><span class="ink-btn__text"><span class="ink-btn__label">The Path</span><span class="ink-btn__sub">Choose a stage</span></span></button>
+        <button class="ink-btn" type="button" data-goto="characters"><span class="ink-btn__ink" aria-hidden="true"></span><span class="ink-btn__num" aria-hidden="true">03</span><span class="ink-btn__text"><span class="ink-btn__label">Warriors</span><span class="ink-btn__sub">Four wanderers</span></span></button>
+        <button class="ink-btn" type="button" data-goto="leaderboard"><span class="ink-btn__ink" aria-hidden="true"></span><span class="ink-btn__num" aria-hidden="true">04</span><span class="ink-btn__text"><span class="ink-btn__label">Scroll of Honor</span><span class="ink-btn__sub">Rankings</span></span></button>
+        <button class="ink-btn" type="button" data-goto="settings"><span class="ink-btn__ink" aria-hidden="true"></span><span class="ink-btn__num" aria-hidden="true">05</span><span class="ink-btn__text"><span class="ink-btn__label">Dojo</span><span class="ink-btn__sub">Settings</span></span></button>
+        <button class="ink-btn" type="button" data-goto="quit"><span class="ink-btn__ink" aria-hidden="true"></span><span class="ink-btn__num" aria-hidden="true">06</span><span class="ink-btn__text"><span class="ink-btn__label">Leave</span><span class="ink-btn__sub">Quit the game</span></span></button>
+      </nav>
+    </section>
+
+    <!-- ================= PLAY ================= -->
+    <section class="screen screen--play" id="play" data-screen aria-labelledby="play-title" hidden>
+      <h1 class="visually-hidden" id="play-title" tabindex="-1">Playing — Paper Lantern Town</h1>
+      <div class="hud">
+        <div class="hud__vitals">
+          <p class="hud__k">Vitality</p>
+          <div class="brushbar"><span id="h-life" style="--v:100%"></span></div>
+          <p class="hud__k">Spirit</p>
+          <div class="spirit" id="h-spirit"><span></span><span></span><span></span><span></span><span></span></div>
+        </div>
+        <p class="hud__score"><span class="hud__k">Honor</span> <strong id="h-score">0</strong></p>
+        <button class="hanko-btn" type="button" data-goto="pause"><span class="visually-hidden">Pause</span><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5h3v14H8zM13 5h3v14h-3z"/></svg></button>
+      </div>
+      <div class="duel" aria-hidden="true">
+        <div class="lanterns"><span></span><span></span><span></span></div>
+        <div class="warrior warrior--play" id="play-warrior"></div>
+        <span class="slash"></span>
+      </div>
+      <div class="play-foot">
+        <p class="quote">“The river does not hurry, yet it reaches the sea.”</p>
+        <button class="btn btn--ghost" type="button" data-goto="gameover">Simulate final duel</button>
+      </div>
+    </section>
+
+    <!-- ================= PAUSE (meditation) ================= -->
+    <section class="screen screen--center" id="pause" data-screen aria-labelledby="pause-title" hidden>
+      <div class="scroll scroll--narrow">
+        <svg class="enso" viewBox="0 0 120 120" aria-hidden="true"><path d="M86 22 C110 40 112 82 84 100 C56 118 18 104 12 70 C6 36 36 10 66 14 C74 15 80 17 84 20"/></svg>
+        <h1 class="scroll__title" id="pause-title" tabindex="-1">Meditation</h1>
+        <p class="scroll__text">Breathe in. The blade waits for a calm mind.</p>
+        <nav class="list-menu" aria-label="Pause menu">
+          <button class="list-btn" type="button" data-goto="play">Return to the duel</button>
+          <button class="list-btn" type="button" data-goto="play" data-action="checkpoint">Restart from the shrine</button>
+          <button class="list-btn" type="button" data-goto="settings">Dojo settings</button>
+          <button class="list-btn" type="button" data-goto="main">Main menu</button>
+        </nav>
+      </div>
+    </section>
+
+    <!-- ================= SETTINGS ================= -->
+    <section class="screen screen--center" id="settings" data-screen aria-labelledby="settings-title" hidden>
+      <div class="scroll">
+        <div class="scroll__head">
+          <button class="hanko-btn hanko-btn--back" type="button" data-goto="main" data-back><span class="visually-hidden">Back</span><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M15 5l-7 7 7 7" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round"/></svg></button>
+          <h1 class="scroll__title" id="settings-title" tabindex="-1">Dojo</h1>
+        </div>
+        <div class="tabs" role="tablist" aria-label="Settings groups">
+          <button class="tab" role="tab" type="button" id="t-visual" aria-controls="p-visual" aria-selected="true">Brush</button>
+          <button class="tab" role="tab" type="button" id="t-audio" aria-controls="p-audio" aria-selected="false" tabindex="-1">Sound</button>
+          <button class="tab" role="tab" type="button" id="t-controls" aria-controls="p-controls" aria-selected="false" tabindex="-1">Controls</button>
+        </div>
+        <form id="settings-form" class="settings">
+          <div class="pane" role="tabpanel" id="p-visual" aria-labelledby="t-visual">
+            <div class="set"><label for="s-petals">Falling petals</label><input class="range" type="range" id="s-petals" name="petals" min="0" max="40" value="16"><output for="s-petals">16</output></div>
+            <div class="set"><label for="s-ink">Ink strength</label><input class="range" type="range" id="s-ink" name="ink" min="50" max="150" value="100"><output for="s-ink">100</output></div>
+            <div class="set set--switch"><label for="s-sun">Red sun</label><input type="checkbox" class="toggle" id="s-sun" name="sun" role="switch" checked></div>
+            <div class="set set--switch"><label for="s-mist">Drifting mist</label><input type="checkbox" class="toggle" id="s-mist" name="mist" role="switch" checked></div>
+          </div>
+          <div class="pane" role="tabpanel" id="p-audio" aria-labelledby="t-audio" hidden>
+            <div class="set"><label for="s-master">Master volume</label><input class="range" type="range" id="s-master" name="master" min="0" max="100" value="80"><output for="s-master">80</output></div>
+            <div class="set"><label for="s-music">Music</label><input class="range" type="range" id="s-music" name="music" min="0" max="100" value="60"><output for="s-music">60</output></div>
+            <div class="set set--switch"><label for="s-koto">Koto plucks on menus</label><input type="checkbox" class="toggle" id="s-koto" name="koto" role="switch"></div>
+          </div>
+          <div class="pane" role="tabpanel" id="p-controls" aria-labelledby="t-controls" hidden>
+            <div class="set"><label for="s-sens">Camera sensitivity</label><input class="range" type="range" id="s-sens" name="sens" min="1" max="10" value="5"><output for="s-sens">5</output></div>
+            <div class="set set--switch"><label for="s-parry">Hold to parry</label><input type="checkbox" class="toggle" id="s-parry" name="parry" role="switch"></div>
+            <fieldset class="set set--choice">
+              <legend>Difficulty</legend>
+              <div class="chips">
+                <input type="radio" id="d-novice" name="difficulty" value="novice"><label for="d-novice">Novice</label>
+                <input type="radio" id="d-ronin" name="difficulty" value="ronin" checked><label for="d-ronin">Wanderer</label>
+                <input type="radio" id="d-master" name="difficulty" value="master"><label for="d-master">Master</label>
+              </div>
+            </fieldset>
+          </div>
+          <div class="settings__actions">
+            <button class="btn btn--ghost" type="button" id="reset-settings">Reset</button>
+            <button class="btn" type="submit">Save settings</button>
+          </div>
+        </form>
+      </div>
+    </section>
+
+    <!-- ================= THE PATH (levels) ================= -->
+    <section class="screen screen--center" id="levels" data-screen aria-labelledby="levels-title" hidden>
+      <div class="scroll scroll--wide">
+        <div class="scroll__head">
+          <button class="hanko-btn hanko-btn--back" type="button" data-goto="main"><span class="visually-hidden">Back to main menu</span><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M15 5l-7 7 7 7" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round"/></svg></button>
+          <h1 class="scroll__title" id="levels-title" tabindex="-1">The Path</h1>
+        </div>
+        <div class="emaki" id="emaki">
+          <svg class="emaki__road" id="emaki-road" viewBox="0 0 940 160" preserveAspectRatio="none" aria-hidden="true"><path id="road-path" d=""/></svg>
+          <div class="emaki__stops" id="stages" role="radiogroup" aria-label="Stages"></div>
+        </div>
+        <div class="stage" id="stage" aria-live="polite">
+          <div>
+            <p class="stage__season" id="stage-season"></p>
+            <h2 class="stage__name" id="stage-name">Stage</h2>
+            <p class="stage__desc" id="stage-desc"></p>
+          </div>
+          <div class="stage__side">
+            <p class="seals" id="stage-seals"></p>
+            <button class="btn" type="button" data-goto="play" id="stage-go">Walk this path</button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ================= WARRIORS (characters) ================= -->
+    <section class="screen screen--center" id="characters" data-screen aria-labelledby="characters-title" hidden>
+      <div class="scroll scroll--wide">
+        <div class="scroll__head">
+          <button class="hanko-btn hanko-btn--back" type="button" data-goto="main"><span class="visually-hidden">Back to main menu</span><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M15 5l-7 7 7 7" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round"/></svg></button>
+          <h1 class="scroll__title" id="characters-title" tabindex="-1">Warriors</h1>
+        </div>
+        <div class="dojo">
+          <div class="dojo__list" id="w-list" role="radiogroup" aria-label="Warriors"></div>
+          <div class="dojo__portrait"><div class="warrior warrior--big" id="w-art" aria-hidden="true"></div></div>
+          <div class="dojo__info" id="w-info" aria-live="polite">
+            <p class="stage__season" id="w-school"></p>
+            <h2 class="stage__name" id="w-name">Warrior</h2>
+            <p class="stage__desc" id="w-desc"></p>
+            <dl class="strokes" id="w-stats"></dl>
+          </div>
+        </div>
+        <div class="scroll__foot">
+          <p class="hint">Use the arrow keys to choose a warrior</p>
+          <button class="btn" type="button" data-goto="main" data-action="choose">Walk with this warrior</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- ================= DEFEATED (game over) ================= -->
+    <section class="screen screen--center" id="gameover" data-screen aria-labelledby="gameover-title" hidden>
+      <div class="defeat" aria-hidden="true">
+        <svg viewBox="0 0 200 200">
+          <path class="defeat__enso" d="M150 40 C190 80 180 150 120 172 C60 194 14 150 18 98 C22 50 62 18 108 20"/>
+          <circle class="splat" cx="148" cy="44" r="12"/><circle class="splat" cx="164" cy="30" r="5"/><circle class="splat" cx="132" cy="26" r="3.5"/><circle class="splat" cx="170" cy="56" r="3"/>
+        </svg>
+      </div>
+      <div class="scroll scroll--narrow">
+        <h1 class="scroll__title scroll__title--big" id="gameover-title" tabindex="-1">Defeated</h1>
+        <p class="scroll__text">The blade rests — for now. Every master has fallen a thousand times.</p>
+        <dl class="tally">
+          <div><dt>Duels won</dt><dd id="go-duels">0</dd></div>
+          <div><dt>Perfect parries</dt><dd id="go-parries">0</dd></div>
+          <div><dt>Honor</dt><dd id="go-honor">0</dd></div>
+        </dl>
+        <nav class="list-menu list-menu--row" aria-label="Defeated options">
+          <button class="btn" type="button" data-goto="play" data-action="retry">Rise again</button>
+          <button class="btn btn--ghost" type="button" data-goto="leaderboard">Scroll of Honor</button>
+          <button class="btn btn--ghost" type="button" data-goto="main">Main menu</button>
+        </nav>
+      </div>
+    </section>
+
+    <!-- ================= SCROLL OF HONOR (leaderboard) ================= -->
+    <section class="screen screen--center" id="leaderboard" data-screen aria-labelledby="leaderboard-title" hidden>
+      <div class="scroll">
+        <div class="scroll__head">
+          <button class="hanko-btn hanko-btn--back" type="button" data-goto="main"><span class="visually-hidden">Back to main menu</span><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M15 5l-7 7 7 7" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round"/></svg></button>
+          <h1 class="scroll__title" id="leaderboard-title" tabindex="-1">Scroll of Honor</h1>
+        </div>
+        <div class="tabs" role="tablist" aria-label="Ranking type">
+          <button class="tab" role="tab" type="button" id="b-honor" aria-controls="b-panel" aria-selected="true" data-board="honor">Honor</button>
+          <button class="tab" role="tab" type="button" id="b-duels" aria-controls="b-panel" aria-selected="false" data-board="duels" tabindex="-1">Duels won</button>
+        </div>
+        <div class="honor" id="b-panel" role="tabpanel" aria-labelledby="b-honor">
+          <table class="honor__table">
+            <caption class="visually-hidden">Warrior rankings</caption>
+            <thead><tr><th scope="col">Rank</th><th scope="col">Name</th><th scope="col" class="col-school">School</th><th scope="col" id="b-metric">Honor</th></tr></thead>
+            <tbody id="b-body"></tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <!-- ================= LEAVE (quit) ================= -->
+    <section class="screen screen--center" id="quit" data-screen aria-labelledby="quit-title" hidden>
+      <div class="scroll scroll--narrow">
+        <h1 class="scroll__title" id="quit-title" tabindex="-1">Leave the dojo?</h1>
+        <p class="scroll__text">Your journey is recorded in ink. The path will wait.</p>
+        <nav class="list-menu" aria-label="Quit confirmation">
+          <button class="list-btn" type="button" data-goto="main">Stay a while</button>
+          <button class="list-btn list-btn--warn" type="button" data-goto="main" data-action="quit">Leave the dojo</button>
+        </nav>
+      </div>
+    </section>
+  </main>
+
+  <div class="toast" role="status" aria-live="polite"></div>
+  <script src="script.js"></script>
+</body>
+</html>
